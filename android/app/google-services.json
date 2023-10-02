@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "204912491565",
+    "project_id": "managercoffeeandfood",
+    "storage_bucket": "managercoffeeandfood.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:204912491565:android:ed1e934fe3c1356531cca4",
+        "android_client_info": {
+          "package_name": "com.example.managerfoodandcoffee"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "204912491565-cd3m4iuq1m496gio6vs89rj8tl7htn1q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9cC2pN_KfgROBsiN8fezAHYVCQjd0C-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "204912491565-cd3m4iuq1m496gio6vs89rj8tl7htn1q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
