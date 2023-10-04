@@ -285,10 +285,9 @@ class FirestoreHelper {
   ///tinh trang
   //read
   static Stream<List<tinhtrangTT>> readtinhtrang(String table) {
-    final tinhtrangCollection = FirebaseFirestore.instance
-        .collection("tinhtrang")
-        .doc("table")
-        .collection(table);
+    final tinhtrangCollection =
+        FirebaseFirestore.instance.collection("tinhtrang");
+
     return tinhtrangCollection.snapshots().map((QuerySnapshot) =>
         QuerySnapshot.docs.map((e) => tinhtrangTT.fromSnapshot(e)).toList());
   }
@@ -296,14 +295,12 @@ class FirestoreHelper {
 
   static Future<void> createtinhtrang(
       tinhtrangTT tinhtrang, String table) async {
-    final tinhtrangCl = FirebaseFirestore.instance
-        .collection("tinhtrang")
-        .doc("table")
-        .collection(table);
-    final uid = tinhtrangCl.doc().id;
-    final docRef = tinhtrangCl.doc(uid);
+    final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
+
+    final docRef = tinhtrangCl.doc(table);
     final newtinhtrang =
-        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: uid).toJson();
+        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table)
+            .toJson();
     try {
       await docRef.set(newtinhtrang);
     } catch (e) {
@@ -324,12 +321,19 @@ class FirestoreHelper {
   //   }
   // }
   static Future updatetinhtrang(tinhtrangTT tinhtrang, String table) async {
-    final tinhtrangCl = FirebaseFirestore.instance
-        .collection("tinhtrang")
-        .doc("table")
-        .collection(table);
-    final docRef = tinhtrangCl.doc(tinhtrang.idtinhtrang);
-    final newtinhtrang = tinhtrangTT(
-        trangthai: tinhtrang.trangthai, idtinhtrang: tinhtrang.idtinhtrang);
+    final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
+
+    final docRef = tinhtrangCl.doc(table);
+    final newtinhtrang =
+        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table)
+            .toJson();
+    try {
+      await docRef.update(newtinhtrang);
+    } catch (e) {
+      Get.snackbar(
+        "lỗi",
+        e.toString(),
+      );
+    }
   }
 }

@@ -1,8 +1,11 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
 // import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/pagetrangtru.dart';
 
 class giohangUser extends StatefulWidget {
   final String tenban;
@@ -183,7 +186,80 @@ class _giohangUserState extends State<giohangUser> {
                                   ),
                                   // luu hoá đơn
                                   ElevatedButton(
-                                      onPressed: () {},
+                                      onPressed: () {
+                                        FirestoreHelper.createtinhtrang(
+                                            tinhtrangTT(trangthai: "success"),
+                                            widget.tenban);
+
+                                        Get.defaultDialog(
+                                          title: "Thanh toán",
+                                          content: Column(
+                                            children: [
+                                              Text(
+                                                "xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              StreamBuilder(
+                                                stream: FirestoreHelper
+                                                    .readtinhtrang(
+                                                        widget.tenban),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return Center(
+                                                      child:
+                                                          CircularProgressIndicator(),
+                                                    );
+                                                  }
+                                                  if (snapshot.hasError) {
+                                                    return Center(
+                                                      child: Text("lỗi"),
+                                                    );
+                                                  }
+                                                  if (snapshot.hasData) {
+                                                    final tinhtrang =
+                                                        snapshot.data;
+                                                    for (var i = 0;
+                                                        i < tinhtrang!.length;
+                                                        i++) {
+                                                      if (tinhtrang[i]
+                                                                  .trangthai ==
+                                                              "xacnhan" &&
+                                                          tinhtrang[i]
+                                                                  .idtinhtrang ==
+                                                              widget.tenban) {
+                                                        showSnackbar(
+                                                            tongtienthanhtoan);
+                                                        return Text(
+                                                          "đã xác nhận \n vui lòng chuẩn bị ${tongtienthanhtoan}",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        );
+                                                      } else {
+                                                        Text("vui lòng chờ");
+                                                      }
+                                                    }
+                                                  }
+                                                  return CircularProgressIndicator();
+                                                },
+                                              )
+                                            ],
+                                          ),
+                                          actions: [
+                                            ElevatedButton(
+                                              onPressed: () {
+                                                //quay lai trang san phẩm
+                                                Get.to(
+                                                  () => LoginPage(
+                                                      tenban: widget.tenban),
+                                                );
+                                              },
+                                              child: Text("thoát"),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                       child: Text("Xác nhận thanh toán"))
                                 ],
                               );
@@ -214,6 +290,14 @@ class _giohangUserState extends State<giohangUser> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<void> showSnackbar(int totalAmount) async {
+    await Future.delayed(Duration.zero); // This ensures the build has completed
+    Get.snackbar(
+      "Đã xác nhận",
+      "Vui lòng chuẩn bị $totalAmount Vnd",
     );
   }
 }
