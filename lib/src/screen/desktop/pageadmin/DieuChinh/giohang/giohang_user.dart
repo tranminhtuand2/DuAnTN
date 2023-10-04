@@ -1,7 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
-import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
+// import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 
 class giohangUser extends StatefulWidget {
@@ -180,7 +180,11 @@ class _giohangUserState extends State<giohangUser> {
                                         Text("${tongtienthanhtoan} VND"),
                                       ],
                                     ),
-                                  )
+                                  ),
+                                  // luu hoá đơn
+                                  ElevatedButton(
+                                      onPressed: () {},
+                                      child: Text("Xác nhận thanh toán"))
                                 ],
                               );
                             }

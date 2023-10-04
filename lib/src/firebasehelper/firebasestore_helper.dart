@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 import 'package:managerfoodandcoffee/src/model/diachimap_model.dart';
@@ -193,7 +194,7 @@ class FirestoreHelper {
 
   //updatetable
   static Future updatetable(TableModel table) async {
-    final headerCollection = FirebaseFirestore.instance.collection("danhmuc");
+    final headerCollection = FirebaseFirestore.instance.collection("table");
     final docRef = headerCollection.doc(table.maban);
     final newtable =
         TableModel(tenban: table.tenban, maban: table.maban).toJson();
@@ -280,4 +281,55 @@ class FirestoreHelper {
   }
 
   ///enđ gio hang
+  ///s
+  ///tinh trang
+  //read
+  static Stream<List<tinhtrangTT>> readtinhtrang(String table) {
+    final tinhtrangCollection = FirebaseFirestore.instance
+        .collection("tinhtrang")
+        .doc("table")
+        .collection(table);
+    return tinhtrangCollection.snapshots().map((QuerySnapshot) =>
+        QuerySnapshot.docs.map((e) => tinhtrangTT.fromSnapshot(e)).toList());
+  }
+  //creater
+
+  static Future<void> createtinhtrang(
+      tinhtrangTT tinhtrang, String table) async {
+    final tinhtrangCl = FirebaseFirestore.instance
+        .collection("tinhtrang")
+        .doc("table")
+        .collection(table);
+    final uid = tinhtrangCl.doc().id;
+    final docRef = tinhtrangCl.doc(uid);
+    final newtinhtrang =
+        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: uid).toJson();
+    try {
+      await docRef.set(newtinhtrang);
+    } catch (e) {
+      Get.snackbar("lỗi", e.toString());
+    }
+  }
+
+  //update
+  //   static Future updatetable(TableModel table) async {
+  //   final headerCollection = FirebaseFirestore.instance.collection("table");
+  //   final docRef = headerCollection.doc(table.maban);
+  //   final newtable =
+  //       TableModel(tenban: table.tenban, maban: table.maban).toJson();
+  //   try {
+  //     await docRef.update(newtable);
+  //   } catch (e) {
+  //     Get.snackbar("lỗi", e.toString());
+  //   }
+  // }
+  static Future updatetinhtrang(tinhtrangTT tinhtrang, String table) async {
+    final tinhtrangCl = FirebaseFirestore.instance
+        .collection("tinhtrang")
+        .doc("table")
+        .collection(table);
+    final docRef = tinhtrangCl.doc(tinhtrang.idtinhtrang);
+    final newtinhtrang = tinhtrangTT(
+        trangthai: tinhtrang.trangthai, idtinhtrang: tinhtrang.idtinhtrang);
+  }
 }
