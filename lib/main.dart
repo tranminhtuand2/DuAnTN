@@ -48,10 +48,11 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           colorScheme: TAppTheme.darkColorScheme,
           textTheme: TAppTextTheme.darkTextTheme),
-      home: ReponsiveLayout(
-          moblie: mobileScreen(),
-          tablet: tabletScreen(),
-          desktop: desktopScreen()),
+      home: const ReponsiveLayout(
+        moblie: mobileScreen(),
+        tablet: tabletScreen(),
+        desktop: desktopScreen(),
+      ),
     );
   }
 }
