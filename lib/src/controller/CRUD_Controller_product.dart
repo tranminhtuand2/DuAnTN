@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:image/image.dart' as img;
-import 'package:managerfoodandcoffee/src/common_widget/textform.dart';
+import 'package:managerfoodandcoffee/src/common_widget/text_form_field.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/widget/crudDialogsanpham/editsanpham.dart';
@@ -51,12 +51,12 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
       } catch (e) {
         Get.rawSnackbar(
           message: "vui lòng chọn hình ảnh. hoặc danh mục",
-          duration: Duration(seconds: 3), // Độ dài hiển thị
+          duration: const Duration(seconds: 3), // Độ dài hiển thị
           isDismissible: true, // Cho phép đóng Snackbar bằng cách nhấn vào nó
-          margin: EdgeInsets.all(16.0), // Đặt khoảng cách bên trái
+          margin: const EdgeInsets.all(16.0), // Đặt khoảng cách bên trái
           borderRadius: 12, // Bỏ viền bo tròn
-          animationDuration: Duration(milliseconds: 300),
-          backgroundGradient: LinearGradient(
+          animationDuration: const Duration(milliseconds: 300),
+          backgroundGradient: const LinearGradient(
             colors: [Colors.blue, Colors.green], // Màu nền
             stops: [0.1, 0.9],
           ),
@@ -182,7 +182,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
     pr = ProgressDialog(context);
     pr.style(
       message: 'Đang tải lên...',
-      progressWidget: CircularProgressIndicator(),
+      progressWidget: const CircularProgressIndicator(),
       maxProgress: 100.0,
     );
   }
@@ -202,10 +202,10 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                     vertical: 10,
                     horizontal: 10,
                   ),
-                  child: textformfield(
+                  child: MyTextFormField(
                     hintext: "tên sản phẩm",
                     labeltext: "tên sản phẩm",
-                    icon: Icon(Icons.forest),
+                    icon: const Icon(Icons.forest),
                     regExp: r'^[1-9a-zA-ZÀ-ỹ\s]+$',
                     isempty: "vui lòng điền thông tin",
                     wrongtype: "có ký tự đặc biệt",
@@ -218,10 +218,10 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                     vertical: 10,
                     horizontal: 10,
                   ),
-                  child: textformfield(
+                  child: MyTextFormField(
                     hintext: "miêu tả",
                     labeltext: "giới thiệu sản phẩm",
-                    icon: Icon(Icons.description),
+                    icon: const Icon(Icons.description),
                     regExp: r'^[1-9a-zA-ZÀ-ỹ\s,.:-]*$',
                     isempty: "vui lòng điền thông tin",
                     wrongtype: "có ký tự đặc biệt",
@@ -234,10 +234,10 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                     vertical: 10,
                     horizontal: 10,
                   ),
-                  child: textformfield(
+                  child: MyTextFormField(
                     hintext: "giá sản phẩm",
                     labeltext: "giá sản phẩm",
-                    icon: Icon(Icons.payment),
+                    icon: const Icon(Icons.payment),
                     regExp: r'^[0-9]+$',
                     isempty: "vui lòng điền giả của sản phẩm",
                     wrongtype:
@@ -252,12 +252,12 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                   builder: (context, snapshot) {
                     final danhmuc = snapshot.data;
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
                     if (snapshot.hasError) {
-                      return Center(
+                      return const Center(
                         child: Text("lỗi"),
                       );
                     }
@@ -279,14 +279,15 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                                         tooltip: "tạo mới ",
                                         onPressed: () async {
                                           print("tạo mới");
-                                          await Get.dialog(addDanhmuc_dialog());
+                                          await Get.dialog(
+                                              const addDanhmuc_dialog());
                                           Navigator.of(context).pop();
                                           // Sau khi dialog đóng xong, thực hiện các thay đổi cần thiết tại đây để làm tươi lại màn hình.
                                           setState(() {
                                             // Thực hiện các thay đổi cần thiết tại đây để làm tươi lại màn hình.
                                           });
                                         },
-                                        icon: Icon(Icons.add),
+                                        icon: const Icon(Icons.add),
                                       ),
                                       IconButton(
                                         tooltip: "sửa danh mục",
@@ -300,7 +301,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                                           print(
                                               "capnhap+${danhmuc[i].iddanhmuc}");
                                         },
-                                        icon: Icon(Icons.edit),
+                                        icon: const Icon(Icons.edit),
                                       ),
                                       IconButton(
                                         tooltip: "xoá",
@@ -331,7 +332,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                                           );
                                           print("xoa+${danhmuc[i].iddanhmuc}");
                                         },
-                                        icon: Icon(Icons.delete),
+                                        icon: const Icon(Icons.delete),
                                       ),
                                     ],
                                   )
@@ -344,15 +345,15 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                       return Padding(
                         padding: const EdgeInsets.all(10.0),
                         child: Container(
-                          padding: EdgeInsets.all(10),
+                          padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
                               border: Border.all(color: Colors.black, width: 1),
                               borderRadius: BorderRadius.circular(20)),
                           child: DropdownButton(
                             value: selectedValue,
-                            underline: SizedBox(),
+                            underline: const SizedBox(),
                             isExpanded: true,
-                            hint: Text("chọn danh mục sản phẩm"),
+                            hint: const Text("chọn danh mục sản phẩm"),
                             items: danhmucItem,
                             onChanged: (value) {
                               setState(() {
@@ -364,7 +365,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                         ),
                       );
                     }
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   },
@@ -376,9 +377,9 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                   onPressed: () async {
                     pickImage();
                   },
-                  child: Text('Chọn hình ảnh từ thư viện'),
+                  child: const Text('Chọn hình ảnh từ thư viện'),
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 _imageFile.isNotEmpty
                     ? Image.memory(
                         selectedImageInBytes!,
@@ -387,7 +388,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                         scale: 1,
                         fit: BoxFit.cover,
                       )
-                    : Text('Không có hình ảnh để hiển thị'),
+                    : const Text('Không có hình ảnh để hiển thị'),
                 const SizedBox(height: 20),
 
                 // nut nhan
@@ -397,7 +398,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                     print(selectedValue);
                     _submidform();
                   },
-                  child: Text('THÊM MỚI'),
+                  child: const Text('THÊM MỚI'),
                 ),
               ],
             ),
@@ -407,12 +408,12 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
           stream: FirestoreHelper.readsp(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             }
             if (snapshot.hasError) {
-              return Center(
+              return const Center(
                 child: Text("lỗi"),
               );
             }
@@ -426,7 +427,8 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                     height: 800,
                     child: GridView.builder(
                       itemCount: sanpham!.length,
-                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 5, // Bạn có thể thay đổi số cột ở đây
                         mainAxisSpacing:
                             10.0, // Điều chỉnh khoảng cách giữa các mục theo chiều dọc
@@ -460,7 +462,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                                       Get.dialog(
                                           editSanpham(sanpham: sanphamindex));
                                     },
-                                    icon: Icon(Icons.edit),
+                                    icon: const Icon(Icons.edit),
                                   ),
                                   IconButton(
                                     tooltip: "xoá",
@@ -489,7 +491,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                                         },
                                       );
                                     },
-                                    icon: Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete),
                                   ),
                                 ],
                               ),
@@ -502,7 +504,7 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                 ),
               );
             }
-            return Center(
+            return const Center(
               child: CircularProgressIndicator(),
             );
           },

@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/loginpage_screen/widget/RegistrationDialog.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/dieuchinh_screen.dart';
-import '../../../common_widget/textform.dart';
+import '../../../common_widget/text_form_field.dart';
 import '../../../constants/textstring.dart';
 import '../../../controller/alertthongbao.dart';
 
@@ -17,7 +17,7 @@ class admin_login extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          header(),
+          const header(),
           formdangnhap(),
         ],
       ),
@@ -52,26 +52,26 @@ class formdangnhap extends StatelessWidget {
                 Slogans.slogan7,
                 style: Theme.of(context).textTheme.headlineMedium,
               ),
-              SizedBox(
+              const SizedBox(
                 height: 60,
               ),
-              textformfield(
-                  hintext: "ten dang nhap",
-                  labeltext: "tên đăng nhập",
-                  icon: Icon(Icons.person),
+              MyTextFormField(
+                  hintext: "Tên đăng nhập",
+                  labeltext: "Tên đăng nhập",
+                  icon: const Icon(Icons.person),
                   // Quy tắc cho tên người dùng: Bao gồm chữ thường, chữ hoa và số, ít nhất 6 ký tự.
                   regExp: r"^[a-zA-Z0-9]{6,}$",
-                  isempty: "vui lòng điền tên tài khoãn",
-                  wrongtype: "có ký tự đặc biệt hoặc chưa đủ độ dài",
+                  isempty: "Vui lòng nhập tên tài khoản",
+                  wrongtype: "Có ký tự đặc biệt hoặc chưa đủ độ dài",
                   textcontroller: tendangnhap,
                   hint: false),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
-              textformfield(
+              MyTextFormField(
                   hintext: "mật khẩu",
                   labeltext: "mật khẩu",
-                  icon: Icon(Icons.key),
+                  icon: const Icon(Icons.key),
                   // Quy tắc cho mật khẩu: Bao gồm ít nhất 8 ký tự, bao gồm chữ thường, chữ hoa và số.
                   regExp: r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$",
                   isempty: "vui lòng nhập mật khẩu",
@@ -79,7 +79,7 @@ class formdangnhap extends StatelessWidget {
                       "ít nhất 8 ký tự, bao gồm chữ thường, chữ hoa và số và không có ký tự đặc biệt",
                   textcontroller: matkhau,
                   hint: true),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               Row(
@@ -87,16 +87,16 @@ class formdangnhap extends StatelessWidget {
                 children: [
                   TextButton(
                     onPressed: () {},
-                    child: Text("Quên mật khẩu"),
+                    child: const Text("Quên mật khẩu"),
                   )
                 ],
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               ElevatedButton(
                 onPressed: () {
-                  Get.to(() => dieuchinhSceen());
+                  Get.to(() => const dieuchinhSceen());
                   // Xử lý sự kiện khi nút được nhấn
                   // Get.rawSnackbar(
                   //   message: "đăng nhập thành công.",
@@ -112,31 +112,30 @@ class formdangnhap extends StatelessWidget {
                   //   ),
                   // );
                 },
-                child: Text('đăng nhập'),
                 style: ElevatedButton.styleFrom(
+                  foregroundColor:
+                      Theme.of(context).colorScheme.onSecondaryContainer,
                   backgroundColor: Theme.of(context)
                       .colorScheme
-                      .secondaryContainer, // Màu nền của nút
-                  onPrimary: Theme.of(context)
-                      .colorScheme
-                      .onSecondaryContainer, // Màu chữ trên nút
-                  textStyle: TextStyle(fontSize: 12), // Kiểu chữ
-                  padding: EdgeInsets.symmetric(
+                      .secondaryContainer, // Màu chữ trên nút
+                  textStyle: const TextStyle(fontSize: 12), // Kiểu chữ
+                  padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 10), // Khoảng cách giữa chữ và viền của nút
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8), // Bo góc của nút
                   ),
                 ),
+                child: const Text('đăng nhập'),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               TextButton(
                   onPressed: () {
                     Get.dialog(RegistrationDialog());
                   },
-                  child: Text("Tôi muốn tạo tài khoãn!"))
+                  child: const Text("Tôi muốn tạo tài khoãn!"))
             ],
           ),
         ),
@@ -166,7 +165,7 @@ class header extends StatelessWidget {
         ),
         Container(
           child: Text(
-            "Hương thơm đắm say, cảm xúc đậy đà",
+            "Hương thơm đắm say, cảm xúc đậm đà",
             style: Theme.of(context).textTheme.displayMedium,
           ),
         )

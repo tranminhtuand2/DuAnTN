@@ -5,7 +5,7 @@ import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/pagetrangtru.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/home_page.dart';
 import 'package:progress_dialog2/progress_dialog2.dart';
 
 class detaiPagescreen extends StatefulWidget {
@@ -32,7 +32,7 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
     pr = ProgressDialog(context);
     pr.style(
       message: 'Đang thêm',
-      progressWidget: CircularProgressIndicator(),
+      progressWidget: const CircularProgressIndicator(),
       maxProgress: 100.0,
     );
   }
@@ -70,8 +70,8 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
                   ),
                   Container(
                     width: double.infinity,
-                    margin: EdgeInsets.all(10),
-                    padding: EdgeInsets.all(10),
+                    margin: const EdgeInsets.all(10),
+                    padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
                         color: Theme.of(context).colorScheme.onSecondary),
@@ -96,7 +96,7 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
                                 )
                               : IconButton(
                                   onPressed: () => txtghichu.clear(),
-                                  icon: Icon(Icons.close),
+                                  icon: const Icon(Icons.close),
                                 ),
                           labelText: "Ghi Chú",
                         ),
@@ -118,11 +118,10 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
                                   ghichu: txtghichu.text,
                                   hinhanh: widget.sanpham.hinhanh),
                               widget.tenban);
-                        } catch (e) {
                         } finally {
                           pr.hide();
                         }
-                        Get.to(() => LoginPage(tenban: widget.tenban));
+                        Get.to(() => HomePage(tenban: widget.tenban));
                       },
                       child: Container(
                         alignment: Alignment.center,
@@ -133,7 +132,7 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
                             border: Border.all(width: 1),
                             color:
                                 Theme.of(context).colorScheme.primaryContainer),
-                        child: Text(
+                        child: const Text(
                           "THÊM VÀO GIỎ HÀNG",
                         ),
                       ),
@@ -183,7 +182,7 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
                       giasanpham = soluong * widget.sanpham.giasp;
                     });
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.remove,
                     size: 20,
                   ),
@@ -205,7 +204,7 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
                       giasanpham = soluong * widget.sanpham.giasp;
                     });
                   },
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.add,
                     size: 20,
                   ),
@@ -215,7 +214,7 @@ class _detaiPagescreenState extends State<detaiPagescreen> {
           ),
         ),
         Text(
-          "${giasanpham} vnd",
+          "$giasanpham vnd",
           style: Theme.of(context)
               .textTheme
               .titleMedium!

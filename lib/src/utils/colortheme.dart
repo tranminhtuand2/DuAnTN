@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 
+var colorScheme = (BuildContext context) => Theme.of(context).colorScheme;
+
 class TAppTheme {
   static const lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    primary: Color(0xFF6750A4),
+    primary: Color.fromARGB(255, 58, 163, 127),
     onPrimary: Color(0xFFFFFFFF),
-    primaryContainer: Color(0xFFEADDFF),
-    onPrimaryContainer: Color.fromARGB(255, 204, 212, 197),
+    primaryContainer: Color.fromARGB(255, 255, 255, 255),
+    onPrimaryContainer: Color.fromARGB(255, 255, 255, 255),
     secondary: Color(0xFF625B71),
     onSecondary: Color(0xFFFFFFFF),
     secondaryContainer: Color(0xFFE8DEF8),
     onSecondaryContainer: Color(0xFF1D192B),
-    tertiary: Color(0xFF7D5260),
-    onTertiary: Color(0xFFFFFFFF),
+    tertiary: Color.fromARGB(255, 255, 255, 255), //color text
+    onTertiary: Color.fromARGB(255, 0, 0, 0), //color text
     tertiaryContainer: Color(0xFFFFD8E4),
     onTertiaryContainer: Color(0xFF31111D),
     error: Color(0xFFB3261E),
@@ -20,7 +22,7 @@ class TAppTheme {
     errorContainer: Color(0xFFF9DEDC),
     onErrorContainer: Color(0xFF410E0B),
     outline: Color(0xFF79747E),
-    background: Color(0xFFFFFBFE),
+    background: Color.fromARGB(255, 255, 255, 255),
     onBackground: Color(0xFF1C1B1F),
     surface: Color(0xFFFFFBFE),
     onSurface: Color(0xFF1C1B1F),
@@ -44,8 +46,8 @@ class TAppTheme {
     onSecondary: Color(0xFF332D41),
     secondaryContainer: Color(0xFF4A4458),
     onSecondaryContainer: Color(0xFFE8DEF8),
-    tertiary: Color(0xFFEFB8C8),
-    onTertiary: Color(0xFF492532),
+    tertiary: Color.fromARGB(255, 0, 0, 0), //color text
+    onTertiary: Color.fromARGB(255, 255, 255, 255), //color text
     tertiaryContainer: Color(0xFF633B48),
     onTertiaryContainer: Color(0xFFFFD8E4),
     error: Color(0xFFF2B8B5),
