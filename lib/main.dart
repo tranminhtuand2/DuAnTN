@@ -39,19 +39,19 @@ class MyApp extends StatelessWidget {
       defaultTransition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 500),
       theme: ThemeData(
-          fontFamily: GoogleFonts.lobster().fontFamily,
+          fontFamily: GoogleFonts.manrope().fontFamily,
           useMaterial3: true,
           colorScheme: TAppTheme.lightColorScheme,
           textTheme: TAppTextTheme.lightTextTheme),
       darkTheme: ThemeData(
-          fontFamily: GoogleFonts.lobster().fontFamily,
+          fontFamily: GoogleFonts.manrope().fontFamily,
           useMaterial3: true,
           colorScheme: TAppTheme.darkColorScheme,
           textTheme: TAppTextTheme.darkTextTheme),
       home: const ReponsiveLayout(
         moblie: MobileScreen(),
-        tablet: tabletScreen(),
-        desktop: desktopScreen(),
+        tablet: TabletScreen(),
+        desktop: DesktopScreen(),
       ),
     );
   }

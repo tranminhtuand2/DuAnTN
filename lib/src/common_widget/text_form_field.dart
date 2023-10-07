@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
-class textformfield extends StatelessWidget {
-  const textformfield({
+class MyTextFormField extends StatelessWidget {
+  const MyTextFormField({
     Key? key,
     required this.hintext,
     required this.labeltext,
@@ -42,7 +42,7 @@ class textformfield extends StatelessWidget {
               )
             : IconButton(
                 onPressed: () => textcontroller!.clear(),
-                icon: Icon(Icons.close),
+                icon: const Icon(Icons.close),
               ),
         // suffixIcon: Icon(Icons.close),
       ),

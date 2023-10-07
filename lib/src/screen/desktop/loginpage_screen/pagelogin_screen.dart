@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/loginpage_screen/widget/RegistrationDialog.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/dieuchinh_screen.dart';
-import '../../../common_widget/textform.dart';
+import '../../../common_widget/text_form_field.dart';
 import '../../../constants/textstring.dart';
 import '../../../controller/alertthongbao.dart';
 
@@ -55,7 +55,7 @@ class formdangnhap extends StatelessWidget {
               const SizedBox(
                 height: 60,
               ),
-              textformfield(
+              MyTextFormField(
                   hintext: "Tên đăng nhập",
                   labeltext: "Tên đăng nhập",
                   icon: const Icon(Icons.person),
@@ -68,7 +68,7 @@ class formdangnhap extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              textformfield(
+              MyTextFormField(
                   hintext: "mật khẩu",
                   labeltext: "mật khẩu",
                   icon: const Icon(Icons.key),

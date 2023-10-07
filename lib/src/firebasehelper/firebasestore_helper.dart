@@ -82,8 +82,8 @@ class FirestoreHelper {
   //read
   static Stream<List<SanPham>> readsp() {
     final sanphamCollection = FirebaseFirestore.instance.collection("sanpham");
-    return sanphamCollection.snapshots().map((QuerySnapshot) =>
-        QuerySnapshot.docs.map((e) => SanPham.fromSnapshot(e)).toList());
+    return sanphamCollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => SanPham.fromSnapshot(e)).toList());
   }
 
   //filter sp
@@ -120,12 +120,12 @@ class FirestoreHelper {
   }
 
   //cruddanhmuc
-  static Future<void> createdanhmuc(danhmucModel danhmuc) async {
+  static Future<void> createdanhmuc(DanhMuc danhmuc) async {
     final danhmucColection = FirebaseFirestore.instance.collection("danhmuc");
     final uid = danhmucColection.doc().id;
     final docRef = danhmucColection.doc(uid);
     final newdanhmuc =
-        danhmucModel(tendanhmuc: danhmuc.tendanhmuc, iddanhmuc: uid).toJson();
+        DanhMuc(tendanhmuc: danhmuc.tendanhmuc, iddanhmuc: uid).toJson();
 
     try {
       await docRef.set(newdanhmuc);
@@ -135,19 +135,19 @@ class FirestoreHelper {
   }
 
   //read
-  static Stream<List<danhmucModel>> readdanhmuc() {
+  static Stream<List<DanhMuc>> readdanhmuc() {
     final danhmucCollection = FirebaseFirestore.instance.collection("danhmuc");
     return danhmucCollection.snapshots().map((QuerySnapshot) =>
-        QuerySnapshot.docs.map((e) => danhmucModel.fromSnapshot(e)).toList());
+        QuerySnapshot.docs.map((e) => DanhMuc.fromSnapshot(e)).toList());
   }
 
   //update
-  static Future updatedanhmuc(danhmucModel danhmuc) async {
+  static Future updatedanhmuc(DanhMuc danhmuc) async {
     final headerCollection = FirebaseFirestore.instance.collection("danhmuc");
     final docRef = headerCollection.doc(danhmuc.iddanhmuc);
-    final newdanhmuc = danhmucModel(
-            tendanhmuc: danhmuc.tendanhmuc, iddanhmuc: danhmuc.iddanhmuc)
-        .toJson();
+    final newdanhmuc =
+        DanhMuc(tendanhmuc: danhmuc.tendanhmuc, iddanhmuc: danhmuc.iddanhmuc)
+            .toJson();
     try {
       await docRef.update(newdanhmuc);
     } catch (e) {
@@ -156,7 +156,7 @@ class FirestoreHelper {
   }
 
   //delete
-  static Future deletedanhmuc(danhmucModel danhmuc) async {
+  static Future deletedanhmuc(DanhMuc danhmuc) async {
     final headerCollection = FirebaseFirestore.instance.collection("danhmuc");
     final docRef = headerCollection.doc(danhmuc.iddanhmuc).delete();
   }

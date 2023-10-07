@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+var text = (BuildContext context) => Theme.of(context).textTheme;
+
 class TAppTextTheme {
   static const lightTextTheme = TextTheme(
     displayLarge: TextStyle(
