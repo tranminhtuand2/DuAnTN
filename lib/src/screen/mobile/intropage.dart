@@ -30,18 +30,18 @@ class _pagegioithieuState extends State<pagegioithieu> {
                 height: 200,
                 width: 200,
               ),
-              Text("vùi lòng nhấn vào nút kiểm tra"),
+              const Text("Vui lòng nhấn vào nút kiểm tra"),
               StreamBuilder(
                 stream: FirestoreHelper.readmap(),
                 builder: (context, snapshot) {
                   final maplocation = snapshot.data;
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   }
                   if (snapshot.hasError) {
-                    return Center(
+                    return const Center(
                       child: Text("đã có lỗi xảy ra"),
                     );
                   }
@@ -54,8 +54,8 @@ class _pagegioithieuState extends State<pagegioithieu> {
                       child: SingleChildScrollView(
                         child: Column(
                           children: [
-                            Text("lấy địa chỉ thành công "),
-                            SizedBox(
+                            const Text("lấy địa chỉ thành công "),
+                            const SizedBox(
                               height: 20,
                             ),
                             StreamBuilder(
@@ -64,12 +64,12 @@ class _pagegioithieuState extends State<pagegioithieu> {
                                 final listtenban = snapshot.data;
                                 if (snapshot.connectionState ==
                                     ConnectionState.waiting) {
-                                  return Center(
+                                  return const Center(
                                     child: CircularProgressIndicator(),
                                   );
                                 }
                                 if (snapshot.hasError) {
-                                  return Center(
+                                  return const Center(
                                     child: Text("lỗi"),
                                   );
                                 }
@@ -90,7 +90,7 @@ class _pagegioithieuState extends State<pagegioithieu> {
                                   return Padding(
                                     padding: const EdgeInsets.all(10.0),
                                     child: Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
                                           border: Border.all(
                                               color: Colors.black, width: 1),
@@ -98,9 +98,9 @@ class _pagegioithieuState extends State<pagegioithieu> {
                                               BorderRadius.circular(20)),
                                       child: DropdownButton(
                                         value: selectedValue,
-                                        underline: SizedBox(),
+                                        underline: const SizedBox(),
                                         isExpanded: true,
-                                        hint: Text("vui lòng chọn bàn"),
+                                        hint: const Text("vui lòng chọn bàn"),
                                         items: tenbanItem,
                                         onChanged: (value) {
                                           setState(() {
@@ -113,7 +113,7 @@ class _pagegioithieuState extends State<pagegioithieu> {
                                   );
                                 }
 
-                                return Center(
+                                return const Center(
                                   child: CircularProgressIndicator(),
                                 );
                               },
@@ -123,7 +123,7 @@ class _pagegioithieuState extends State<pagegioithieu> {
                       ),
                     );
                   }
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 },
@@ -142,13 +142,13 @@ class _pagegioithieuState extends State<pagegioithieu> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
+                      const SnackBar(
                         content: Text('vui long nhap ten ban'),
                       ),
                     );
                   }
                 },
-                child: Text("kiểm tra"),
+                child: const Text("kiểm tra"),
               )
             ],
           ),

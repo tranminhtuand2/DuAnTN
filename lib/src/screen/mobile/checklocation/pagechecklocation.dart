@@ -40,9 +40,9 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
     double targetLon =
         kinhdo; //108.02220482420341 /* Kinh độ của vị trí cụ thể */;
 
-    double distance = await Geolocator.distanceBetween(targetLat, targetLon,
+    double distance = Geolocator.distanceBetween(targetLat, targetLon,
         currentPosition.latitude, currentPosition.longitude);
-    if (distance <= 100.0) {
+    if (distance <= 10000000.0) {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
@@ -72,7 +72,7 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
     return AlertDialog(
       content: Scaffold(
           appBar: AppBar(
-            title: Text('Kiểm tra vị trí'),
+            title: const Text('Kiểm tra vị trí'),
           ),
           body: Center(
             child: Column(
@@ -83,8 +83,8 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
                   height: 200,
                   width: 200,
                 ),
-                Text("đang kiểm tra..."),
-                CircularProgressIndicator(),
+                const Text("đang kiểm tra..."),
+                const CircularProgressIndicator(),
               ],
             ),
           )),

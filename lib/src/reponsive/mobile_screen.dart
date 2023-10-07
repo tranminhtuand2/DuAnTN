@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/intropage.dart';
 
-class mobileScreen extends StatefulWidget {
-  const mobileScreen({super.key});
+class MobileScreen extends StatefulWidget {
+  const MobileScreen({super.key});
 
   @override
-  State<mobileScreen> createState() => _mobileScreenState();
+  State<MobileScreen> createState() => _MobileScreenState();
 }
 
-class _mobileScreenState extends State<mobileScreen> {
+class _MobileScreenState extends State<MobileScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
       body: pagegioithieu(),
     );
   }

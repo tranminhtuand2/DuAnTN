@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Coffee Wind',
       debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.leftToRightWithFade,
+      defaultTransition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 500),
       theme: ThemeData(
           fontFamily: GoogleFonts.lobster().fontFamily,
@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           colorScheme: TAppTheme.darkColorScheme,
           textTheme: TAppTextTheme.darkTextTheme),
       home: const ReponsiveLayout(
-        moblie: mobileScreen(),
+        moblie: MobileScreen(),
         tablet: tabletScreen(),
         desktop: desktopScreen(),
       ),

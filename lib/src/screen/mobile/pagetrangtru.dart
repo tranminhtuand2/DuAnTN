@@ -63,11 +63,11 @@ class _LoginPageState extends State<LoginPage> {
                   final giohangtb = snapshot.data;
                   return badges.Badge(
                     position: badges.BadgePosition.custom(),
-                    badgeAnimation: badges.BadgeAnimation.fade(),
+                    badgeAnimation: const badges.BadgeAnimation.fade(),
                     //lấy dự liệu order
                     badgeContent: Text(
                       "${giohangtb!.length}",
-                      style: TextStyle(fontSize: 12),
+                      style: const TextStyle(fontSize: 12),
                     ),
                     child: IconButton(
                         onPressed: () {
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
                         )),
                   );
                 }
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               },
@@ -97,12 +97,12 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context, snapshot) {
                 final danhmuc = snapshot.data;
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return Center(
+                  return const Center(
                     child: CircularProgressIndicator(),
                   );
                 }
                 if (snapshot.hasError) {
-                  return Center(
+                  return const Center(
                     child: Text("đã có lỗi xảy ra"),
                   );
                 }
@@ -114,7 +114,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     }
                     return Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
+                      margin: const EdgeInsets.symmetric(vertical: 10),
                       height: 30,
                       child: ListView.builder(
                         scrollDirection: Axis.horizontal,
@@ -127,8 +127,8 @@ class _LoginPageState extends State<LoginPage> {
                                 ? kDefaultPadding
                                 : 0,
                           ),
-                          padding:
-                              EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: kDefaultPadding),
                           decoration: BoxDecoration(
                             color: index == selectedindex
                                 ? Colors.white.withOpacity(0.4)
@@ -154,12 +154,12 @@ class _LoginPageState extends State<LoginPage> {
                   }
                 }
 
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               },
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             StreamBuilder(
@@ -184,8 +184,8 @@ class _LoginPageState extends State<LoginPage> {
                     child: Stack(
                       children: [
                         Container(
-                          margin: EdgeInsets.only(top: 70),
-                          decoration: BoxDecoration(
+                          margin: const EdgeInsets.only(top: 70),
+                          decoration: const BoxDecoration(
                             color: kBackgroundColor,
                             borderRadius: BorderRadius.only(
                               topLeft: Radius.circular(40),
@@ -205,7 +205,7 @@ class _LoginPageState extends State<LoginPage> {
                                     ));
                               },
                               child: Container(
-                                margin: EdgeInsets.symmetric(
+                                margin: const EdgeInsets.symmetric(
                                     horizontal: kDefaultPadding,
                                     vertical: kDefaultPadding / 2),
                                 // color: Theme.of(context).colorScheme.secondary,
@@ -220,9 +220,10 @@ class _LoginPageState extends State<LoginPage> {
                                         color: kBlueColor,
                                       ),
                                       child: Container(
-                                        margin: EdgeInsets.only(right: 10),
+                                        margin:
+                                            const EdgeInsets.only(right: 10),
                                         decoration: BoxDecoration(
-                                            boxShadow: [kDefaultShadow],
+                                            boxShadow: const [kDefaultShadow],
                                             color: Theme.of(context)
                                                 .colorScheme
                                                 .background,
@@ -235,7 +236,7 @@ class _LoginPageState extends State<LoginPage> {
                                       top: 0,
                                       right: 0,
                                       child: Container(
-                                        padding: EdgeInsets.symmetric(
+                                        padding: const EdgeInsets.symmetric(
                                             horizontal: kDefaultPadding),
                                         height: 160,
                                         width: 200,
@@ -256,7 +257,7 @@ class _LoginPageState extends State<LoginPage> {
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
                                           children: [
-                                            Spacer(),
+                                            const Spacer(),
                                             Padding(
                                               padding: const EdgeInsets.all(20),
                                               child: Text(
@@ -266,9 +267,10 @@ class _LoginPageState extends State<LoginPage> {
                                                     .titleLarge,
                                               ),
                                             ),
-                                            Spacer(),
+                                            const Spacer(),
                                             Container(
-                                              padding: EdgeInsets.symmetric(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
                                                 horizontal:
                                                     kDefaultPadding * 1.5,
                                                 vertical: kDefaultPadding / 4,
@@ -277,7 +279,8 @@ class _LoginPageState extends State<LoginPage> {
                                                 color: Theme.of(context)
                                                     .colorScheme
                                                     .onTertiary,
-                                                borderRadius: BorderRadius.only(
+                                                borderRadius:
+                                                    const BorderRadius.only(
                                                   bottomLeft:
                                                       Radius.circular(22),
                                                   topRight: Radius.circular(22),
@@ -301,7 +304,7 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   );
                 }
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               },
