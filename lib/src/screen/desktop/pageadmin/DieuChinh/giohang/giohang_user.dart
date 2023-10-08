@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
 // import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
@@ -75,43 +76,70 @@ class _CartProductState extends State<CartProduct> {
                                     color: const Color(0xFFF5F6F9),
                                     borderRadius: BorderRadius.circular(15),
                                   ),
-                                  child: Image.network(giohangindex.hinhanh),
+                                  child:
+                                      cacheNetWorkImage(giohangindex.hinhanh),
                                 ),
                               ),
                             ),
-                            SizedBox(
-                              width: getProportionateScreenWidth(20),
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  giohangindex.tensp,
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onBackground),
-                                ),
-                                Text.rich(
-                                  TextSpan(
-                                    text: " ${giohangindex.giasp}",
-                                    children: [
-                                      TextSpan(
-                                          text: "x ${giohangindex.soluong}")
-                                    ],
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    giohangindex.tensp,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground),
                                   ),
-                                ),
-                              ],
+                                  Text.rich(
+                                    TextSpan(
+                                      text: " ${giohangindex.giasp}",
+                                      children: [
+                                        TextSpan(
+                                            text: " x ${giohangindex.soluong}")
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                             Text(
-                                "  VND: ${giohangindex.soluong * giohangindex.giasp}"),
+                                "VND: ${giohangindex.soluong * giohangindex.giasp}"),
                             IconButton(
                                 onPressed: () {
-                                  FirestoreHelper.deletegiohang(
-                                      giohangindex, widget.tenban);
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Xóa?'),
+                                      content: const Text(
+                                          'Bạn có chắc chắn muốn xóa?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Không'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            await FirestoreHelper.deletegiohang(
+                                                giohangindex, widget.tenban);
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Có'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
                                 },
-                                icon: const Icon(Icons.delete))
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ))
                           ],
                         ),
                       );
@@ -129,7 +157,8 @@ class _CartProductState extends State<CartProduct> {
                 showModalBottomSheet(
                   context: context,
                   builder: (context) {
-                    return SizedBox(
+                    return Container(
+                      padding: const EdgeInsets.all(16),
                       // height: 200,
                       child: StreamBuilder(
                         stream: FirestoreHelper.readgiohang(widget.tenban),
@@ -149,14 +178,21 @@ class _CartProductState extends State<CartProduct> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text("nhập mã"),
-                                      SizedBox(
-                                        width: SizeConfig.screenWidth * 0.6,
-                                        child: TextFormField(
-                                          decoration: InputDecoration(
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(22),
+                                      const Text("Mã giảm giá: "),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 54,
+                                          child: TextFormField(
+                                            controller: makm,
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 20),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -174,88 +210,120 @@ class _CartProductState extends State<CartProduct> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text("số tiền cần thanh toán:"),
+                                      const Text("Tổng tiền:"),
                                       Text("$tongtienthanhtoan VND"),
                                     ],
                                   ),
                                 ),
                                 // luu hoá đơn
-                                ElevatedButton(
-                                    onPressed: () {
-                                      FirestoreHelper.createtinhtrang(
-                                          tinhtrangTT(trangthai: "success"),
-                                          widget.tenban);
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 20),
+                                  child: MyButton(
+                                      onTap: () {
+                                        FirestoreHelper.createtinhtrang(
+                                            tinhtrangTT(trangthai: "success"),
+                                            widget.tenban);
 
-                                      Get.defaultDialog(
-                                        title: "Thanh toán",
-                                        content: Column(
-                                          children: [
-                                            const Text(
-                                              "xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
-                                              textAlign: TextAlign.center,
-                                            ),
-                                            StreamBuilder(
-                                              stream:
-                                                  FirestoreHelper.readtinhtrang(
-                                                      widget.tenban),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.connectionState ==
-                                                    ConnectionState.waiting) {
-                                                  return const Center(
-                                                    child:
-                                                        CircularProgressIndicator(),
-                                                  );
-                                                }
-                                                if (snapshot.hasError) {
-                                                  return const Center(
-                                                    child: Text("lỗi"),
-                                                  );
-                                                }
-                                                if (snapshot.hasData) {
-                                                  final tinhtrang =
-                                                      snapshot.data;
-                                                  for (var i = 0;
-                                                      i < tinhtrang!.length;
-                                                      i++) {
-                                                    if (tinhtrang[i]
-                                                                .trangthai ==
-                                                            "xacnhan" &&
-                                                        tinhtrang[i]
-                                                                .idtinhtrang ==
-                                                            widget.tenban) {
-                                                      showSnackbar(
-                                                          tongtienthanhtoan);
-                                                      return Text(
-                                                        "đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan",
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                      );
-                                                    } else {
-                                                      const Text(
-                                                          "vui lòng chờ");
+                                        Get.defaultDialog(
+                                          title: "Thanh toán",
+                                          content: Column(
+                                            children: [
+                                              const Text(
+                                                "Xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
+                                                textAlign: TextAlign.center,
+                                              ),
+                                              StreamBuilder(
+                                                stream: FirestoreHelper
+                                                    .readtinhtrang(
+                                                        widget.tenban),
+                                                builder: (context, snapshot) {
+                                                  if (snapshot
+                                                          .connectionState ==
+                                                      ConnectionState.waiting) {
+                                                    return const Center(
+                                                      child:
+                                                          CircularProgressIndicator(),
+                                                    );
+                                                  }
+                                                  if (snapshot.hasError) {
+                                                    return const Center(
+                                                      child: Text("lỗi"),
+                                                    );
+                                                  }
+                                                  if (snapshot.hasData) {
+                                                    final tinhtrang =
+                                                        snapshot.data;
+                                                    for (var i = 0;
+                                                        i < tinhtrang!.length;
+                                                        i++) {
+                                                      if (tinhtrang[i]
+                                                                  .trangthai ==
+                                                              "xacnhan" &&
+                                                          tinhtrang[i]
+                                                                  .idtinhtrang ==
+                                                              widget.tenban) {
+                                                        showSnackbar(
+                                                            tongtienthanhtoan);
+                                                        return Text(
+                                                          "Đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan vnđ",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                        );
+                                                      } else {
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 10),
+                                                          child: const Text(
+                                                              "Vui lòng chờ"),
+                                                        );
+                                                      }
                                                     }
                                                   }
-                                                }
-                                                return const CircularProgressIndicator();
-                                              },
-                                            )
-                                          ],
-                                        ),
-                                        actions: [
-                                          ElevatedButton(
-                                            onPressed: () {
-                                              //quay lai trang san phẩm
-                                              Get.to(
-                                                () => HomePage(
-                                                    tenban: widget.tenban),
-                                              );
-                                            },
-                                            child: const Text("thoát"),
+                                                  return const CircularProgressIndicator();
+                                                },
+                                              )
+                                            ],
                                           ),
-                                        ],
-                                      );
-                                    },
-                                    child: const Text("Xác nhận thanh toán"))
+                                          actions: [
+                                            MyButton(
+                                                onTap: () {
+                                                  //quay lai trang san phẩm
+                                                  Get.offAll(
+                                                    () => HomePage(
+                                                        tenban: widget.tenban),
+                                                  );
+                                                },
+                                                backgroundColor:
+                                                    colorScheme(context)
+                                                        .primary,
+                                                height: 60,
+                                                text: Text(
+                                                  'Thoát',
+                                                  style: text(context)
+                                                      .titleMedium
+                                                      ?.copyWith(
+                                                          color: colorScheme(
+                                                                  context)
+                                                              .tertiary),
+                                                ))
+                                          ],
+                                        );
+                                      },
+                                      backgroundColor:
+                                          colorScheme(context).primary,
+                                      height: 60,
+                                      text: Text(
+                                        'Xác nhận thanh toán',
+                                        style: text(context)
+                                            .titleMedium
+                                            ?.copyWith(
+                                                color: colorScheme(context)
+                                                    .tertiary),
+                                      )),
+                                )
                               ],
                             );
                           }

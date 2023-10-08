@@ -154,17 +154,20 @@ class _HomePageState extends State<HomePage> {
                     ?.copyWith(color: colorScheme(context).tertiary),
               ),
             ),
-            child: IconButton(
-                onPressed: () {
-                  Get.to(
-                    () => CartProduct(tenban: widget.tenban),
-                  );
-                },
-                icon: Icon(
-                  Icons.shopping_bag,
-                  size: 30,
-                  color: Theme.of(context).colorScheme.onPrimaryContainer,
-                )),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: IconButton(
+                  onPressed: () {
+                    Get.to(
+                      () => CartProduct(tenban: widget.tenban),
+                    );
+                  },
+                  icon: Icon(
+                    Icons.shopping_bag,
+                    size: 32,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                  )),
+            ),
           );
         }
         return const Center(
