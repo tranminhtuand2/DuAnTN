@@ -24,6 +24,7 @@ class ProductDetailPage extends StatefulWidget {
 
 class _ProductDetailPageState extends State<ProductDetailPage> {
   final TextEditingController controllerNode = TextEditingController();
+  bool disableButton = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,28 +48,33 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
               ),
               QuanityButtonProduct(
                 price: widget.product.giasp,
-                onClick: (int soLuong) async {
-                  try {
-                    log("Số lượng: $soLuong");
+                onClick: disableButton
+                    ? null
+                    : (int soLuong) async {
+                        setState(() {
+                          disableButton = true;
+                        });
+                        try {
+                          log("Số lượng: $soLuong");
 
-                    await FirestoreHelper.createdgiohang(
-                      GioHang(
-                          tensp: widget.product.tensp,
-                          giasp: widget.product.giasp,
-                          soluong: soLuong,
-                          ghichu: controllerNode.text,
-                          hinhanh: widget.product.hinhanh),
-                      widget.soBan,
-                    );
-                  } finally {
-                    showCustomSnackBar(
-                        title: 'Thành công',
-                        message: "Thêm món thành công",
-                        type: Type.success);
-                    // ignore: use_build_context_synchronously
-                    Navigator.of(context).pop();
-                  }
-                },
+                          await FirestoreHelper.createdgiohang(
+                            GioHang(
+                                tensp: widget.product.tensp,
+                                giasp: widget.product.giasp,
+                                soluong: soLuong,
+                                ghichu: controllerNode.text,
+                                hinhanh: widget.product.hinhanh),
+                            widget.soBan,
+                          );
+                        } finally {
+                          showCustomSnackBar(
+                              title: 'Thành công',
+                              message: "Thêm món thành công",
+                              type: Type.success);
+                          // ignore: use_build_context_synchronously
+                          Navigator.of(context).pop();
+                        }
+                      },
               ),
             ],
           ),

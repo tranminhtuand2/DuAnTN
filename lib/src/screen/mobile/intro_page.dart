@@ -77,8 +77,8 @@ class _IntroScreenState extends State<IntroScreen> {
                                 message: 'Đã có lỗi xảy ra',
                                 type: Type.error);
                           }
-                          List<DropdownMenuItem> tenbanItem = [];
                           if (snapshot.hasData) {
+                            List<DropdownMenuItem> tenbanItem = [];
                             if (listtenban != null) {
                               for (var i = 0; i < listtenban.length; i++) {
                                 tenbanItem.add(
@@ -89,7 +89,9 @@ class _IntroScreenState extends State<IntroScreen> {
                                 );
                               }
                             }
-                            return myDropDown(tenbanItem);
+                            if (tenbanItem.isNotEmpty) {
+                              return myDropDown(tenbanItem);
+                            }
                           }
 
                           return const SizedBox();
