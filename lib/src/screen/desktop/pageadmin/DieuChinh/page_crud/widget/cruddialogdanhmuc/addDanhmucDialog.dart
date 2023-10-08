@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:managerfoodandcoffee/src/common_widget/textform.dart';
+import 'package:managerfoodandcoffee/src/common_widget/text_form_field.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 import 'package:progress_dialog2/progress_dialog2.dart';
@@ -22,7 +22,7 @@ class _addDanhmuc_dialogState extends State<addDanhmuc_dialog> {
     pr = ProgressDialog(context);
     pr.style(
       message: 'Đang tải lên...',
-      progressWidget: CircularProgressIndicator(),
+      progressWidget: const CircularProgressIndicator(),
       maxProgress: 100.0,
     );
   }
@@ -35,16 +35,16 @@ class _addDanhmuc_dialogState extends State<addDanhmuc_dialog> {
       content: SingleChildScrollView(
         child: Column(
           children: [
-            textformfield(
+            MyTextFormField(
                 hintext: "danh mục",
                 labeltext: "danh mục",
-                icon: Icon(Icons.abc),
+                icon: const Icon(Icons.abc),
                 regExp: "",
                 isempty: "không được để danh mục rỗng",
                 wrongtype: "có ký tự đặc biệt",
                 textcontroller: textdanhmuc,
                 hint: false),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ElevatedButton(
@@ -52,7 +52,7 @@ class _addDanhmuc_dialogState extends State<addDanhmuc_dialog> {
                 try {
                   pr.show();
                   await FirestoreHelper.createdanhmuc(
-                          danhmucModel(tendanhmuc: textdanhmuc.text))
+                          DanhMuc(tendanhmuc: textdanhmuc.text))
                       .then((value) => Navigator.of(context).pop());
                 } catch (e) {
                   print('Lỗi khi xóa hình ảnh: $e');
@@ -60,7 +60,7 @@ class _addDanhmuc_dialogState extends State<addDanhmuc_dialog> {
                   pr.hide();
                 }
               },
-              child: Text("tạo danh mục"),
+              child: const Text("tạo danh mục"),
             ),
           ],
         ),

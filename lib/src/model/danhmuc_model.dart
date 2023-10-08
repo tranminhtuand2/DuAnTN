@@ -1,16 +1,16 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class danhmucModel {
+class DanhMuc {
   String tendanhmuc;
   String? iddanhmuc;
-  danhmucModel({
+  DanhMuc({
     required this.tendanhmuc,
     this.iddanhmuc,
   });
-  factory danhmucModel.fromSnapshot(DocumentSnapshot snap) {
+  factory DanhMuc.fromSnapshot(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
-    return danhmucModel(
+    return DanhMuc(
         tendanhmuc: snapshot['tendanhmuc'], iddanhmuc: snapshot['iddanhmuc']);
   }
   Map<String, dynamic> toJson() => {

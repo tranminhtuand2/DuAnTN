@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/common_widget/textform.dart';
+import 'package:managerfoodandcoffee/src/common_widget/text_form_field.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 import 'package:progress_dialog2/progress_dialog2.dart';
 
 class Editdanhmuc_dialog extends StatefulWidget {
-  final danhmucModel danhmuc;
+  final DanhMuc danhmuc;
   const Editdanhmuc_dialog({
     super.key,
     required this.danhmuc,
@@ -27,7 +27,7 @@ class _Editdanhmuc_dialogState extends State<Editdanhmuc_dialog> {
     pr = ProgressDialog(context);
     pr.style(
       message: 'Đang tải lên...',
-      progressWidget: CircularProgressIndicator(),
+      progressWidget: const CircularProgressIndicator(),
       maxProgress: 100.0,
     );
   }
@@ -40,23 +40,23 @@ class _Editdanhmuc_dialogState extends State<Editdanhmuc_dialog> {
       content: SingleChildScrollView(
         child: Column(
           children: [
-            textformfield(
+            MyTextFormField(
                 hintext: "danh mục",
                 labeltext: "danh mục",
-                icon: Icon(Icons.abc),
+                icon: const Icon(Icons.abc),
                 regExp: "",
                 isempty: "không được để danh mục rỗng",
                 wrongtype: "có ký tự đặc biệt",
                 textcontroller: textdanhmuc,
                 hint: false),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             ElevatedButton(
               onPressed: () async {
                 try {
                   pr.show();
-                  await FirestoreHelper.updatedanhmuc(danhmucModel(
+                  await FirestoreHelper.updatedanhmuc(DanhMuc(
                           tendanhmuc: textdanhmuc.text,
                           iddanhmuc: widget.danhmuc.iddanhmuc))
                       .then((value) => navigator!.pop(context));
@@ -66,7 +66,7 @@ class _Editdanhmuc_dialogState extends State<Editdanhmuc_dialog> {
                   pr.hide();
                 }
               },
-              child: Text("tạo danh mục"),
+              child: const Text("tạo danh mục"),
             ),
           ],
         ),

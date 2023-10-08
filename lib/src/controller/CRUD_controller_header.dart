@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/common_widget/textform.dart';
+import 'package:managerfoodandcoffee/src/common_widget/text_form_field.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 
 import 'package:managerfoodandcoffee/src/model/header_model.dart';
@@ -109,7 +109,7 @@ class _crud_headerState extends State<crud_header> {
     pr = ProgressDialog(context);
     pr.style(
       message: 'Đang tải lên...',
-      progressWidget: CircularProgressIndicator(),
+      progressWidget: const CircularProgressIndicator(),
       maxProgress: 100.0,
     );
   }
@@ -136,10 +136,10 @@ class _crud_headerState extends State<crud_header> {
                           onPressed: () async {
                             pickImage();
                           },
-                          child: Text('Chọn hình ảnh'),
+                          child: const Text('Chọn hình ảnh'),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       _imageFile.isNotEmpty
                           ? Image.memory(
                               selectedImageInBytes!,
@@ -148,16 +148,16 @@ class _crud_headerState extends State<crud_header> {
                               scale: 1,
                               fit: BoxFit.fill,
                             )
-                          : Text('Không có hình ảnh để hiển thị'),
-                      SizedBox(height: 20),
+                          : const Text('Không có hình ảnh để hiển thị'),
+                      const SizedBox(height: 20),
                       Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 20),
-                        child: Container(
+                        child: SizedBox(
                           width: 600,
-                          child: textformfield(
+                          child: MyTextFormField(
                             hintext: "nhập nôi dung",
                             labeltext: "nội dung",
-                            icon: Icon(Icons.abc),
+                            icon: const Icon(Icons.abc),
                             regExp: "",
                             isempty: "không được để trống",
                             wrongtype: "",
@@ -166,7 +166,7 @@ class _crud_headerState extends State<crud_header> {
                           ),
                         ),
                       ),
-                      SizedBox(height: 20),
+                      const SizedBox(height: 20),
                       ElevatedButton(
                         onPressed: () async {
                           // pr.show();
@@ -181,14 +181,16 @@ class _crud_headerState extends State<crud_header> {
                           } catch (e) {
                             Get.rawSnackbar(
                               message: "vui lòng chọn hình ảnh.",
-                              duration: Duration(seconds: 3), // Độ dài hiển thị
+                              duration:
+                                  const Duration(seconds: 3), // Độ dài hiển thị
                               isDismissible:
                                   true, // Cho phép đóng Snackbar bằng cách nhấn vào nó
-                              margin: EdgeInsets.all(
+                              margin: const EdgeInsets.all(
                                   16.0), // Đặt khoảng cách bên trái
                               borderRadius: 12, // Bỏ viền bo tròn
-                              animationDuration: Duration(milliseconds: 300),
-                              backgroundGradient: LinearGradient(
+                              animationDuration:
+                                  const Duration(milliseconds: 300),
+                              backgroundGradient: const LinearGradient(
                                 colors: [Colors.blue, Colors.green], // Màu nền
                                 stops: [0.1, 0.9],
                               ),
@@ -197,7 +199,7 @@ class _crud_headerState extends State<crud_header> {
 
                           // pr.hide();
                         },
-                        child: Text('THÊM MỚI'),
+                        child: const Text('THÊM MỚI'),
                       ),
                     ],
                   ),
@@ -209,24 +211,24 @@ class _crud_headerState extends State<crud_header> {
             stream: FirestoreHelper.read(),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               }
               if (snapshot.hasError) {
-                return Center(
+                return const Center(
                   child: Text("lỗi"),
                 );
               }
               if (snapshot.hasData) {
                 final headerdata = snapshot.data;
-                return Container(
+                return SizedBox(
                   height: 500,
                   child: ListView.builder(
                     itemCount: headerdata!.length,
                     itemBuilder: (context, index) {
                       final headerindex = headerdata[index];
-                      return Container(
+                      return SizedBox(
                         height: 300,
                         width: double.infinity,
                         child: Column(
@@ -252,9 +254,9 @@ class _crud_headerState extends State<crud_header> {
                                       ),
                                     );
                                   },
-                                  icon: Icon(Icons.edit),
+                                  icon: const Icon(Icons.edit),
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   width: 10,
                                 ),
                                 IconButton(
@@ -283,7 +285,7 @@ class _crud_headerState extends State<crud_header> {
                                       },
                                     );
                                   },
-                                  icon: Icon(Icons.delete),
+                                  icon: const Icon(Icons.delete),
                                 ),
                               ],
                             )
@@ -294,7 +296,7 @@ class _crud_headerState extends State<crud_header> {
                   ),
                 );
               }
-              return Center(
+              return const Center(
                 child: CircularProgressIndicator(),
               );
             },

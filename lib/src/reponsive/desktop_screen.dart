@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../screen/desktop/loginpage_screen/pagelogin_screen.dart';
 
-class desktopScreen extends StatelessWidget {
-  const desktopScreen({super.key});
+class DesktopScreen extends StatelessWidget {
+  const DesktopScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +12,14 @@ class desktopScreen extends StatelessWidget {
       body: Container(
         height: double.infinity,
         width: double.infinity,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage(
                 '/images/bgdesktop.jpg'), // Thay đổi hình ảnh nền ở đây
             fit: BoxFit.cover,
           ),
         ),
-        child: admin_login(),
+        child: const admin_login(),
       ),
     );
   }

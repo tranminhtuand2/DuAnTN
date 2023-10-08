@@ -36,22 +36,23 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'Coffee Wind',
       debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.leftToRightWithFade,
+      defaultTransition: Transition.cupertino,
       transitionDuration: const Duration(milliseconds: 500),
       theme: ThemeData(
-          fontFamily: GoogleFonts.lobster().fontFamily,
+          fontFamily: GoogleFonts.manrope().fontFamily,
           useMaterial3: true,
           colorScheme: TAppTheme.lightColorScheme,
           textTheme: TAppTextTheme.lightTextTheme),
       darkTheme: ThemeData(
-          fontFamily: GoogleFonts.lobster().fontFamily,
+          fontFamily: GoogleFonts.manrope().fontFamily,
           useMaterial3: true,
           colorScheme: TAppTheme.darkColorScheme,
           textTheme: TAppTextTheme.darkTextTheme),
-      home: ReponsiveLayout(
-          moblie: mobileScreen(),
-          tablet: tabletScreen(),
-          desktop: desktopScreen()),
+      home: const ReponsiveLayout(
+        moblie: MobileScreen(),
+        tablet: TabletScreen(),
+        desktop: DesktopScreen(),
+      ),
     );
   }
 }

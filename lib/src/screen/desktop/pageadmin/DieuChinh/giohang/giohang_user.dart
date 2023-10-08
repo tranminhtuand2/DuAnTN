@@ -5,7 +5,7 @@ import 'package:managerfoodandcoffee/src/constants/size.dart';
 // import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/pagetrangtru.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/home_page.dart';
 
 class giohangUser extends StatefulWidget {
   final String tenban;
@@ -49,12 +49,12 @@ class _giohangUserState extends State<giohangUser> {
                   stream: FirestoreHelper.readgiohang(widget.tenban),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
                     if (snapshot.hasError) {
-                      return Center(
+                      return const Center(
                         child: Text("lỗi"),
                       );
                     }
@@ -74,9 +74,9 @@ class _giohangUserState extends State<giohangUser> {
                                   child: AspectRatio(
                                     aspectRatio: 0.88,
                                     child: Container(
-                                      padding: EdgeInsets.all(10),
+                                      padding: const EdgeInsets.all(10),
                                       decoration: BoxDecoration(
-                                        color: Color(0xFFF5F6F9),
+                                        color: const Color(0xFFF5F6F9),
                                         borderRadius: BorderRadius.circular(15),
                                       ),
                                       child:
@@ -100,7 +100,7 @@ class _giohangUserState extends State<giohangUser> {
                                     ),
                                     Text.rich(
                                       TextSpan(
-                                        text: "\ ${giohangindex.giasp}",
+                                        text: " ${giohangindex.giasp}",
                                         children: [
                                           TextSpan(
                                               text: "x ${giohangindex.soluong}")
@@ -116,14 +116,14 @@ class _giohangUserState extends State<giohangUser> {
                                       FirestoreHelper.deletegiohang(
                                           giohangindex, widget.tenban);
                                     },
-                                    icon: Icon(Icons.delete))
+                                    icon: const Icon(Icons.delete))
                               ],
                             ),
                           );
                         },
                       );
                     }
-                    return Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator());
                   },
                 ),
               ),
@@ -155,7 +155,7 @@ class _giohangUserState extends State<giohangUser> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("nhập mã"),
+                                        const Text("nhập mã"),
                                         SizedBox(
                                           width: SizeConfig.screenWidth * 0.6,
                                           child: TextFormField(
@@ -169,7 +169,8 @@ class _giohangUserState extends State<giohangUser> {
                                         ),
                                         IconButton(
                                             onPressed: () {},
-                                            icon: Icon(Icons.confirmation_num))
+                                            icon: const Icon(
+                                                Icons.confirmation_num))
                                       ],
                                     ),
                                   ),
@@ -179,8 +180,8 @@ class _giohangUserState extends State<giohangUser> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Text("số tiền cần thanh toán:"),
-                                        Text("${tongtienthanhtoan} VND"),
+                                        const Text("số tiền cần thanh toán:"),
+                                        Text("$tongtienthanhtoan VND"),
                                       ],
                                     ),
                                   ),
@@ -195,7 +196,7 @@ class _giohangUserState extends State<giohangUser> {
                                           title: "Thanh toán",
                                           content: Column(
                                             children: [
-                                              Text(
+                                              const Text(
                                                 "xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
                                                 textAlign: TextAlign.center,
                                               ),
@@ -207,13 +208,13 @@ class _giohangUserState extends State<giohangUser> {
                                                   if (snapshot
                                                           .connectionState ==
                                                       ConnectionState.waiting) {
-                                                    return Center(
+                                                    return const Center(
                                                       child:
                                                           CircularProgressIndicator(),
                                                     );
                                                   }
                                                   if (snapshot.hasError) {
-                                                    return Center(
+                                                    return const Center(
                                                       child: Text("lỗi"),
                                                     );
                                                   }
@@ -232,16 +233,17 @@ class _giohangUserState extends State<giohangUser> {
                                                         showSnackbar(
                                                             tongtienthanhtoan);
                                                         return Text(
-                                                          "đã xác nhận \n vui lòng chuẩn bị ${tongtienthanhtoan}",
+                                                          "đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan",
                                                           textAlign:
                                                               TextAlign.center,
                                                         );
                                                       } else {
-                                                        Text("vui lòng chờ");
+                                                        const Text(
+                                                            "vui lòng chờ");
                                                       }
                                                     }
                                                   }
-                                                  return CircularProgressIndicator();
+                                                  return const CircularProgressIndicator();
                                                 },
                                               )
                                             ],
@@ -251,20 +253,20 @@ class _giohangUserState extends State<giohangUser> {
                                               onPressed: () {
                                                 //quay lai trang san phẩm
                                                 Get.to(
-                                                  () => LoginPage(
+                                                  () => HomePage(
                                                       tenban: widget.tenban),
                                                 );
                                               },
-                                              child: Text("thoát"),
+                                              child: const Text("thoát"),
                                             ),
                                           ],
                                         );
                                       },
-                                      child: Text("Xác nhận thanh toán"))
+                                      child: const Text("Xác nhận thanh toán"))
                                 ],
                               );
                             }
-                            return Center(
+                            return const Center(
                               child: CircularProgressIndicator(),
                             );
                           },
@@ -273,7 +275,7 @@ class _giohangUserState extends State<giohangUser> {
                     },
                   );
                 },
-                child: Text("xem hoá đơn"),
+                child: const Text("xem hoá đơn"),
               ),
             )
 
