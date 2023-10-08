@@ -26,7 +26,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 260),
+      duration: const Duration(milliseconds: 260),
     );
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController!);
@@ -36,20 +36,20 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("bán hàng"),
-      ),
+      // appBar: AppBar(
+      //   title: Text("bán hàng"),
+      // ),
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
           Bubble(
-            title: "thêm sản phẩm",
+            title: "Thêm sản phẩm",
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.settings,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
-              Get.to(() => SanphamCrudScreen());
+              Get.to(() => const SanphamCrudScreen());
             },
           ),
           Bubble(
@@ -57,10 +57,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.people,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
-              Get.dialog(Crud_table());
+              Get.dialog(const Crud_table());
             },
           ),
           Bubble(
@@ -68,10 +68,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.home,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
-              Get.to(() => headerCrudScreen());
+              Get.to(() => const headerCrudScreen());
             },
           ),
         ],
@@ -113,7 +113,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                           child: GridView.builder(
                             itemCount: table!.length,
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount:
                                   6, // Bạn có thể thay đổi số cột ở đây
                               mainAxisSpacing:
@@ -144,13 +144,13 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                     return badges.Badge(
                                       position: badges.BadgePosition.topStart(),
                                       badgeAnimation:
-                                          badges.BadgeAnimation.fade(),
+                                          const badges.BadgeAnimation.fade(),
                                       //lấy dự liệu order
                                       badgeContent: Text(
                                         "${giohangtb!.length}",
-                                        style: TextStyle(fontSize: 20),
+                                        style: const TextStyle(fontSize: 20),
                                       ),
-                                      child: giohangtb.length > 0
+                                      child: giohangtb.isNotEmpty
                                           ? InkWell(
                                               onTap: () {},
                                               child: Container(
@@ -159,7 +159,8 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
-                                                margin: EdgeInsets.all(20),
+                                                margin:
+                                                    const EdgeInsets.all(20),
                                                 height: 300,
                                                 width: 150,
                                                 child: SingleChildScrollView(
@@ -178,7 +179,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                               ),
                                             )
                                           : Container(
-                                              margin: EdgeInsets.all(20),
+                                              margin: const EdgeInsets.all(20),
                                               height: 300,
                                               width: 150,
                                               child: SingleChildScrollView(
