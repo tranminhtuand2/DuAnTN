@@ -61,18 +61,24 @@ class _QuanityButtonProductState extends State<QuanityButtonProduct> {
                         ),
                       ),
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Text(
-                        '$count',
-                        style: const TextStyle(
-                            fontSize: 16, fontWeight: FontWeight.bold),
+                    SizedBox(
+                      width: 20,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          '$count',
+                          style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                        ),
                       ),
                     ),
                     IconButton(
                       onPressed: () {
                         setState(() {
                           count++;
+                          if (count >= 9) {
+                            count = 9;
+                          }
                         });
                       },
                       icon: Container(
@@ -102,7 +108,7 @@ class _QuanityButtonProductState extends State<QuanityButtonProduct> {
                     backgroundColor: colorScheme(context).primary,
                     height: 60,
                     text: Text(
-                      'Thêm - ${widget.price! * count} vnđ',
+                      'Thêm : ${widget.price! * count} vnđ',
                       style: text(context)
                           .titleMedium
                           ?.copyWith(color: colorScheme(context).tertiary),
