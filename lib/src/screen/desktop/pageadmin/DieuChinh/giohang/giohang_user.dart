@@ -1,193 +1,226 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
+import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
 // import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/home_page.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/home_page/home_page.dart';
+import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
+import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
-class giohangUser extends StatefulWidget {
+class CartProduct extends StatefulWidget {
   final String tenban;
-  const giohangUser({
+  const CartProduct({
     Key? key,
     required this.tenban,
   }) : super(key: key);
 
   @override
-  State<giohangUser> createState() => _giohangUserState();
+  State<CartProduct> createState() => _CartProductState();
 }
 
-class _giohangUserState extends State<giohangUser> {
-  TextEditingController makm = TextEditingController();
+class _CartProductState extends State<CartProduct> {
+  final makm = TextEditingController();
   int tongtienthanhtoan = 0;
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    tongtienthanhtoan;
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Giỏ Hàng bàn ${widget.tenban}"),
+        title: Text("Bàn ${widget.tenban}"),
         centerTitle: true,
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SingleChildScrollView(
-              child: Container(
-                decoration: BoxDecoration(
-                    color: Theme.of(context).colorScheme.secondaryContainer,
-                    borderRadius: BorderRadius.circular(22)),
-                height: SizeConfig.screenHeight * 0.8,
-                child: StreamBuilder(
-                  stream: FirestoreHelper.readgiohang(widget.tenban),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return const Center(
-                        child: Text("lỗi"),
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      final giohang = snapshot.data;
-                      return ListView.builder(
-                        itemCount: giohang!.length,
-                        itemBuilder: (context, index) {
-                          final giohangindex = giohang[index];
-                          return Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                SizedBox(
-                                  width: getProportionateScreenWidth(88),
-                                  child: AspectRatio(
-                                    aspectRatio: 0.88,
-                                    child: Container(
-                                      padding: const EdgeInsets.all(10),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFF5F6F9),
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child:
-                                          Image.network(giohangindex.hinhanh),
+      body: Column(
+        children: [
+          Expanded(
+            child: StreamBuilder(
+              stream: FirestoreHelper.readgiohang(widget.tenban),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasError) {
+                  return const Center(
+                    child: Text("lỗi"),
+                  );
+                }
+                if (snapshot.hasData) {
+                  final giohang = snapshot.data;
+                  return ListView.builder(
+                    itemCount: giohang!.length,
+                    itemBuilder: (context, index) {
+                      final giohangindex = giohang[index];
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 16, horizontal: 20),
+                        margin: const EdgeInsets.symmetric(
+                            vertical: 4, horizontal: 10),
+                        decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 229, 229, 229),
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            SizedBox(
+                              width: getProportionateScreenWidth(88),
+                              child: AspectRatio(
+                                aspectRatio: 0.88,
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFFF5F6F9),
+                                    borderRadius: BorderRadius.circular(15),
+                                  ),
+                                  child:
+                                      cacheNetWorkImage(giohangindex.hinhanh),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    giohangindex.tensp,
+                                    style: TextStyle(
+                                        fontSize: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground),
+                                  ),
+                                  Text.rich(
+                                    TextSpan(
+                                      text: " ${giohangindex.giasp}",
+                                      children: [
+                                        TextSpan(
+                                            text: " x ${giohangindex.soluong}")
+                                      ],
                                     ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: getProportionateScreenWidth(20),
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      giohangindex.tensp,
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onBackground),
-                                    ),
-                                    Text.rich(
-                                      TextSpan(
-                                        text: " ${giohangindex.giasp}",
-                                        children: [
-                                          TextSpan(
-                                              text: "x ${giohangindex.soluong}")
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Text(
-                                    "  VND: ${giohangindex.soluong * giohangindex.giasp}"),
-                                IconButton(
-                                    onPressed: () {
-                                      FirestoreHelper.deletegiohang(
-                                          giohangindex, widget.tenban);
-                                    },
-                                    icon: const Icon(Icons.delete))
-                              ],
+                                ],
+                              ),
                             ),
-                          );
-                        },
+                            Text(
+                                "VND: ${giohangindex.soluong * giohangindex.giasp}"),
+                            IconButton(
+                                onPressed: () {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Xóa?'),
+                                      content: const Text(
+                                          'Bạn có chắc chắn muốn xóa?'),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Không'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () async {
+                                            await FirestoreHelper.deletegiohang(
+                                                giohangindex, widget.tenban);
+                                            // ignore: use_build_context_synchronously
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Text('Có'),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                },
+                                icon: const Icon(
+                                  Icons.delete,
+                                  color: Colors.red,
+                                ))
+                          ],
+                        ),
                       );
-                    }
-                    return const Center(child: CircularProgressIndicator());
-                  },
-                ),
-              ),
+                    },
+                  );
+                }
+                return const Center(child: CircularProgressIndicator());
+              },
             ),
-            Padding(
-              padding: const EdgeInsets.all(10.0),
-              child: ElevatedButton(
-                onPressed: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) {
-                      return SizedBox(
-                        height: 200,
-                        child: StreamBuilder(
-                          stream: FirestoreHelper.readgiohang(widget.tenban),
-                          builder: (context, snapshot) {
-                            if (snapshot.hasData) {
-                              tongtienthanhtoan = 0;
-                              final tongtiengh = snapshot.data;
-                              for (var i = 0; i < tongtiengh!.length; i++) {
-                                tongtienthanhtoan +=
-                                    tongtiengh[i].giasp * tongtiengh[i].soluong;
-                              }
-                              return Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text("nhập mã"),
-                                        SizedBox(
-                                          width: SizeConfig.screenWidth * 0.6,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
+            child: MyButton(
+              onTap: () {
+                showModalBottomSheet(
+                  context: context,
+                  builder: (context) {
+                    return Container(
+                      padding: const EdgeInsets.all(16),
+                      // height: 200,
+                      child: StreamBuilder(
+                        stream: FirestoreHelper.readgiohang(widget.tenban),
+                        builder: (context, snapshot) {
+                          if (snapshot.hasData) {
+                            tongtienthanhtoan = 0;
+                            final tongtiengh = snapshot.data;
+                            for (var i = 0; i < tongtiengh!.length; i++) {
+                              tongtienthanhtoan +=
+                                  tongtiengh[i].giasp * tongtiengh[i].soluong;
+                            }
+                            return Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Mã giảm giá: "),
+                                      const SizedBox(width: 10),
+                                      Expanded(
+                                        child: SizedBox(
+                                          height: 54,
                                           child: TextFormField(
+                                            controller: makm,
                                             decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      left: 20),
                                               border: OutlineInputBorder(
                                                 borderRadius:
-                                                    BorderRadius.circular(22),
+                                                    BorderRadius.circular(8),
                                               ),
                                             ),
                                           ),
                                         ),
-                                        IconButton(
-                                            onPressed: () {},
-                                            icon: const Icon(
-                                                Icons.confirmation_num))
-                                      ],
-                                    ),
+                                      ),
+                                      IconButton(
+                                          onPressed: () {},
+                                          icon: const Icon(
+                                              Icons.confirmation_num))
+                                    ],
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(10),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        const Text("số tiền cần thanh toán:"),
-                                        Text("$tongtienthanhtoan VND"),
-                                      ],
-                                    ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(10),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      const Text("Tổng tiền:"),
+                                      Text("$tongtienthanhtoan VND"),
+                                    ],
                                   ),
-                                  // luu hoá đơn
-                                  ElevatedButton(
-                                      onPressed: () {
+                                ),
+                                // luu hoá đơn
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 20, horizontal: 20),
+                                  child: MyButton(
+                                      onTap: () {
                                         FirestoreHelper.createtinhtrang(
                                             tinhtrangTT(trangthai: "success"),
                                             widget.tenban);
@@ -197,7 +230,7 @@ class _giohangUserState extends State<giohangUser> {
                                           content: Column(
                                             children: [
                                               const Text(
-                                                "xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
+                                                "Xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
                                                 textAlign: TextAlign.center,
                                               ),
                                               StreamBuilder(
@@ -233,13 +266,19 @@ class _giohangUserState extends State<giohangUser> {
                                                         showSnackbar(
                                                             tongtienthanhtoan);
                                                         return Text(
-                                                          "đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan",
+                                                          "Đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan vnđ",
                                                           textAlign:
                                                               TextAlign.center,
                                                         );
                                                       } else {
-                                                        const Text(
-                                                            "vui lòng chờ");
+                                                        Container(
+                                                          margin:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  vertical: 10),
+                                                          child: const Text(
+                                                              "Vui lòng chờ"),
+                                                        );
                                                       }
                                                     }
                                                   }
@@ -249,48 +288,65 @@ class _giohangUserState extends State<giohangUser> {
                                             ],
                                           ),
                                           actions: [
-                                            ElevatedButton(
-                                              onPressed: () {
-                                                //quay lai trang san phẩm
-                                                Get.to(
-                                                  () => HomePage(
-                                                      tenban: widget.tenban),
-                                                );
-                                              },
-                                              child: const Text("thoát"),
-                                            ),
+                                            MyButton(
+                                                onTap: () {
+                                                  //quay lai trang san phẩm
+                                                  Get.offAll(
+                                                    () => HomePage(
+                                                        tenban: widget.tenban),
+                                                  );
+                                                },
+                                                backgroundColor:
+                                                    colorScheme(context)
+                                                        .primary,
+                                                height: 60,
+                                                text: Text(
+                                                  'Thoát',
+                                                  style: text(context)
+                                                      .titleMedium
+                                                      ?.copyWith(
+                                                          color: colorScheme(
+                                                                  context)
+                                                              .tertiary),
+                                                ))
                                           ],
                                         );
                                       },
-                                      child: const Text("Xác nhận thanh toán"))
-                                ],
-                              );
-                            }
-                            return const Center(
-                              child: CircularProgressIndicator(),
+                                      backgroundColor:
+                                          colorScheme(context).primary,
+                                      height: 60,
+                                      text: Text(
+                                        'Xác nhận thanh toán',
+                                        style: text(context)
+                                            .titleMedium
+                                            ?.copyWith(
+                                                color: colorScheme(context)
+                                                    .tertiary),
+                                      )),
+                                )
+                              ],
                             );
-                          },
-                        ),
-                      );
-                    },
-                  );
-                },
-                child: const Text("xem hoá đơn"),
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
+                      ),
+                    );
+                  },
+                );
+              },
+              backgroundColor: colorScheme(context).primary,
+              height: 60,
+              text: Text(
+                'Xem hóa đơn',
+                style: text(context)
+                    .titleMedium
+                    ?.copyWith(color: colorScheme(context).tertiary),
               ),
-            )
-
-            // Container(
-            //   height: SizeConfig.screenHeight * 0.2,
-            //   decoration: BoxDecoration(
-            //     borderRadius: BorderRadius.circular(22),
-            //     color: Theme.of(context).colorScheme.secondaryContainer,
-            //   ),
-            //   child: Row(
-            //     children: [TextFormField()],
-            //   ),
-            // ),
-          ],
-        ),
+            ),
+          )
+        ],
       ),
     );
   }

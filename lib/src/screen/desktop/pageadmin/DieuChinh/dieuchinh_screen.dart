@@ -28,7 +28,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
     super.initState();
     _animationController = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: 260),
+      duration: const Duration(milliseconds: 260),
     );
     final curvedAnimation =
         CurvedAnimation(curve: Curves.easeInOut, parent: _animationController!);
@@ -38,20 +38,20 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("bán hàng"),
-      ),
+      // appBar: AppBar(
+      //   title: Text("bán hàng"),
+      // ),
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
           Bubble(
-            title: "thêm sản phẩm",
+            title: "Thêm sản phẩm",
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.settings,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
-              Get.to(() => SanphamCrudScreen());
+              Get.to(() => const SanphamCrudScreen());
             },
           ),
           Bubble(
@@ -59,10 +59,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.people,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
-              Get.dialog(Crud_table());
+              Get.dialog(const Crud_table());
             },
           ),
           Bubble(
@@ -70,10 +70,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.home,
-            titleStyle: TextStyle(fontSize: 12, color: Colors.white),
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
-              Get.to(() => headerCrudScreen());
+              Get.to(() => const headerCrudScreen());
             },
           ),
         ],
@@ -85,193 +85,169 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
         iconColor: Colors.white,
         iconData: Icons.settings,
       ),
-      body: Row(children: [
-        Center(
-          child: SingleChildScrollView(
-            child: Column(
-              children: [
-                //header
-                StreamBuilder(
-                  stream: FirestoreHelper.readtable(),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    }
-                    if (snapshot.hasError) {
-                      return SingleChildScrollView(
-                        child: Text("Lỗi: ${snapshot.error.toString()}"),
-                      );
-                    }
-                    if (snapshot.hasData) {
-                      final table = snapshot.data;
-                      return Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Container(
-                          // height: 500,
-
-                          width: SizeConfig.screenWidth / 1.5,
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).colorScheme.onPrimary),
-                          child: SingleChildScrollView(
-                            scrollDirection: Axis.vertical,
-                            child: SizedBox(
-                              height: SizeConfig.screenHeight,
-                              width: double.infinity,
-                              child: GridView.builder(
-                                itemCount: table!.length,
-                                gridDelegate:
-                                    SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount:
-                                      3, // Bạn có thể thay đổi số cột ở đây
-                                  mainAxisSpacing:
-                                      10.0, // Điều chỉnh khoảng cách giữa các mục theo chiều dọc
-                                  crossAxisSpacing:
-                                      10.0, // Điều chỉnh khoảng cách giữa các mục theo chiều ngang
-                                ),
-                                itemBuilder: (context, index) {
-                                  final tableindex = table[index];
-                                  return StreamBuilder(
-                                    stream: FirestoreHelper.readgiohang(
-                                        tableindex.tenban),
-                                    builder: (context, snapshot) {
-                                      if (snapshot.connectionState ==
-                                          ConnectionState.waiting) {
-                                        return const Center(
-                                          child: CircularProgressIndicator(),
-                                        );
-                                      }
-                                      if (snapshot.hasError) {
-                                        return SingleChildScrollView(
-                                          child: Text(
-                                              "Lỗi: ${snapshot.error.toString()}"),
-                                        );
-                                      }
-                                      if (snapshot.hasData) {
-                                        final giohangtb = snapshot.data;
-                                        return badges.Badge(
-                                          position:
-                                              badges.BadgePosition.topStart(),
-                                          badgeAnimation:
-                                              badges.BadgeAnimation.fade(),
-                                          //lấy dự liệu order
-                                          badgeContent: Text(
-                                            "${giohangtb!.length}",
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                          child: giohangtb.length > 0
-                                              ? InkWell(
-                                                  onTap: () async {
-                                                    setState(() {
-                                                      tenbanthanhtoan =
-                                                          tableindex.tenban
-                                                              .toString();
-
-                                                      print(tenbanthanhtoan);
-                                                    });
-                                                  },
-                                                  child: Container(
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.green[300],
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              20),
-                                                    ),
-                                                    margin: EdgeInsets.all(20),
-                                                    height: 300,
-                                                    width: 150,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: Column(
-                                                        children: [
-                                                          Image.asset(
-                                                            "/images/bill1.png",
-                                                            height: 150,
-                                                            width: 100,
-                                                          ),
-                                                          Text(
-                                                              "bàn số  ${tableindex.tenban}"),
-                                                        ],
+      body: Center(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              //header
+              StreamBuilder(
+                stream: FirestoreHelper.readtable(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return SingleChildScrollView(
+                      child: Text("Lỗi: ${snapshot.error.toString()}"),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    final table = snapshot.data;
+                    return Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.vertical,
+                        child: SizedBox(
+                          height: SizeConfig.screenHeight,
+                          width: double.infinity,
+                          child: GridView.builder(
+                            itemCount: table!.length,
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount:
+                                  6, // Bạn có thể thay đổi số cột ở đây
+                              mainAxisSpacing:
+                                  10.0, // Điều chỉnh khoảng cách giữa các mục theo chiều dọc
+                              crossAxisSpacing:
+                                  10.0, // Điều chỉnh khoảng cách giữa các mục theo chiều ngang
+                            ),
+                            itemBuilder: (context, index) {
+                              final tableindex = table[index];
+                              return StreamBuilder(
+                                stream: FirestoreHelper.readgiohang(
+                                    tableindex.tenban),
+                                builder: (context, snapshot) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Center(
+                                      child: CircularProgressIndicator(),
+                                    );
+                                  }
+                                  if (snapshot.hasError) {
+                                    return SingleChildScrollView(
+                                      child: Text(
+                                          "Lỗi: ${snapshot.error.toString()}"),
+                                    );
+                                  }
+                                  if (snapshot.hasData) {
+                                    final giohangtb = snapshot.data;
+                                    return badges.Badge(
+                                      position: badges.BadgePosition.topStart(),
+                                      badgeAnimation:
+                                          badges.BadgeAnimation.fade(),
+                                      //lấy dự liệu order
+                                      badgeContent: Text(
+                                        "${giohangtb!.length}",
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                      child: giohangtb.length > 0
+                                          ? InkWell(
+                                              onTap: () {},
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  color: Colors.green[300],
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                ),
+                                                margin: EdgeInsets.all(20),
+                                                height: 300,
+                                                width: 150,
+                                                child: SingleChildScrollView(
+                                                  child: Column(
+                                                    children: [
+                                                      Image.asset(
+                                                        "/images/bill1.png",
+                                                        height: 150,
+                                                        width: 100,
                                                       ),
-                                                    ),
-                                                  ),
-                                                )
-                                              : Container(
-                                                  margin: EdgeInsets.all(20),
-                                                  height: 300,
-                                                  width: 150,
-                                                  child: SingleChildScrollView(
-                                                    child: Column(
-                                                      children: [
-                                                        Image.asset(
-                                                          "/images/bill1.png",
-                                                          height: 150,
-                                                          width: 100,
-                                                        ),
-                                                        Text(
-                                                            "bàn số  ${tableindex.tenban}"),
-                                                      ],
-                                                    ),
+                                                      Text(
+                                                          "bàn số  ${tableindex.tenban}"),
+                                                    ],
                                                   ),
                                                 ),
-                                        );
-                                      }
-                                      return SingleChildScrollView(
-                                        child: Text(
-                                            "Lỗi: ${snapshot.error.toString()}"),
-                                      );
-                                    },
+                                              ),
+                                            )
+                                          : Container(
+                                              margin: EdgeInsets.all(20),
+                                              height: 300,
+                                              width: 150,
+                                              child: SingleChildScrollView(
+                                                child: Column(
+                                                  children: [
+                                                    Image.asset(
+                                                      "/images/bill1.png",
+                                                      height: 150,
+                                                      width: 100,
+                                                    ),
+                                                    Text(
+                                                        "bàn số  ${tableindex.tenban}"),
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                    );
+                                  }
+                                  return SingleChildScrollView(
+                                    child: Text(
+                                        "Lỗi: ${snapshot.error.toString()}"),
                                   );
-                                  //  badges.Badge(
-                                  //   position: badges.BadgePosition.center(),
-                                  //   badgeAnimation: badges.BadgeAnimation.fade(),
-                                  //   //lấy dự liệu order
-                                  //   badgeContent: Text("0"),
-                                  //   child: Container(
-                                  //     margin: EdgeInsets.all(20),
-                                  //     height: 300,
-                                  //     width: 150,
-                                  //     child: SingleChildScrollView(
-                                  //       child: Column(
-                                  //         children: [
-                                  //           Image.asset(
-                                  //             "/images/bill1.png",
-                                  //             height: 150,
-                                  //             width: 100,
-                                  //           ),
-                                  //           Text("bàn số  ${tableindex.tenban}"),
-                                  //         ],
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  // );
                                 },
-                              ),
-                            ),
+                              );
+                              //  badges.Badge(
+                              //   position: badges.BadgePosition.center(),
+                              //   badgeAnimation: badges.BadgeAnimation.fade(),
+                              //   //lấy dự liệu order
+                              //   badgeContent: Text("0"),
+                              //   child: Container(
+                              //     margin: EdgeInsets.all(20),
+                              //     height: 300,
+                              //     width: 150,
+                              //     child: SingleChildScrollView(
+                              //       child: Column(
+                              //         children: [
+                              //           Image.asset(
+                              //             "/images/bill1.png",
+                              //             height: 150,
+                              //             width: 100,
+                              //           ),
+                              //           Text("bàn số  ${tableindex.tenban}"),
+                              //         ],
+                              //       ),
+                              //     ),
+                              //   ),
+                              // );
+                            },
                           ),
                         ),
-                      );
-                    }
-                    return const Center(
-                      child: Column(
-                        children: [
-                          CircularProgressIndicator(),
-                          Text("đang tải dữ liệu")
-                        ],
                       ),
                     );
-                  },
-                )
-              ],
-            ),
+                  }
+                  return const Center(
+                    child: Column(
+                      children: [
+                        CircularProgressIndicator(),
+                        Text("đang tải dữ liệu")
+                      ],
+                    ),
+                  );
+                },
+              )
+            ],
           ),
         ),
-        //
-        tenbanthanhtoan == ""
-            ? CircularProgressIndicator()
-            : giohang_admin(tenban: tenbanthanhtoan),
-      ]),
+      ),
     );
   }
 }
