@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 
 // list of colors that we use in our app
 const kBackgroundColor =
-    Color.fromARGB(255, 213, 236, 236); // Màu nền (Màu nền ấm áp)
+    Color.fromARGB(255, 255, 255, 255); // Màu nền (Màu nền ấm áp)
 const kPrimaryColor =
-    Color.fromARGB(255, 124, 163, 169); // Màu chính (Màu cà phê đậm)
+    Color.fromARGB(255, 65, 132, 143); // Màu chính (Màu cà phê đậm)
 const kSecondaryColor =
     Color.fromARGB(255, 223, 223, 223); // Màu phụ (Màu kem sữa)
 const kTextColor = Color(0xFF2C1A0A); // Màu chữ (Màu nâu đậm)

@@ -1,9 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/check_location_page.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/scan_qr_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -40,7 +42,7 @@ class _IntroScreenState extends State<IntroScreen> {
                 ),
               ),
               Text(
-                "Vui lòng chọn số bàn & \n nhấn vào nút kiểm tra !",
+                "Vui lòng chọn số bàn & \n nhấn vào nút kiểm tra!",
                 style: text(context).titleLarge,
               ),
               const SizedBox(height: 30),
@@ -85,10 +87,7 @@ class _IntroScreenState extends State<IntroScreen> {
                           if (listtenban != null) {
                             for (var i = 0; i < listtenban.length; i++) {
                               tenbanItem.add(
-                                DropdownMenuItem(
-                                  value: listtenban[i].tenban,
-                                  child: Text(listtenban[i].tenban),
-                                ),
+                                myDropDownMenuItem(listtenban, i, context),
                               );
                             }
                           }
@@ -139,7 +138,7 @@ class _IntroScreenState extends State<IntroScreen> {
                   backgroundColor: colorScheme(context).primary,
                   height: 60,
                   text: Text(
-                    'Kiểm tra',
+                    'Kiểm tra'.toUpperCase(),
                     style: text(context)
                         .titleMedium
                         ?.copyWith(color: colorScheme(context).tertiary),
@@ -153,16 +152,39 @@ class _IntroScreenState extends State<IntroScreen> {
     );
   }
 
+  DropdownMenuItem<dynamic> myDropDownMenuItem(
+      List<TableModel> listtenban, int i, BuildContext context) {
+    return DropdownMenuItem(
+      alignment: Alignment.center,
+      value: listtenban[i].tenban,
+      child: Container(
+          alignment: Alignment.center,
+          margin: const EdgeInsets.symmetric(vertical: 6),
+          padding: const EdgeInsets.symmetric(vertical: 4),
+          decoration: BoxDecoration(
+            color: colorScheme(context).primary.withOpacity(0.1),
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            listtenban[i].tenban,
+            style: text(context).titleLarge,
+          )),
+    );
+  }
+
   Container myDropDown(
     List<DropdownMenuItem<dynamic>> tenbanItem,
   ) {
     return Container(
+      width: MediaQuery.sizeOf(context).width * 0.5,
       padding: const EdgeInsets.all(6),
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
           border: Border.all(color: Colors.black, width: 1),
           borderRadius: BorderRadius.circular(8)),
       child: DropdownButton(
+        borderRadius: BorderRadius.circular(30),
+        alignment: Alignment.center,
         value: selectedValue,
         underline: const SizedBox(),
         isExpanded: true,

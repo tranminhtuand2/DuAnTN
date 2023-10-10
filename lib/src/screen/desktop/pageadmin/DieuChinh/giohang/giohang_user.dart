@@ -63,7 +63,8 @@ class _CartProductState extends State<CartProduct> {
                         margin: const EdgeInsets.symmetric(
                             vertical: 4, horizontal: 10),
                         decoration: BoxDecoration(
-                            color: const Color.fromARGB(255, 229, 229, 229),
+                            color:
+                                colorScheme(context).primary.withOpacity(0.3),
                             borderRadius: BorderRadius.circular(12)),
                         child: Row(
                           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
