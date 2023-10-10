@@ -58,6 +58,10 @@ dependencies:
   permission_handler: ^11.0.1
   flutter_native_splash: ^2.3.2
   shimmer: ^3.0.0
+  momo_vn: 
+    path: ./momo.vn
+      
+
 
 
 dev_dependencies:

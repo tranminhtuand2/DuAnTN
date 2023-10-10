@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,6 +14,7 @@ import 'package:managerfoodandcoffee/src/screen/mobile/home_page/home_page.dart'
 import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
+import 'package:momo_vn/momo_vn.dart';
 
 class CartProduct extends StatefulWidget {
   final String tenban;
@@ -27,6 +30,76 @@ class CartProduct extends StatefulWidget {
 class _CartProductState extends State<CartProduct> {
   final makm = TextEditingController();
   int tongtienthanhtoan = 0;
+
+  late MomoVn _momoPay;
+  late PaymentResponse _momoPaymentResult;
+
+  late String _payment_status;
+
+  final options = MomoPaymentInfo(
+      merchantName: "Tên đối tác",
+      merchantCode: 'Mã đối tác',
+      partnerCode: 'Mã đối tác',
+      appScheme: "1221212",
+      amount: 6000000000,
+      orderId: '12321312',
+      orderLabel: 'Label để hiển thị Mã giao dịch',
+      merchantNameLabel: "Tiêu đề tên cửa hàng",
+      fee: 0,
+      description: 'Mô tả chi tiết',
+      username: 'Định danh user (id/email/...)',
+      partner: 'merchant',
+      extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
+      isTestMode: true);
+
+  void _setState() {
+    _payment_status = 'Đã chuyển thanh toán';
+    if (_momoPaymentResult.isSuccess!) {
+      _payment_status += "\nTình trạng: Thành công.";
+      _payment_status += "\nSố điện thoại: ${_momoPaymentResult.phoneNumber!}";
+      _payment_status += "\nExtra: ${_momoPaymentResult.extra}";
+      _payment_status += "\nToken: ${_momoPaymentResult.token}";
+    } else {
+      _payment_status += "\nTình trạng: Thất bại.";
+      _payment_status += "\nExtra: ${_momoPaymentResult.extra}";
+      _payment_status += "\nMã lỗi: ${_momoPaymentResult.status}";
+    }
+  }
+
+  void _handlePaymentSuccess(PaymentResponse response) {
+    setState(() {
+      _momoPaymentResult = response;
+      _setState();
+    });
+    // Fluttertoast.showToast(
+    //     msg: "THÀNH CÔNG: " + response.phonenumber, timeInSecForIos: 4);
+    log('THÀNH CÔNG');
+  }
+
+  void _handlePaymentError(PaymentResponse response) {
+    setState(() {
+      _momoPaymentResult = response;
+      _setState();
+    });
+    // Fluttertoast.showToast(
+    //     msg: "THẤT BẠI: " + response.message.toString(), timeInSecForIos: 4);
+    log('THất bại');
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _momoPay = MomoVn();
+    _momoPay.on(MomoVn.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
+    _momoPay.on(MomoVn.EVENT_PAYMENT_ERROR, _handlePaymentError);
+    _payment_status = "";
+    initPlatformState();
+  }
+
+  Future<void> initPlatformState() async {
+    if (!mounted) return;
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -205,9 +278,33 @@ class _CartProductState extends State<CartProduct> {
                                         ),
                                       ),
                                       IconButton(
-                                          onPressed: () {},
-                                          icon: const Icon(
-                                              Icons.confirmation_num))
+                                        onPressed: () async {
+                                          MomoPaymentInfo options = MomoPaymentInfo(
+                                              merchantName: "HoangNgoc",
+                                              appScheme: "HoangNgoc",
+                                              merchantCode: 'MOMOC2IC20220510',
+                                              partnerCode: 'MOMOC2IC20220510',
+                                              amount: 10000,
+                                              orderId: '12321312',
+                                              orderLabel: 'Gói combo',
+                                              merchantNameLabel: "HLGD",
+                                              fee: 10,
+                                              description:
+                                                  'Tích hợp thanh toán ngon lành =))',
+                                              username: 'HA THE CHI',
+                                              partner: 'merchant',
+                                              extra:
+                                                  "{\"key1\":\"value1\",\"key2\":\"value2\"}",
+                                              isTestMode: true);
+                                          try {
+                                            _momoPay.open(options);
+                                          } catch (e) {
+                                            debugPrint(e.toString());
+                                          }
+                                        },
+                                        icon:
+                                            const Icon(Icons.confirmation_num),
+                                      )
                                     ],
                                   ),
                                 ),
