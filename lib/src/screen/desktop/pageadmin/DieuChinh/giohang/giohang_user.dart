@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
@@ -8,6 +9,7 @@ import 'package:managerfoodandcoffee/src/constants/size.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/home_page.dart';
+import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
@@ -64,7 +66,7 @@ class _CartProductState extends State<CartProduct> {
                             color: const Color.fromARGB(255, 229, 229, 229),
                             borderRadius: BorderRadius.circular(12)),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             SizedBox(
                               width: getProportionateScreenWidth(88),
@@ -81,65 +83,64 @@ class _CartProductState extends State<CartProduct> {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 14),
+                            const SizedBox(width: 12),
                             Expanded(
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    giohangindex.tensp,
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onBackground),
-                                  ),
-                                  Text.rich(
-                                    TextSpan(
-                                      text: " ${giohangindex.giasp}",
-                                      children: [
-                                        TextSpan(
-                                            text: " x ${giohangindex.soluong}")
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Text(
-                                "VND: ${giohangindex.soluong * giohangindex.giasp}"),
-                            IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (context) => AlertDialog(
-                                      title: const Text('Xóa?'),
-                                      content: const Text(
-                                          'Bạn có chắc chắn muốn xóa?'),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop();
-                                          },
-                                          child: const Text('Không'),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          giohangindex.tensp.toUpperCase(),
+                                          style: text(context)
+                                              .titleLarge
+                                              ?.copyWith(
+                                                  color: colorScheme(context)
+                                                      .onTertiary),
                                         ),
-                                        TextButton(
-                                          onPressed: () async {
+                                      ),
+                                      IconButton(
+                                        onPressed: () {
+                                          dialogModalBottomsheet(
+                                              context, 'xóa', () async {
                                             await FirestoreHelper.deletegiohang(
                                                 giohangindex, widget.tenban);
                                             // ignore: use_build_context_synchronously
                                             Navigator.of(context).pop();
-                                          },
-                                          child: const Text('Có'),
+                                          });
+                                        },
+                                        icon: const Icon(
+                                          CupertinoIcons.trash_circle,
+                                          color: Colors.red,
+                                          size: 36,
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                                icon: const Icon(
-                                  Icons.delete,
-                                  color: Colors.red,
-                                ))
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 30),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text.rich(
+                                        TextSpan(
+                                          text: "${giohangindex.giasp}",
+                                          children: [
+                                            TextSpan(
+                                                text:
+                                                    " x ${giohangindex.soluong}")
+                                          ],
+                                        ),
+                                      ),
+                                      Text(
+                                          "Tổng: ${giohangindex.soluong * giohangindex.giasp} vnđ"),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
                           ],
                         ),
                       );
@@ -178,7 +179,12 @@ class _CartProductState extends State<CartProduct> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text("Mã giảm giá: "),
+                                      Text("Mã giảm giá: ",
+                                          style: text(context)
+                                              .titleMedium
+                                              ?.copyWith(
+                                                  color: colorScheme(context)
+                                                      .onTertiary)),
                                       const SizedBox(width: 10),
                                       Expanded(
                                         child: SizedBox(
@@ -210,8 +216,20 @@ class _CartProductState extends State<CartProduct> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      const Text("Tổng tiền:"),
-                                      Text("$tongtienthanhtoan VND"),
+                                      Text(
+                                        "Tổng tiền:",
+                                        style: text(context)
+                                            .titleMedium
+                                            ?.copyWith(
+                                                color: colorScheme(context)
+                                                    .onTertiary),
+                                      ),
+                                      Text("$tongtienthanhtoan VNĐ",
+                                          style: text(context)
+                                              .titleMedium
+                                              ?.copyWith(
+                                                  color: colorScheme(context)
+                                                      .onTertiary)),
                                     ],
                                   ),
                                 ),
@@ -339,7 +357,7 @@ class _CartProductState extends State<CartProduct> {
               backgroundColor: colorScheme(context).primary,
               height: 60,
               text: Text(
-                'Xem hóa đơn',
+                'Thanh toán',
                 style: text(context)
                     .titleMedium
                     ?.copyWith(color: colorScheme(context).tertiary),
@@ -355,7 +373,7 @@ class _CartProductState extends State<CartProduct> {
     await Future.delayed(Duration.zero); // This ensures the build has completed
     Get.snackbar(
       "Đã xác nhận",
-      "Vui lòng chuẩn bị $totalAmount Vnd",
+      "Vui lòng chuẩn bị $totalAmount VNĐ",
     );
   }
 }

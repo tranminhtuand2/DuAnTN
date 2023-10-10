@@ -29,12 +29,12 @@ class MyApp extends StatelessWidget {
       defaultTransition: Transition.leftToRightWithFade,
       transitionDuration: const Duration(milliseconds: 400),
       theme: ThemeData(
-          fontFamily: GoogleFonts.manrope().fontFamily,
+          fontFamily: GoogleFonts.interTight().fontFamily,
           useMaterial3: true,
           colorScheme: TAppTheme.lightColorScheme,
           textTheme: TAppTextTheme.lightTextTheme),
       darkTheme: ThemeData(
-          fontFamily: GoogleFonts.manrope().fontFamily,
+          fontFamily: GoogleFonts.interTight().fontFamily,
           useMaterial3: true,
           colorScheme: TAppTheme.darkColorScheme,
           textTheme: TAppTextTheme.darkTextTheme),

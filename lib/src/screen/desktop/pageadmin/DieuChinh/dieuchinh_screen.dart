@@ -53,7 +53,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             },
           ),
           Bubble(
-            title: "TÀI KHOÃN",
+            title: "Tài khoản",
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
             icon: Icons.people,
