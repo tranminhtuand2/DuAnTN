@@ -14,8 +14,8 @@ void showCustomSnackBar(
             color: type == Type.error
                 ? Colors.white
                 : type == Type.warning
-                    ? Colors.black
-                    : Colors.black,
+                    ? Colors.white
+                    : Colors.white,
             fontSize: 18,
             fontWeight: FontWeight.bold),
       ),
@@ -25,8 +25,8 @@ void showCustomSnackBar(
             color: type == Type.error
                 ? Colors.white
                 : type == Type.warning
-                    ? Colors.black
-                    : Colors.black,
+                    ? Colors.white
+                    : Colors.white,
             fontSize: 20),
       ),
       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 30),

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -30,6 +32,7 @@ class _HomePageState extends State<HomePage> {
   int selectedindex = 0;
   final controller = Get.put(ProductController());
   final controllerCategory = Get.put(CategoryController());
+  final pageViewController = PageController();
 
   @override
   Widget build(BuildContext context) {
@@ -71,18 +74,19 @@ class _HomePageState extends State<HomePage> {
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
                           itemCount: controllerCategory.categories.length,
-                          physics: const BouncingScrollPhysics(),
+                          physics: const BouncingScrollPhysics(
+                              parent: AlwaysScrollableScrollPhysics()),
                           itemBuilder: (context, index) => InkWell(
                             splashColor: Colors.transparent,
                             onTap: selectedindex == index
                                 ? null
                                 : () {
+                                    pageViewController.jumpToPage(index);
                                     setState(() {
                                       selectedindex = index;
-                                      categories = controllerCategory
-                                          .categories[index].tendanhmuc;
-                                      controller.fetchProduct(categories);
-                                      // print(categories);
+                                      // categories = controllerCategory
+                                      //     .categories[index].tendanhmuc;
+                                      // controller.fetchProduct(categories);
                                     });
                                   },
                             child: Container(
@@ -114,9 +118,25 @@ class _HomePageState extends State<HomePage> {
             ),
             Obx(
               () {
-                return controller.isLoading.value
-                    ? shimmerLoading()
-                    : bodyProduct(size, widget.tenban);
+                return Expanded(
+                  child: PageView.builder(
+                    physics: const BouncingScrollPhysics(),
+                    onPageChanged: (value) {
+                      setState(() {
+                        selectedindex = value;
+                      });
+                      controller.fetchProduct(
+                          controllerCategory.categories[value].tendanhmuc);
+                      // log("message $value ${controllerCategory.categories[value].tendanhmuc}");
+                      // log(controller.products[value].tensp.toString());
+                    },
+                    controller: pageViewController,
+                    itemCount: controllerCategory.categories.length,
+                    itemBuilder: (context, index) {
+                      return MyBodyProduct(tenBan: widget.tenban);
+                    },
+                  ),
+                );
               },
             ),
           ],

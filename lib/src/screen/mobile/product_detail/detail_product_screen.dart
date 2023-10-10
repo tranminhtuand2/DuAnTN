@@ -28,67 +28,52 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Stack(
+      // resizeToAvoidBottomInset: false,
+      appBar: AppBar(),
+      body: Column(
         children: [
-          Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
-                  child: Column(
-                    children: [
-                      imageProduct(widget.product.hinhanh, context),
-                      infoProduct(widget.product, context),
-                      inputNoteProduct(controllerNode),
-                    ],
-                  ),
-                ),
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              child: Column(
+                children: [
+                  imageProduct(widget.product.hinhanh, context),
+                  infoProduct(widget.product, context),
+                  inputNoteProduct(controllerNode),
+                ],
               ),
-              QuanityButtonProduct(
-                price: widget.product.giasp,
-                onClick: disableButton
-                    ? null
-                    : (int soLuong) async {
-                        setState(() {
-                          disableButton = true;
-                        });
-                        try {
-                          log("Số lượng: $soLuong");
-
-                          await FirestoreHelper.createdgiohang(
-                            GioHang(
-                                tensp: widget.product.tensp,
-                                giasp: widget.product.giasp,
-                                soluong: soLuong,
-                                ghichu: controllerNode.text,
-                                hinhanh: widget.product.hinhanh),
-                            widget.soBan,
-                          );
-                        } finally {
-                          showCustomSnackBar(
-                              title: 'Thành công',
-                              message: "Thêm món thành công",
-                              type: Type.success);
-                          // ignore: use_build_context_synchronously
-                          Navigator.of(context).pop();
-                        }
-                      },
-              ),
-            ],
-          ),
-          Positioned(
-            top: 30,
-            left: 10,
-            child: IconButton(
-              icon: const Icon(
-                Icons.arrow_circle_left_rounded,
-                size: 50.0,
-              ),
-              color: Colors.black.withOpacity(0.6),
-              onPressed: () => Get.back(),
             ),
+          ),
+          QuanityButtonProduct(
+            price: widget.product.giasp,
+            onClick: disableButton
+                ? null
+                : (int soLuong) async {
+                    setState(() {
+                      disableButton = true;
+                    });
+                    try {
+                      log("Số lượng: $soLuong");
+
+                      await FirestoreHelper.createdgiohang(
+                        GioHang(
+                            tensp: widget.product.tensp,
+                            giasp: widget.product.giasp,
+                            soluong: soLuong,
+                            ghichu: controllerNode.text,
+                            hinhanh: widget.product.hinhanh),
+                        widget.soBan,
+                      );
+                    } finally {
+                      showCustomSnackBar(
+                          title: 'Thành công',
+                          message: "Thêm món thành công",
+                          type: Type.success);
+                      // ignore: use_build_context_synchronously
+                      Navigator.of(context).pop();
+                    }
+                  },
           ),
         ],
       ),
