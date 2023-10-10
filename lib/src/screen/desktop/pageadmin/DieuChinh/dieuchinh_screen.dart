@@ -5,6 +5,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/constants/size.dart';
 
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
+import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
 
@@ -23,7 +24,17 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
     with SingleTickerProviderStateMixin {
   Animation<double>? _animation;
   AnimationController? _animationController;
-  String tenbanthanhtoan = "";
+  String tttenban = "";
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    final myalert = Get.put(getAlert());
+    if (tttenban != "") {
+      myalert.showAlertDialog("THÔNG BÁO", "$tttenban ĐÃ ORDER");
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -99,7 +110,42 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text("Danh Sách Bàn"),
-                      Icon(Icons.notifications_active),
+                      //thong bao
+                      StreamBuilder(
+                        stream: FirestoreHelper.readtinhtrangtt(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return SingleChildScrollView(
+                              child: Text("Lỗi: ${snapshot.error.toString()}"),
+                            );
+                          }
+                          if (snapshot.hasData) {
+                            final tinhtrangtt = snapshot.data;
+
+                            return badges.Badge(
+                              position: badges.BadgePosition.topStart(),
+                              badgeAnimation: badges.BadgeAnimation.fade(),
+                              //lấy dự liệu order
+                              badgeContent: Text(
+                                "${tinhtrangtt!.length}",
+                                style: TextStyle(fontSize: 20),
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: Icon(Icons.notifications),
+                              ),
+                            );
+                          }
+                          return Icon(Icons.notifications);
+                        },
+                      )
+                      //end thong bao
                     ],
                   ),
                 ),
@@ -223,29 +269,6 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                   );
                                 },
                               );
-                              //  badges.Badge(
-                              //   position: badges.BadgePosition.center(),
-                              //   badgeAnimation: badges.BadgeAnimation.fade(),
-                              //   //lấy dự liệu order
-                              //   badgeContent: Text("0"),
-                              //   child: Container(
-                              //     margin: EdgeInsets.all(20),
-                              //     height: 300,
-                              //     width: 150,
-                              //     child: SingleChildScrollView(
-                              //       child: Column(
-                              //         children: [
-                              //           Image.asset(
-                              //             "/images/bill1.png",
-                              //             height: 150,
-                              //             width: 100,
-                              //           ),
-                              //           Text("bàn số  ${tableindex.tenban}"),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //   ),
-                              // );
                             },
                           ),
                         ),

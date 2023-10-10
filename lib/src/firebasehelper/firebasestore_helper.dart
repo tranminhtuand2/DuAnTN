@@ -291,6 +291,14 @@ class FirestoreHelper {
     return tinhtrangCollection.snapshots().map((QuerySnapshot) =>
         QuerySnapshot.docs.map((e) => tinhtrangTT.fromSnapshot(e)).toList());
   }
+
+  static Stream<List<tinhtrangTT>> readtinhtrangtt() {
+    final tinhtrangCollection =
+        FirebaseFirestore.instance.collection("tinhtrang");
+
+    return tinhtrangCollection.snapshots().map((QuerySnapshot) =>
+        QuerySnapshot.docs.map((e) => tinhtrangTT.fromSnapshot(e)).toList());
+  }
   //creater
 
   static Future<void> createtinhtrang(
