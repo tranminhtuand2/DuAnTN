@@ -6,6 +6,8 @@ import 'package:managerfoodandcoffee/src/constants/size.dart';
 
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
+
 // import 'package:managerfoodandcoffee/src/controller/CRUD_controller_header.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/headercrud_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/sanphamcrud_screen.dart';
@@ -21,6 +23,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
     with SingleTickerProviderStateMixin {
   Animation<double>? _animation;
   AnimationController? _animationController;
+  String tenbanthanhtoan = "";
   @override
   void initState() {
     super.initState();
@@ -53,10 +56,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             },
           ),
           Bubble(
-            title: "Tài khoản",
+            title: "Thêm bàn",
             iconColor: Colors.white,
             bubbleColor: Colors.blue,
-            icon: Icons.people,
+            icon: Icons.table_view,
             titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
@@ -87,6 +90,20 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
         child: SingleChildScrollView(
           child: Column(
             children: [
+              Container(
+                width: double.infinity,
+                height: 100,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("Danh Sách Bàn"),
+                      Icon(Icons.notifications_active),
+                    ],
+                  ),
+                ),
+              ),
               //header
               StreamBuilder(
                 stream: FirestoreHelper.readtable(),
@@ -104,7 +121,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                   if (snapshot.hasData) {
                     final table = snapshot.data;
                     return Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(10),
                       child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: SizedBox(
@@ -113,13 +130,13 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                           child: GridView.builder(
                             itemCount: table!.length,
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount:
                                   6, // Bạn có thể thay đổi số cột ở đây
                               mainAxisSpacing:
                                   10.0, // Điều chỉnh khoảng cách giữa các mục theo chiều dọc
                               crossAxisSpacing:
-                                  10.0, // Điều chỉnh khoảng cách giữa các mục theo chiều ngang
+                                  20.0, // Điều chỉnh khoảng cách giữa các mục theo chiều ngang
                             ),
                             itemBuilder: (context, index) {
                               final tableindex = table[index];
@@ -144,23 +161,25 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                     return badges.Badge(
                                       position: badges.BadgePosition.topStart(),
                                       badgeAnimation:
-                                          const badges.BadgeAnimation.fade(),
+                                          badges.BadgeAnimation.fade(),
                                       //lấy dự liệu order
                                       badgeContent: Text(
                                         "${giohangtb!.length}",
-                                        style: const TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: 20),
                                       ),
-                                      child: giohangtb.isNotEmpty
+                                      child: giohangtb.length > 0
                                           ? InkWell(
-                                              onTap: () {},
+                                              onTap: () {
+                                                Get.to(() => giohang_admin(
+                                                    tenban: tableindex.tenban));
+                                              },
                                               child: Container(
                                                 decoration: BoxDecoration(
                                                   color: Colors.green[300],
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
-                                                margin:
-                                                    const EdgeInsets.all(20),
+                                                margin: EdgeInsets.all(10),
                                                 height: 300,
                                                 width: 150,
                                                 child: SingleChildScrollView(
@@ -179,7 +198,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                               ),
                                             )
                                           : Container(
-                                              margin: const EdgeInsets.all(20),
+                                              margin: EdgeInsets.all(10),
                                               height: 300,
                                               width: 150,
                                               child: SingleChildScrollView(
