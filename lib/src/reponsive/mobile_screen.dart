@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/intro_page.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/intro_page/intro_page.dart';
 import 'package:managerfoodandcoffee/src/utils/will_pop_scope.dart';
 
 class MobileScreen extends StatefulWidget {
