@@ -34,23 +34,24 @@ class _CartProductState extends State<CartProduct> {
   late MomoVn _momoPay;
   late PaymentResponse _momoPaymentResult;
 
-  late String _payment_status;
+  late String _payment_status = '';
 
   final options = MomoPaymentInfo(
-      merchantName: "Tên đối tác",
-      merchantCode: 'Mã đối tác',
-      partnerCode: 'Mã đối tác',
-      appScheme: "1221212",
-      amount: 6000000000,
-      orderId: '12321312',
-      orderLabel: 'Label để hiển thị Mã giao dịch',
-      merchantNameLabel: "Tiêu đề tên cửa hàng",
-      fee: 0,
-      description: 'Mô tả chi tiết',
-      username: 'Định danh user (id/email/...)',
-      partner: 'merchant',
-      extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
-      isTestMode: true);
+    merchantName: "HoangNgoc",
+    appScheme: "HoangNgoc",
+    merchantCode: 'MOMOC2IC20220510',
+    partnerCode: 'MOMOC2IC20220510',
+    amount: 10000,
+    orderId: '12321312',
+    orderLabel: 'Gói combo',
+    merchantNameLabel: "HLGD",
+    fee: 10,
+    description: 'Tích hợp thanh toán ngon lành =))',
+    username: 'HA THE CHI',
+    partner: 'merchant',
+    extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
+    isTestMode: true,
+  );
 
   void _setState() {
     _payment_status = 'Đã chuyển thanh toán';
@@ -71,9 +72,7 @@ class _CartProductState extends State<CartProduct> {
       _momoPaymentResult = response;
       _setState();
     });
-    // Fluttertoast.showToast(
-    //     msg: "THÀNH CÔNG: " + response.phonenumber, timeInSecForIos: 4);
-    log('THÀNH CÔNG');
+    log('THANH TOÁN THÀNH CÔNG');
   }
 
   void _handlePaymentError(PaymentResponse response) {
@@ -81,9 +80,7 @@ class _CartProductState extends State<CartProduct> {
       _momoPaymentResult = response;
       _setState();
     });
-    // Fluttertoast.showToast(
-    //     msg: "THẤT BẠI: " + response.message.toString(), timeInSecForIos: 4);
-    log('THất bại');
+    log('THANH TOÁN THẤT BẠI');
   }
 
   @override
@@ -279,23 +276,6 @@ class _CartProductState extends State<CartProduct> {
                                       ),
                                       IconButton(
                                         onPressed: () async {
-                                          MomoPaymentInfo options = MomoPaymentInfo(
-                                              merchantName: "HoangNgoc",
-                                              appScheme: "HoangNgoc",
-                                              merchantCode: 'MOMOC2IC20220510',
-                                              partnerCode: 'MOMOC2IC20220510',
-                                              amount: 10000,
-                                              orderId: '12321312',
-                                              orderLabel: 'Gói combo',
-                                              merchantNameLabel: "HLGD",
-                                              fee: 10,
-                                              description:
-                                                  'Tích hợp thanh toán ngon lành =))',
-                                              username: 'HA THE CHI',
-                                              partner: 'merchant',
-                                              extra:
-                                                  "{\"key1\":\"value1\",\"key2\":\"value2\"}",
-                                              isTestMode: true);
                                           try {
                                             _momoPay.open(options);
                                           } catch (e) {
