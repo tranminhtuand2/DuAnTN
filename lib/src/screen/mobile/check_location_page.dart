@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/home_page.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/home_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
@@ -50,15 +51,10 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
 
     double distance = Geolocator.distanceBetween(targetLat, targetLon,
         currentPosition.latitude, currentPosition.longitude);
-    if (distance <= 10008800.0) {
+    if (distance <= 1000008800.0) {
       // Điều kiện đáp ứng, chuyển hướng tới trang đăng nhập.
-      Get.offAll(() => HomePage(tenban: widget.tenban));
-
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('Bạn dang nhap thanh cong.${distance.ceil()}'),
-      //   ),
-      // );
+      Get.back();
+      Get.offAll(() => HomeScreen(tenban: widget.tenban));
     } else {
       // Người dùng không ở trong phạm vi 100m, hiển thị thông báo hoặc thực hiện hành động khác.
       // showCustomSnackBar(

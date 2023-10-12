@@ -1,12 +1,19 @@
+import 'dart:developer';
+
 import 'package:badges/badges.dart' as badges;
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/categorry_controller.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/drawer_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_user.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/body_product.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/my_drawer.dart';
+import 'package:managerfoodandcoffee/src/shared_preferences/shared_preference.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/constants.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
@@ -34,24 +41,40 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
+    final brightnessController = Get.put(BrightnessController());
     return WillPopScope(
       onWillPop: () async {
-        return onBackPressed(
-            context); //bắt sự kiện người dùng back để thoát ứng dụng để gọi hàm thông báo
+        return onBackPressed(context);
       },
       child: Scaffold(
         backgroundColor: colorScheme(context).primary,
+        // drawer: const MyDrawer(),
         appBar: AppBar(
           backgroundColor: colorScheme(context).primary,
           elevation: 0,
           title: Text(
-            "Bàn ${widget.tenban}",
-            style: text(context).headlineMedium?.copyWith(
+            "BÀN ${widget.tenban}",
+            style: text(context).titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colorScheme(context).tertiary),
           ),
-          centerTitle: false,
+          // leading: Switch(
+          //   value: brightnessController.isDarkMode.value,
+          //   onChanged: (bool newValue) {
+          //     brightnessController.toggleDarkMode();
+          //     saveBrightnessPreference(newValue);
+          //   },
+          // ),
+          leading: IconButton(
+              onPressed: () {
+                Get.put(MyDrawerController()).toggleDrawer();
+              },
+              icon: Icon(
+                CupertinoIcons.bars,
+                size: 32,
+                color: colorScheme(context).tertiary,
+              )),
+          centerTitle: true,
           actions: [
             gioHang(),
           ],
@@ -65,8 +88,8 @@ class _HomePageState extends State<HomePage> {
                         child: CircularProgressIndicator(),
                       )
                     : Container(
-                        margin: const EdgeInsets.symmetric(
-                            vertical: 10, horizontal: 20),
+                        margin: const EdgeInsets.only(
+                            top: 20, left: 20, right: 20, bottom: 10),
                         height: MediaQuery.sizeOf(context).height * 0.04,
                         child: ListView.builder(
                           scrollDirection: Axis.horizontal,
@@ -94,19 +117,20 @@ class _HomePageState extends State<HomePage> {
                               decoration: BoxDecoration(
                                 color: Colors.white.withOpacity(
                                     index == selectedindex ? 0.8 : 0.3),
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(8),
                               ),
                               child: Text(
-                                  controllerCategory
-                                      .categories[index].tendanhmuc,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleMedium
-                                      ?.copyWith(
-                                        color: index == selectedindex
-                                            ? colorScheme(context).onTertiary
-                                            : colorScheme(context).tertiary,
-                                      )),
+                                controllerCategory.categories[index].tendanhmuc
+                                    .toUpperCase(),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall
+                                    ?.copyWith(
+                                      color: index == selectedindex
+                                          ? colorScheme(context).onTertiary
+                                          : colorScheme(context).tertiary,
+                                    ),
+                              ),
                             ),
                           ),
                         ),
