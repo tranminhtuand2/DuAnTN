@@ -4,16 +4,21 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:managerfoodandcoffee/firebase_options.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/drawer_controller.dart';
 import 'package:managerfoodandcoffee/src/reponsive/desktop_screen.dart';
 import 'package:managerfoodandcoffee/src/reponsive/mobile_screen.dart';
 import 'package:managerfoodandcoffee/src/reponsive/reponsive_layout.dart';
 import 'package:managerfoodandcoffee/src/reponsive/tablet_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
+import 'package:managerfoodandcoffee/src/utils/theme_data.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  Get.put(BrightnessController());
+  Get.put(MyDrawerController());
   runApp(const MyApp());
 }
 
@@ -23,25 +28,20 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    return GetMaterialApp(
-      title: 'Coffee Wind',
-      debugShowCheckedModeBanner: false,
-      defaultTransition: Transition.leftToRightWithFade,
-      transitionDuration: const Duration(milliseconds: 400),
-      theme: ThemeData(
-          fontFamily: GoogleFonts.interTight().fontFamily,
-          useMaterial3: true,
-          colorScheme: TAppTheme.lightColorScheme,
-          textTheme: TAppTextTheme.lightTextTheme),
-      darkTheme: ThemeData(
-          fontFamily: GoogleFonts.interTight().fontFamily,
-          useMaterial3: true,
-          colorScheme: TAppTheme.darkColorScheme,
-          textTheme: TAppTextTheme.darkTextTheme),
-      home: const ReponsiveLayout(
-        moblie: MobileScreen(),
-        tablet: TabletScreen(),
-        desktop: DesktopScreen(),
+    final brightnessController = Get.put(BrightnessController());
+
+    return Obx(
+      () => GetMaterialApp(
+        title: 'Coffee Wind',
+        debugShowCheckedModeBanner: false,
+        defaultTransition: Transition.leftToRightWithFade,
+        transitionDuration: const Duration(milliseconds: 400),
+        theme: brightnessController.isDarkMode.value ? lightTheme : darkTheme,
+        home: const ReponsiveLayout(
+          moblie: MobileScreen(),
+          tablet: TabletScreen(),
+          desktop: DesktopScreen(),
+        ),
       ),
     );
   }
