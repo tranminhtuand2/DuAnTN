@@ -7,6 +7,8 @@ import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/shimmer
 import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/detail_product_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/constants.dart';
+import 'package:managerfoodandcoffee/src/utils/format_price.dart';
+import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:shimmer/shimmer.dart';
 
 class MyBodyProduct extends StatefulWidget {
@@ -31,9 +33,9 @@ class _MyBodyProductState extends State<MyBodyProduct> {
         children: [
           Container(
             margin: const EdgeInsets.only(top: 70),
-            decoration: const BoxDecoration(
-              color: kBackgroundColor,
-              borderRadius: BorderRadius.only(
+            decoration: BoxDecoration(
+              color: colorScheme(context).background,
+              borderRadius: const BorderRadius.only(
                 topLeft: Radius.circular(40),
                 topRight: Radius.circular(40),
               ),
@@ -63,15 +65,18 @@ class _MyBodyProductState extends State<MyBodyProduct> {
                                 horizontal: kDefaultPadding,
                                 vertical: kDefaultPadding / 2),
                             // color: Theme.of(context).colorScheme.secondary,
-                            height: 160,
+                            height: MediaQuery.sizeOf(context).height * 0.16,
                             child: Stack(
                               alignment: Alignment.bottomCenter,
                               children: [
                                 Container(
-                                  height: 136,
+                                  height:
+                                      MediaQuery.sizeOf(context).height * 0.14,
                                   decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(22),
-                                    color: kBlueColor,
+                                    borderRadius: BorderRadius.circular(20),
+                                    color: colorScheme(context)
+                                        .primary
+                                        .withOpacity(0.6),
                                   ),
                                   child: Container(
                                     margin: const EdgeInsets.only(right: 10),
@@ -81,7 +86,7 @@ class _MyBodyProductState extends State<MyBodyProduct> {
                                             .colorScheme
                                             .background,
                                         borderRadius:
-                                            BorderRadius.circular(22)),
+                                            BorderRadius.circular(20)),
                                   ),
                                 ),
                                 //hien thi ảnh sản phẩm
@@ -103,42 +108,29 @@ class _MyBodyProductState extends State<MyBodyProduct> {
                                 Positioned(
                                   left: 0,
                                   bottom: 0,
-                                  child: SizedBox(
+                                  child: Container(
+                                    margin: const EdgeInsets.only(left: 30),
                                     height: 136,
                                     width: size.width - 200,
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        const Spacer(),
-                                        Padding(
-                                          padding: const EdgeInsets.all(20),
-                                          child: Text(
-                                            sanphamnew.tensp,
-                                            style: Theme.of(context)
-                                                .textTheme
-                                                .titleLarge,
-                                          ),
+                                        Text(
+                                          sanphamnew.tensp.toUpperCase(),
+                                          style: text(context)
+                                              .titleMedium
+                                              ?.copyWith(
+                                                  fontWeight: FontWeight.bold),
                                         ),
-                                        const Spacer(),
-                                        Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: kDefaultPadding * 1.5,
-                                            vertical: kDefaultPadding / 4,
-                                          ),
-                                          decoration: const BoxDecoration(
-                                            borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(22),
-                                              topRight: Radius.circular(22),
-                                            ),
-                                          ),
-                                          child: Text(
-                                            "${sanphamnew.giasp} vnđ",
-                                            style: TextStyle(
-                                                color: colorScheme(context)
-                                                    .onTertiary),
-                                          ),
-                                        )
+                                        Text(
+                                          "${formatPrice(sanphamnew.giasp)} vnđ",
+                                          style: TextStyle(
+                                              color: colorScheme(context)
+                                                  .onTertiary),
+                                        ),
                                       ],
                                     ),
                                   ),

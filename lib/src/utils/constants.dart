@@ -15,7 +15,7 @@ const kDefaultPadding = 20.0; // Khoảng cách mặc định
 
 // our default Shadow
 const kDefaultShadow = BoxShadow(
-  offset: Offset(0, 15),
+  offset: Offset(0, 22),
   blurRadius: 27,
   color: Colors.black12, // Black color with 12% opacity
 );

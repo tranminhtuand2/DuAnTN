@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,7 +7,6 @@ import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_user.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/body_product.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/shimmer_loading.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/constants.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
@@ -44,9 +41,9 @@ class _HomePageState extends State<HomePage> {
             context); //bắt sự kiện người dùng back để thoát ứng dụng để gọi hàm thông báo
       },
       child: Scaffold(
-        backgroundColor: kPrimaryColor,
+        backgroundColor: colorScheme(context).primary,
         appBar: AppBar(
-          backgroundColor: kPrimaryColor,
+          backgroundColor: colorScheme(context).primary,
           elevation: 0,
           title: Text(
             "Bàn ${widget.tenban}",
