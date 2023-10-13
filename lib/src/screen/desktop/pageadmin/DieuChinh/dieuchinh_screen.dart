@@ -13,8 +13,10 @@ import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/gioh
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/headercrud_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/sanphamcrud_screen.dart';
 
+import '../../../../controller_getx/brightness_controller.dart';
+
 class dieuchinhSceen extends StatefulWidget {
-  const dieuchinhSceen({super.key});
+  dieuchinhSceen({super.key});
 
   @override
   State<dieuchinhSceen> createState() => _dieuchinhSceenState();
@@ -22,18 +24,20 @@ class dieuchinhSceen extends StatefulWidget {
 
 class _dieuchinhSceenState extends State<dieuchinhSceen>
     with SingleTickerProviderStateMixin {
+  final BrightnessController brightnessController =
+      Get.put(BrightnessController());
   Animation<double>? _animation;
   AnimationController? _animationController;
-  String tttenban = "";
-  @override
-  void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
-    super.didChangeDependencies();
-    final myalert = Get.put(getAlert());
-    if (tttenban != "") {
-      myalert.showAlertDialog("THÔNG BÁO", "$tttenban ĐÃ ORDER");
-    }
-  }
+  // String tttenban = "";
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  //   final myalert = Get.put(getAlert());
+  //   if (tttenban != "") {
+  //     myalert.showAlertDialog("THÔNG BÁO", "$tttenban ĐÃ ORDER");
+  //   }
+  // }
 
   @override
   void initState() {
@@ -86,6 +90,24 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             onPress: () {
               _animationController!.reverse();
               Get.to(() => const headerCrudScreen());
+            },
+          ),
+          Bubble(
+            title: brightnessController.isDarkMode == true
+                ? " Dart Mode"
+                : "Light Mode",
+            iconColor: Colors.white,
+            bubbleColor: Colors.blue,
+            icon: brightnessController.isDarkMode == true
+                ? Icons.dark_mode
+                : Icons.light_mode,
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
+            onPress: () {
+              setState(() {
+                brightnessController.isDarkMode;
+              });
+              brightnessController.toggleDarkMode();
+              _animationController!.reverse();
             },
           ),
         ],
