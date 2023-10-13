@@ -92,6 +92,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
               Get.to(() => const headerCrudScreen());
             },
           ),
+          //chế độ sáng tối
           Bubble(
             title: brightnessController.isDarkMode == true
                 ? " Dart Mode"
