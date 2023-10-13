@@ -3,7 +3,6 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/home_page/home_page.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';

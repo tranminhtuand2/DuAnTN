@@ -6,6 +6,7 @@ void dialogModalBottomsheet(
     BuildContext context, String title, Function function) {
   showModalBottomSheet(
     context: context,
+    backgroundColor: colorScheme(context).onPrimary,
     shape: const RoundedRectangleBorder(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(30),
@@ -30,9 +31,7 @@ void dialogModalBottomsheet(
                 ),
                 Text(
                   'Bạn có chắc chắn muốn $title?',
-                  style: text(context)
-                      .titleMedium
-                      ?.copyWith(color: colorScheme(context).onTertiary),
+                  style: text(context).titleMedium,
                 ),
                 Padding(
                   padding: const EdgeInsets.fromLTRB(0, 30, 0, 30),

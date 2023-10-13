@@ -20,12 +20,11 @@ class MyButton extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: height,
-      // margin: const EdgeInsets.symmetric(horizontal: 40, vertical: 30),
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.all(Radius.circular(16)),
+            borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
         ),
         onPressed: () async {

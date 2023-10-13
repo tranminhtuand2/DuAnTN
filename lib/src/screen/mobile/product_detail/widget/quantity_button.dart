@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
+import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class QuanityButtonProduct extends StatefulWidget {
@@ -20,10 +21,10 @@ class _QuanityButtonProductState extends State<QuanityButtonProduct> {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 14),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 255, 255, 255),
+        color: colorScheme(context).onBackground.withOpacity(0.1),
         boxShadow: [
           BoxShadow(
-            color: const Color.fromARGB(255, 0, 0, 0).withOpacity(0.5),
+            color: const Color.fromARGB(255, 249, 249, 249).withOpacity(0.2),
             spreadRadius: 2,
             blurRadius: 10,
             offset: const Offset(0, 3),
@@ -68,7 +69,7 @@ class _QuanityButtonProductState extends State<QuanityButtonProduct> {
                         child: Text(
                           '$count',
                           style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -108,7 +109,7 @@ class _QuanityButtonProductState extends State<QuanityButtonProduct> {
                     backgroundColor: colorScheme(context).primary,
                     height: 60,
                     text: Text(
-                      'Thêm : ${widget.price! * count} vnđ',
+                      'THÊM : ${formatPrice(widget.price! * count)} VNĐ',
                       style: text(context)
                           .titleMedium
                           ?.copyWith(color: colorScheme(context).tertiary),
