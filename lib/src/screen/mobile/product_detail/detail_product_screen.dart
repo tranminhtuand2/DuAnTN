@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
@@ -9,6 +10,7 @@ import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/widget/ima
 import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/widget/info.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/widget/input_note.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/widget/quantity_button.dart';
+import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 
 import '../../../firebasehelper/firebasestore_helper.dart';
 
@@ -29,7 +31,16 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       // resizeToAvoidBottomInset: false,
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: Icon(
+            CupertinoIcons.back,
+            size: 32,
+            color: colorScheme(context).onBackground,
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -40,7 +51,7 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 children: [
                   imageProduct(widget.product.hinhanh, context),
                   infoProduct(widget.product, context),
-                  inputNoteProduct(controllerNode),
+                  inputNoteProduct(controllerNode, context),
                 ],
               ),
             ),

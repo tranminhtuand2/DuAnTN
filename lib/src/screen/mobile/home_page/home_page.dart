@@ -1,19 +1,14 @@
-import 'dart:developer';
-
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/categorry_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/drawer_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_user.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/giohang_user.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/body_product.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/my_drawer.dart';
-import 'package:managerfoodandcoffee/src/shared_preferences/shared_preference.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/constants.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
@@ -41,7 +36,6 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    final brightnessController = Get.put(BrightnessController());
     return WillPopScope(
       onWillPop: () async {
         return onBackPressed(context);
@@ -58,13 +52,6 @@ class _HomePageState extends State<HomePage> {
                 fontWeight: FontWeight.bold,
                 color: colorScheme(context).tertiary),
           ),
-          // leading: Switch(
-          //   value: brightnessController.isDarkMode.value,
-          //   onChanged: (bool newValue) {
-          //     brightnessController.toggleDarkMode();
-          //     saveBrightnessPreference(newValue);
-          //   },
-          // ),
           leading: IconButton(
               onPressed: () {
                 Get.put(MyDrawerController()).toggleDrawer();
@@ -182,34 +169,38 @@ class _HomePageState extends State<HomePage> {
         }
         if (snapshot.hasData) {
           final giohangtb = snapshot.data;
-          return badges.Badge(
-            position: badges.BadgePosition.custom(),
-            badgeAnimation: const badges.BadgeAnimation.fade(),
-            //lấy dự liệu order
-            badgeContent: Padding(
-              padding: const EdgeInsets.all(2.0),
-              child: Text(
-                "${giohangtb!.length}",
-                style: text(context)
-                    .titleSmall
-                    ?.copyWith(color: colorScheme(context).tertiary),
-              ),
-            ),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconButton(
-                  onPressed: () {
-                    Get.to(
-                      () => CartProduct(tenban: widget.tenban),
-                    );
-                  },
-                  icon: Icon(
-                    Icons.shopping_bag,
-                    size: 32,
-                    color: Theme.of(context).colorScheme.onPrimaryContainer,
-                  )),
-            ),
-          );
+
+          return giohangtb!.isNotEmpty
+              ? badges.Badge(
+                  position: badges.BadgePosition.custom(),
+                  badgeAnimation: const badges.BadgeAnimation.fade(),
+                  //lấy dự liệu order
+                  badgeContent: Padding(
+                    padding: const EdgeInsets.all(2.0),
+                    child: Text(
+                      "${giohangtb.length}",
+                      style: text(context)
+                          .titleSmall
+                          ?.copyWith(color: colorScheme(context).tertiary),
+                    ),
+                  ),
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(horizontal: 10),
+                    child: IconButton(
+                      onPressed: () {
+                        Get.to(
+                          () => CartProduct(tenban: widget.tenban),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.shopping_bag,
+                        size: 32,
+                        color: Theme.of(context).colorScheme.onPrimaryContainer,
+                      ),
+                    ),
+                  ),
+                )
+              : const SizedBox();
         }
         return const Center(
           child: CircularProgressIndicator(),
