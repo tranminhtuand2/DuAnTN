@@ -101,7 +101,7 @@ class FormLogin extends StatelessWidget {
               ),
               MyButton(
                   onTap: () {
-                    Get.to(() => const dieuchinhSceen());
+                    Get.to(() => dieuchinhSceen());
                     // Xử lý sự kiện khi nút được nhấn
                     // Get.rawSnackbar(
                     //   message: "đăng nhập thành công.",

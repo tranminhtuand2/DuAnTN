@@ -1,16 +1,16 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/constants/size.dart';
-
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
-
 // import 'package:managerfoodandcoffee/src/controller/CRUD_controller_header.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/headercrud_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/sanphamcrud_screen.dart';
+
+import '../../../../controller_getx/brightness_controller.dart';
 
 class dieuchinhSceen extends StatefulWidget {
   const dieuchinhSceen({super.key});
@@ -21,9 +21,21 @@ class dieuchinhSceen extends StatefulWidget {
 
 class _dieuchinhSceenState extends State<dieuchinhSceen>
     with SingleTickerProviderStateMixin {
+  final BrightnessController brightnessController =
+      Get.put(BrightnessController());
   Animation<double>? _animation;
   AnimationController? _animationController;
-  String tenbanthanhtoan = "";
+  // String tttenban = "";
+  // @override
+  // void didChangeDependencies() {
+  //   // TODO: implement didChangeDependencies
+  //   super.didChangeDependencies();
+  //   final myalert = Get.put(getAlert());
+  //   if (tttenban != "") {
+  //     myalert.showAlertDialog("THÔNG BÁO", "$tttenban ĐÃ ORDER");
+  //   }
+  // }
+
   @override
   void initState() {
     super.initState();
@@ -77,6 +89,25 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
               Get.to(() => const headerCrudScreen());
             },
           ),
+          //chế độ sáng tối
+          Bubble(
+            title: brightnessController.isDarkMode == true
+                ? " Dart Mode"
+                : "Light Mode",
+            iconColor: Colors.white,
+            bubbleColor: Colors.blue,
+            icon: brightnessController.isDarkMode == true
+                ? Icons.dark_mode
+                : Icons.light_mode,
+            titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
+            onPress: () {
+              setState(() {
+                brightnessController.isDarkMode;
+              });
+              brightnessController.toggleDarkMode();
+              _animationController!.reverse();
+            },
+          ),
         ],
         animation: _animation!,
         onPress: () => _animationController!.isCompleted
@@ -90,7 +121,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Container(
+              SizedBox(
                 width: double.infinity,
                 height: 100,
                 child: Padding(
@@ -98,8 +129,44 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Danh Sách Bàn"),
-                      Icon(Icons.notifications_active),
+                      const Text("Danh Sách Bàn"),
+                      //thong bao
+                      StreamBuilder(
+                        stream: FirestoreHelper.readtinhtrangtt(),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          }
+                          if (snapshot.hasError) {
+                            return SingleChildScrollView(
+                              child: Text("Lỗi: ${snapshot.error.toString()}"),
+                            );
+                          }
+                          if (snapshot.hasData) {
+                            final tinhtrangtt = snapshot.data;
+
+                            return badges.Badge(
+                              position: badges.BadgePosition.topStart(),
+                              badgeAnimation:
+                                  const badges.BadgeAnimation.fade(),
+                              //lấy dự liệu order
+                              badgeContent: Text(
+                                "${tinhtrangtt!.length}",
+                                style: const TextStyle(fontSize: 20),
+                              ),
+                              child: IconButton(
+                                onPressed: () {},
+                                icon: const Icon(Icons.notifications),
+                              ),
+                            );
+                          }
+                          return const Icon(Icons.notifications);
+                        },
+                      )
+                      //end thong bao
                     ],
                   ),
                 ),
@@ -130,7 +197,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                           child: GridView.builder(
                             itemCount: table!.length,
                             gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
+                                const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount:
                                   6, // Bạn có thể thay đổi số cột ở đây
                               mainAxisSpacing:
@@ -161,13 +228,13 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                     return badges.Badge(
                                       position: badges.BadgePosition.topStart(),
                                       badgeAnimation:
-                                          badges.BadgeAnimation.fade(),
+                                          const badges.BadgeAnimation.fade(),
                                       //lấy dự liệu order
                                       badgeContent: Text(
                                         "${giohangtb!.length}",
-                                        style: TextStyle(fontSize: 20),
+                                        style: const TextStyle(fontSize: 20),
                                       ),
-                                      child: giohangtb.length > 0
+                                      child: giohangtb.isNotEmpty
                                           ? InkWell(
                                               onTap: () {
                                                 Get.to(() => giohang_admin(
@@ -179,7 +246,8 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
-                                                margin: EdgeInsets.all(10),
+                                                margin:
+                                                    const EdgeInsets.all(10),
                                                 height: 300,
                                                 width: 150,
                                                 child: SingleChildScrollView(
@@ -198,7 +266,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                               ),
                                             )
                                           : Container(
-                                              margin: EdgeInsets.all(10),
+                                              margin: const EdgeInsets.all(10),
                                               height: 300,
                                               width: 150,
                                               child: SingleChildScrollView(
@@ -223,29 +291,6 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                   );
                                 },
                               );
-                              //  badges.Badge(
-                              //   position: badges.BadgePosition.center(),
-                              //   badgeAnimation: badges.BadgeAnimation.fade(),
-                              //   //lấy dự liệu order
-                              //   badgeContent: Text("0"),
-                              //   child: Container(
-                              //     margin: EdgeInsets.all(20),
-                              //     height: 300,
-                              //     width: 150,
-                              //     child: SingleChildScrollView(
-                              //       child: Column(
-                              //         children: [
-                              //           Image.asset(
-                              //             "/images/bill1.png",
-                              //             height: 150,
-                              //             width: 100,
-                              //           ),
-                              //           Text("bàn số  ${tableindex.tenban}"),
-                              //         ],
-                              //       ),
-                              //     ),
-                              //   ),
-                              // );
                             },
                           ),
                         ),

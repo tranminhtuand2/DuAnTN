@@ -157,6 +157,7 @@ class _giohang_adminState extends State<giohang_admin> {
                       }
                       return Center(
                         child: Container(
+                          alignment: Alignment.center,
                           width: double.infinity,
                           height: 50,
                           child: thanhtoan == false
