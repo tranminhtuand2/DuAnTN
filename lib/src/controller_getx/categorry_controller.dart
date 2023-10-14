@@ -2,7 +2,7 @@ import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 
-import '../firebasehelper/firebasestore_helper.dart';
+import '../firebase_helper/firebasestore_helper.dart';
 
 class CategoryController extends GetxController {
   var categories = <DanhMuc>[].obs;

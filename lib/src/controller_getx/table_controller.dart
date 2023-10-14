@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 
-import '../firebasehelper/firebasestore_helper.dart';
+import '../firebase_helper/firebasestore_helper.dart';
 
 class TableController extends GetxController {
   var tables = <int>[].obs;

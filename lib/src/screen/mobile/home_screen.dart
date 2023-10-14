@@ -99,9 +99,9 @@ class MenuScreen extends GetView<MyDrawerController> {
                           children: [
                             Text(
                               "DARK MODE",
-                              style: text(context).bodySmall?.copyWith(
-                                  fontWeight: FontWeight.bold,
-                                  color: colorScheme(context).onTertiary),
+                              style: text(context)
+                                  .bodySmall
+                                  ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                             const SizedBox(width: 8),
                             Switch(
@@ -137,7 +137,7 @@ class MenuScreen extends GetView<MyDrawerController> {
           child: const Icon(
             CupertinoIcons.back,
             size: 30,
-            color: Colors.black,
+            // color: Colors.black,
           ),
         ),
       ),

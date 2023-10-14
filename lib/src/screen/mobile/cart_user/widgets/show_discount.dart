@@ -77,7 +77,7 @@ class _ShowDiscountState extends State<ShowDiscount> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text("Mã giảm giá: ", style: text(context).titleMedium),
+            Text("Mã giảm giá: ", style: text(context).titleSmall),
             const SizedBox(width: 10),
             Expanded(
               child: SizedBox(
@@ -94,13 +94,7 @@ class _ShowDiscountState extends State<ShowDiscount> {
               ),
             ),
             IconButton(
-              onPressed: () async {
-                // try {
-                //   _momoPay.open(options);
-                // } catch (e) {
-                //   debugPrint(e.toString());
-                // }
-              },
+              onPressed: () async {},
               icon: Icon(
                 Icons.confirmation_num,
                 color: colorScheme(context).onBackground,
