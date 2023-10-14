@@ -212,6 +212,9 @@ class _CartProductState extends State<CartProduct> {
       showDragHandle: true,
       isScrollControlled: true,
       backgroundColor: colorScheme(context).onPrimary,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12.0),
+      ),
       context: context,
       builder: (context) {
         return Container(
@@ -233,48 +236,43 @@ class _CartProductState extends State<CartProduct> {
                       totalPrice(context),
                       ShowDiscount(discountController: discountController),
                       ShowPayment(
-                        onTap: (int isSelected) {
-                          setState(() {
-                            isSelectedPayment = isSelected;
-                          });
+                        currentMethod: (int isSelected) {
+                          isSelectedPayment = isSelected;
                         },
                       ),
+                      const SizedBox(height: 24),
                       // luu hoá đơn
-                      Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 20),
-                        child: MyButton(
-                          onTap: () {
-                            log(isSelectedPayment.toString());
-                            switch (isSelectedPayment) {
-                              case 0:
-                                log('Cash');
-                                createPaymentStatus();
-                                break;
-                              case 1:
-                                log('MoMo');
-                                Get.back();
-                                openMoMoApp(
-                                    amount: tongtienthanhtoan,
-                                    orderId: widget.tenban +
-                                        tongtienthanhtoan.toString(),
-                                    description: 'Thanh toán hóa đơn',
-                                    username:
-                                        'Khách bàn số ${widget.tenban}');
-                                break;
-                              case 2:
-                                log('VnPay');
-                                //
-                                break;
-                            }
-                          },
-                          backgroundColor: colorScheme(context).primary,
-                          height: 60,
-                          text: Text(
-                            'Xác nhận ',
-                            style: text(context).titleMedium?.copyWith(
-                                color: colorScheme(context).tertiary),
-                          ),
+                      MyButton(
+                        onTap: () {
+                          log(isSelectedPayment.toString());
+                          switch (isSelectedPayment) {
+                            case 0:
+                              log('Cash');
+                              createPaymentStatus();
+                              break;
+                            case 1:
+                              log('MoMo');
+                              Get.back();
+                              openMoMoApp(
+                                  amount: tongtienthanhtoan,
+                                  orderId: widget.tenban +
+                                      tongtienthanhtoan.toString(),
+                                  description: 'Thanh toán hóa đơn',
+                                  username: 'Khách bàn số ${widget.tenban}');
+                              break;
+                            case 2:
+                              log('VnPay');
+                              //
+                              break;
+                          }
+                        },
+                        backgroundColor: colorScheme(context).primary,
+                        height: 60,
+                        text: Text(
+                          'Xác nhận ',
+                          style: text(context)
+                              .titleMedium
+                              ?.copyWith(color: colorScheme(context).tertiary),
                         ),
                       ),
                     ],
@@ -303,10 +301,12 @@ class _CartProductState extends State<CartProduct> {
         children: [
           Text(
             "Tổng tiền:",
-            style: text(context).titleMedium,
+            style: text(context).titleSmall,
           ),
           Text("${formatPrice(tongtienthanhtoan)} VNĐ",
-              style: text(context).titleMedium),
+              style: text(context)
+                  .titleMedium
+                  ?.copyWith(fontWeight: FontWeight.w600)),
         ],
       ),
     );

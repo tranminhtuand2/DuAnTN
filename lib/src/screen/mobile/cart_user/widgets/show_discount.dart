@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
@@ -36,7 +37,7 @@ class _ShowDiscountState extends State<ShowDiscount> {
                     Row(
                       children: [
                         Icon(Icons.confirmation_num),
-                        SizedBox(width: 16),
+                        SizedBox(width: 10),
                         Text('Áp dụng ưu đãi để được giảm giá')
                       ],
                     ),
@@ -77,12 +78,21 @@ class _ShowDiscountState extends State<ShowDiscount> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Icon(
+              Icons.confirmation_num,
+              color: colorScheme(context).onBackground,
+            ),
+            const SizedBox(width: 10),
             Text("Mã giảm giá: ", style: text(context).titleSmall),
             const SizedBox(width: 10),
             Expanded(
               child: SizedBox(
                 height: 54,
                 child: TextFormField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[0-9a-zA-Z]")),
+                    LengthLimitingTextInputFormatter(10)
+                  ],
                   controller: widget.discountController,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(left: 20),
@@ -93,13 +103,6 @@ class _ShowDiscountState extends State<ShowDiscount> {
                 ),
               ),
             ),
-            IconButton(
-              onPressed: () async {},
-              icon: Icon(
-                Icons.confirmation_num,
-                color: colorScheme(context).onBackground,
-              ),
-            )
           ],
         ),
       ],

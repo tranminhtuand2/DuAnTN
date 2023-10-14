@@ -3,7 +3,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 class PushNotification {
   static final _notifications = FlutterLocalNotificationsPlugin();
 
-  static Future _notificationDetails() async {
+  static _notificationDetails() async {
     return const NotificationDetails(
       android: AndroidNotificationDetails('channel_id', 'channel_name',
           channelDescription: 'description',
@@ -37,11 +37,11 @@ class PushNotification {
     // String? payload,
   }) async {
     try {
-      await _notifications.show(
-        id ?? 1,
+      _notifications.show(
+        id,
         title,
         body,
-        await _notificationDetails(),
+        _notificationDetails(),
       );
     } catch (e) {
       print('Error when showing notification: $e');
