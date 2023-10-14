@@ -12,7 +12,7 @@ import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/widget/inp
 import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/widget/quantity_button.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 
-import '../../../firebasehelper/firebasestore_helper.dart';
+import '../../../firebase_helper/firebasestore_helper.dart';
 
 class ProductDetailPage extends StatefulWidget {
   const ProductDetailPage(

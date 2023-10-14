@@ -3,17 +3,19 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
-// import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
-import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/show_discount.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/show_payment.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/home_page.dart';
-import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/notifications/notification.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/payment_wallet/momo_wallet.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
@@ -36,70 +38,20 @@ class _CartProductState extends State<CartProduct> {
   int isSelectedPayment = 0;
 
   late MomoVn _momoPay;
+  // ignore: unused_field
   late PaymentResponse _momoPaymentResult;
-
-  late String _payment_status = '';
-
-  final options = MomoPaymentInfo(
-    merchantName: "HoangNgoc",
-    appScheme: "HoangNgoc",
-    merchantCode: 'MOMOC2IC20220510',
-    partnerCode: 'MOMOC2IC20220510',
-    amount: 10000,
-    orderId: '12321312',
-    orderLabel: 'Gói combo',
-    merchantNameLabel: "HLGD",
-    fee: 10,
-    description: 'Tích hợp thanh toán ngon lành =))',
-    username: 'HA THE CHI',
-    partner: 'merchant',
-    extra: "{\"key1\":\"value1\",\"key2\":\"value2\"}",
-    isTestMode: true,
-  );
-
-  void _setState() {
-    _payment_status = 'Đã chuyển thanh toán';
-    if (_momoPaymentResult.isSuccess!) {
-      _payment_status += "\nTình trạng: Thành công.";
-      _payment_status += "\nSố điện thoại: ${_momoPaymentResult.phoneNumber!}";
-      _payment_status += "\nExtra: ${_momoPaymentResult.extra}";
-      _payment_status += "\nToken: ${_momoPaymentResult.token}";
-    } else {
-      _payment_status += "\nTình trạng: Thất bại.";
-      _payment_status += "\nExtra: ${_momoPaymentResult.extra}";
-      _payment_status += "\nMã lỗi: ${_momoPaymentResult.status}";
-    }
-  }
-
-  void _handlePaymentSuccess(PaymentResponse response) {
-    setState(() {
-      _momoPaymentResult = response;
-      _setState();
-    });
-    log('THANH TOÁN THÀNH CÔNG');
-  }
-
-  void _handlePaymentError(PaymentResponse response) {
-    setState(() {
-      _momoPaymentResult = response;
-      _setState();
-    });
-    log('THANH TOÁN THẤT BẠI');
-  }
+  // late String _payment_status = '';
 
   @override
   void initState() {
     super.initState();
+    //Khởi tạo notification
+    PushNotification.intialize();
+
     _momoPay = MomoVn();
     _momoPay.on(MomoVn.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _momoPay.on(MomoVn.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _payment_status = "";
     initPlatformState();
-  }
-
-  Future<void> initPlatformState() async {
-    if (!mounted) return;
-    setState(() {});
   }
 
   @override
@@ -294,84 +246,27 @@ class _CartProductState extends State<CartProduct> {
                         child: MyButton(
                           onTap: () {
                             log(isSelectedPayment.toString());
-                            // FirestoreHelper.createtinhtrang(
-                            //     tinhtrangTT(trangthai: "success"),
-                            //     widget.tenban);
-
-                            // Get.defaultDialog(
-                            //   title: "Thanh toán",
-                            //   content: Column(
-                            //     children: [
-                            //       const Text(
-                            //         "Xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
-                            //         textAlign: TextAlign.center,
-                            //       ),
-                            //       StreamBuilder(
-                            //         stream: FirestoreHelper.readtinhtrang(
-                            //             widget.tenban),
-                            //         builder: (context, snapshot) {
-                            //           if (snapshot.connectionState ==
-                            //               ConnectionState.waiting) {
-                            //             return const Center(
-                            //               child: CircularProgressIndicator(),
-                            //             );
-                            //           }
-                            //           if (snapshot.hasError) {
-                            //             return const Center(
-                            //               child: Text("lỗi"),
-                            //             );
-                            //           }
-                            //           if (snapshot.hasData) {
-                            //             final tinhtrang = snapshot.data;
-                            //             for (var i = 0;
-                            //                 i < tinhtrang!.length;
-                            //                 i++) {
-                            //               if (tinhtrang[i].trangthai ==
-                            //                       "xacnhan" &&
-                            //                   tinhtrang[i].idtinhtrang ==
-                            //                       widget.tenban) {
-                            //                 showSnackbar(tongtienthanhtoan);
-                            //                 return Text(
-                            //                   "Đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan vnđ",
-                            //                   textAlign: TextAlign.center,
-                            //                 );
-                            //               } else {
-                            //                 Container(
-                            //                   margin:
-                            //                       const EdgeInsets.symmetric(
-                            //                           vertical: 10),
-                            //                   child:
-                            //                       const Text("Vui lòng chờ"),
-                            //                 );
-                            //               }
-                            //             }
-                            //           }
-                            //           return const CircularProgressIndicator();
-                            //         },
-                            //       )
-                            //     ],
-                            //   ),
-                            //   actions: [
-                            //     MyButton(
-                            //         onTap: () {
-                            //           //quay lai trang san phẩm
-                            //           Get.offAll(
-                            //             () => HomePage(tenban: widget.tenban),
-                            //           );
-                            //         },
-                            //         backgroundColor:
-                            //             colorScheme(context).primary,
-                            //         height: 60,
-                            //         text: Text(
-                            //           'Thoát',
-                            //           style: text(context)
-                            //               .titleMedium
-                            //               ?.copyWith(
-                            //                   color: colorScheme(context)
-                            //                       .tertiary),
-                            //         ))
-                            //   ],
-                            // );
+                            switch (isSelectedPayment) {
+                              case 0:
+                                log('Cash');
+                                createPaymentStatus();
+                                break;
+                              case 1:
+                                log('MoMo');
+                                Get.back();
+                                openMoMoApp(
+                                    amount: tongtienthanhtoan,
+                                    orderId: widget.tenban +
+                                        tongtienthanhtoan.toString(),
+                                    description: 'Thanh toán hóa đơn',
+                                    username:
+                                        'Khách bàn số ${widget.tenban}');
+                                break;
+                              case 2:
+                                log('VnPay');
+                                //
+                                break;
+                            }
                           },
                           backgroundColor: colorScheme(context).primary,
                           height: 60,
@@ -422,6 +317,122 @@ class _CartProductState extends State<CartProduct> {
     Get.snackbar(
       "Đã xác nhận",
       "Vui lòng chuẩn bị $totalAmount VNĐ",
+    );
+  }
+
+  void _handlePaymentSuccess(PaymentResponse response) async {
+    setState(() {
+      _momoPaymentResult = response;
+      // _setState();
+    });
+    log('THANH TOÁN THÀNH CÔNG');
+    await PushNotification.showNotification(
+        id: 1,
+        title: 'Thanh toán ${formatPrice(tongtienthanhtoan)} thành công',
+        body: 'Vui lòng chờ đồ uống trong vài phút <3');
+    //gọi hàm xác nhận thanh toán lên firebase
+    createPaymentStatus();
+  }
+
+  void _handlePaymentError(PaymentResponse response) async {
+    setState(() {
+      _momoPaymentResult = response;
+      // _setState();
+    });
+    log('THANH TOÁN THẤT BẠI');
+    await PushNotification.showNotification(
+        id: int.parse(widget.tenban),
+        title: 'Thanh toán lỗi',
+        body: 'Có lỗi trong quá trình thanh toán rồi :(');
+  }
+
+  Future<void> initPlatformState() async {
+    if (!mounted) return;
+    setState(() {});
+  }
+
+  void openMoMoApp({
+    required int amount,
+    required String orderId,
+    required String description,
+    required String username,
+  }) {
+    try {
+      _momoPay.open(setOptionsPayment(
+        amount: amount,
+        orderId: orderId,
+        description: description,
+        username: username,
+      ));
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  void createPaymentStatus() {
+    FirestoreHelper.createtinhtrang(
+        tinhtrangTT(trangthai: "success"), widget.tenban);
+    Get.defaultDialog(
+      title: "Thanh toán",
+      content: Column(
+        children: [
+          const Text(
+            "Xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
+            textAlign: TextAlign.center,
+          ),
+          StreamBuilder(
+            stream: FirestoreHelper.readtinhtrang(widget.tenban),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+              if (snapshot.hasError) {
+                return const Center(
+                  child: Text("lỗi"),
+                );
+              }
+              if (snapshot.hasData) {
+                final tinhtrang = snapshot.data;
+                for (var i = 0; i < tinhtrang!.length; i++) {
+                  if (tinhtrang[i].trangthai == "xacnhan" &&
+                      tinhtrang[i].idtinhtrang == widget.tenban) {
+                    showSnackbar(tongtienthanhtoan);
+                    return Text(
+                      "Đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan vnđ",
+                      textAlign: TextAlign.center,
+                    );
+                  } else {
+                    Container(
+                      margin: const EdgeInsets.symmetric(vertical: 10),
+                      child: const Text("Vui lòng chờ"),
+                    );
+                  }
+                }
+              }
+              return const CircularProgressIndicator();
+            },
+          )
+        ],
+      ),
+      actions: [
+        MyButton(
+            onTap: () {
+              //quay lai trang san phẩm
+              Get.offAll(
+                () => HomePage(tenban: widget.tenban),
+              );
+            },
+            backgroundColor: colorScheme(context).primary,
+            height: 60,
+            text: Text(
+              'Thoát',
+              style: text(context)
+                  .titleMedium
+                  ?.copyWith(color: colorScheme(context).tertiary),
+            ))
+      ],
     );
   }
 }

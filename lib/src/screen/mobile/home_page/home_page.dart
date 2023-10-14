@@ -7,6 +7,7 @@ import 'package:managerfoodandcoffee/src/controller_getx/drawer_controller.dart'
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/alert_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/giohang_user.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/body_product.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -14,7 +15,7 @@ import 'package:managerfoodandcoffee/src/utils/constants.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:managerfoodandcoffee/src/utils/will_pop_scope.dart';
 
-import '../../../firebasehelper/firebasestore_helper.dart';
+import '../../../firebase_helper/firebasestore_helper.dart';
 
 class HomePage extends StatefulWidget {
   final String tenban;
@@ -64,6 +65,7 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           actions: [
             gioHang(),
+            notifications(),
           ],
         ),
         body: Column(
@@ -193,8 +195,8 @@ class _HomePageState extends State<HomePage> {
                         );
                       },
                       icon: Icon(
-                        Icons.shopping_bag,
-                        size: 32,
+                        CupertinoIcons.cart_fill,
+                        size: 30,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
                     ),
@@ -206,6 +208,21 @@ class _HomePageState extends State<HomePage> {
           child: CircularProgressIndicator(),
         );
       },
+    );
+  }
+
+  Widget notifications() {
+    return IconButton(
+      onPressed: () {
+        Get.to(
+          () => const AlertScreen(),
+        );
+      },
+      icon: Icon(
+        CupertinoIcons.bell_fill,
+        size: 30,
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      ),
     );
   }
 }

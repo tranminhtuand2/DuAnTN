@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
+import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 import 'package:managerfoodandcoffee/src/model/diachimap_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
@@ -335,5 +336,33 @@ class FirestoreHelper {
         e.toString(),
       );
     }
+  }
+
+  ////////////////////////////NOTIFICATION ///////////////////////////
+  static Future<void> createMagiamGia() async {
+    final couponsColection = FirebaseFirestore.instance.collection("coupons");
+    final uid = couponsColection.doc().id;
+    final docRef = couponsColection.doc(uid);
+    final coupons = Coupons(
+      beginDay: "14/10/2023",
+      endDay: "16/10/2023",
+      data: 'HATHECHI20',
+      persent: 20,
+      isEnable: true,
+    );
+    try {
+      await docRef.set(
+        coupons.toJson(),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Stream<List<Coupons>> getDataCoupons() {
+    final couponsColection = FirebaseFirestore.instance.collection("coupons");
+
+    return couponsColection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => Coupons.fromsnapshot(e)).toList());
   }
 }
