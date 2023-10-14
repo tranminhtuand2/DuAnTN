@@ -60,7 +60,9 @@ class ChatMessage extends StatelessWidget {
                               BottomSheetItem(
                                 icon: const Icon(CupertinoIcons.delete),
                                 title: 'Xóa tin nhắn',
-                                function: () {},
+                                function: () {
+                                  //
+                                },
                               ),
                             ],
                           ),
