@@ -178,7 +178,9 @@ class FirestoreHelper {
     final tableColection = FirebaseFirestore.instance.collection("table");
     final uid = tableColection.doc().id;
     final docref = tableColection.doc(uid);
-    final newtable = TableModel(tenban: table.tenban, maban: uid).toJson();
+    final newtable =
+        TableModel(tenban: table.tenban, maban: uid, isSelected: false)
+            .toJson();
     try {
       await docref.set(newtable);
     } catch (e) {
@@ -197,10 +199,14 @@ class FirestoreHelper {
   static Future updatetable(TableModel table) async {
     final headerCollection = FirebaseFirestore.instance.collection("table");
     final docRef = headerCollection.doc(table.maban);
-    final newtable =
-        TableModel(tenban: table.tenban, maban: table.maban).toJson();
+    // final newtable = TableModel(
+    //         tenban: table.tenban,
+    //         maban: table.maban,
+    //         isSelected: table.isSelected)
+    //     .toJson();
     try {
-      await docRef.update(newtable);
+      print('UPDATE');
+      await docRef.update(table.toJson());
     } catch (e) {
       Get.snackbar("lỗi", e.toString());
     }
@@ -303,12 +309,12 @@ class FirestoreHelper {
   //creater
 
   static Future<void> createtinhtrang(
-      tinhtrangTT tinhtrang, String table) async {
+      tinhtrangTT tinhtrang, TableModel table) async {
     final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
 
-    final docRef = tinhtrangCl.doc(table);
+    final docRef = tinhtrangCl.doc(table.tenban);
     final newtinhtrang =
-        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table)
+        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table.tenban)
             .toJson();
     try {
       await docRef.set(newtinhtrang);

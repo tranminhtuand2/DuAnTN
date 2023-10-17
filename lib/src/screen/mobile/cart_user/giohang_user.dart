@@ -9,8 +9,10 @@ import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/show_discount.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/show_payment.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/home_page.dart';
@@ -22,10 +24,10 @@ import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:momo_vn/momo_vn.dart';
 
 class CartProduct extends StatefulWidget {
-  final String tenban;
+  final TableModel table;
   const CartProduct({
     Key? key,
-    required this.tenban,
+    required this.table,
   }) : super(key: key);
 
   @override
@@ -59,7 +61,7 @@ class _CartProductState extends State<CartProduct> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "BÀN ${widget.tenban}",
+          "BÀN ${widget.table.tenban}",
           style:
               text(context).titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
@@ -77,7 +79,7 @@ class _CartProductState extends State<CartProduct> {
         children: [
           Expanded(
             child: StreamBuilder(
-              stream: FirestoreHelper.readgiohang(widget.tenban),
+              stream: FirestoreHelper.readgiohang(widget.table.tenban),
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
@@ -141,7 +143,8 @@ class _CartProductState extends State<CartProduct> {
                                           dialogModalBottomsheet(
                                               context, 'xóa', () async {
                                             await FirestoreHelper.deletegiohang(
-                                                giohangindex, widget.tenban);
+                                                giohangindex,
+                                                widget.table.tenban);
                                             // ignore: use_build_context_synchronously
                                             Navigator.of(context).pop();
                                           });
@@ -221,7 +224,7 @@ class _CartProductState extends State<CartProduct> {
           padding: const EdgeInsets.all(16),
           height: MediaQuery.sizeOf(context).height * 0.7,
           child: StreamBuilder(
-            stream: FirestoreHelper.readgiohang(widget.tenban),
+            stream: FirestoreHelper.readgiohang(widget.table.tenban),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 tongtienthanhtoan = 0;
@@ -255,10 +258,11 @@ class _CartProductState extends State<CartProduct> {
                               Get.back();
                               openMoMoApp(
                                   amount: tongtienthanhtoan,
-                                  orderId: widget.tenban +
+                                  orderId: widget.table.tenban +
                                       tongtienthanhtoan.toString(),
                                   description: 'Thanh toán hóa đơn',
-                                  username: 'Khách bàn số ${widget.tenban}');
+                                  username:
+                                      'Khách bàn số ${widget.table.tenban}');
                               break;
                             case 2:
                               log('VnPay');
@@ -341,7 +345,7 @@ class _CartProductState extends State<CartProduct> {
     });
     log('THANH TOÁN THẤT BẠI');
     await PushNotification.showNotification(
-        id: int.parse(widget.tenban),
+        id: int.parse(widget.table.tenban),
         title: 'Thanh toán lỗi',
         body: 'Có lỗi trong quá trình thanh toán rồi :(');
   }
@@ -369,9 +373,9 @@ class _CartProductState extends State<CartProduct> {
     }
   }
 
-  void createPaymentStatus() {
-    FirestoreHelper.createtinhtrang(
-        tinhtrangTT(trangthai: "success"), widget.tenban);
+  void createPaymentStatus() async {
+    await FirestoreHelper.createtinhtrang(
+        tinhtrangTT(trangthai: "success"), widget.table);
     Get.defaultDialog(
       title: "Thanh toán",
       content: Column(
@@ -381,7 +385,7 @@ class _CartProductState extends State<CartProduct> {
             textAlign: TextAlign.center,
           ),
           StreamBuilder(
-            stream: FirestoreHelper.readtinhtrang(widget.tenban),
+            stream: FirestoreHelper.readtinhtrang(widget.table.tenban),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -397,7 +401,7 @@ class _CartProductState extends State<CartProduct> {
                 final tinhtrang = snapshot.data;
                 for (var i = 0; i < tinhtrang!.length; i++) {
                   if (tinhtrang[i].trangthai == "xacnhan" &&
-                      tinhtrang[i].idtinhtrang == widget.tenban) {
+                      tinhtrang[i].idtinhtrang == widget.table.tenban) {
                     showSnackbar(tongtienthanhtoan);
                     return Text(
                       "Đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan vnđ",
@@ -421,7 +425,7 @@ class _CartProductState extends State<CartProduct> {
             onTap: () {
               //quay lai trang san phẩm
               Get.offAll(
-                () => HomePage(tenban: widget.tenban),
+                () => HomePage(table: widget.table),
               );
             },
             backgroundColor: colorScheme(context).primary,

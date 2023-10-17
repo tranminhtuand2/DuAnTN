@@ -41,7 +41,7 @@ class TAppTheme {
     brightness: Brightness.dark,
     primary: Color.fromARGB(255, 71, 70, 70),
     onPrimary: Color.fromARGB(255, 36, 36, 36),
-    primaryContainer: Color.fromARGB(255, 18, 18, 18),
+    primaryContainer: Color.fromARGB(255, 101, 101, 101),
     onPrimaryContainer: Color(0xFFFFFFFF),
     secondary: Color.fromARGB(255, 63, 63, 63),
     onSecondary: Color(0xFFFFFFFF),

@@ -4,6 +4,9 @@ import 'dart:io';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/check_location_page.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
@@ -18,6 +21,8 @@ class QRViewExample extends StatefulWidget {
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
+  final controllerTable = Get.put(TableController());
+  TableModel? tableModel;
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
@@ -164,14 +169,27 @@ class _QRViewExampleState extends State<QRViewExample> {
     controller.scannedDataStream.listen((scanData) {
       setState(() {
         result = scanData;
+      });
+      for (var element in controllerTable.tables) {
+        if (element.tenban == result!.code) {
+          tableModel = element;
+        }
+      }
+
+      if (tableModel != null) {
         Get.dialog(
           LocationCheckPage(
             vido: widget.vido,
             kinhdo: widget.kinhdo,
-            tenban: result!.code.toString(),
+            table: tableModel!,
           ),
         );
-      });
+      } else {
+        showCustomSnackBar(
+            title: "Lỗi",
+            message: "Hãy quét lại mã bàn",
+            type: Type.error);
+      }
     });
   }
 
