@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/alert_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/giohang_user.dart';
 
 class FirebaseMessagingApi {
@@ -24,7 +25,7 @@ class FirebaseMessagingApi {
     // log(message.notification!.title!);
     // log(message.notification!.body!);
     // log(message.data.toString());
-    Get.to(CartProduct(tenban: 4.toString()));
+    Get.to(() => const AlertScreen());
   }
 
   Future<void> initPushNotifications() async {

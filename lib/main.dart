@@ -40,7 +40,7 @@ class MyApp extends StatelessWidget {
         theme: brightnessController.isDarkMode.value ? lightTheme : darkTheme,
         home: const ReponsiveLayout(
           moblie: MobileScreen(),
-          tablet: TabletScreen(),
+          tablet: MobileScreen(),
           desktop: DesktopScreen(),
         ),
       ),

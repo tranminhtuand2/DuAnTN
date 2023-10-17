@@ -38,6 +38,7 @@ class _NotificationPageState extends State<NotificationPage> {
                           type: Type.success);
                     },
                     child: TicketWidget(
+                      margin: const EdgeInsets.symmetric(vertical: 4),
                       width: width,
                       height: 170,
                       child: CouponItem(
@@ -137,10 +138,18 @@ class CouponItem extends StatelessWidget {
             ),
           ),
         ),
-        const Positioned(
+        Positioned(
           bottom: 24,
           right: 24,
-          child: Icon(Icons.copy),
+          child: IconButton(
+              onPressed: () {
+                Clipboard.setData(ClipboardData(text: details));
+                showCustomSnackBar(
+                    title: 'Copy',
+                    message: "Đã sao chép mã giảm giá",
+                    type: Type.success);
+              },
+              icon: const Icon(Icons.copy)),
         ),
       ],
     );
