@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,8 @@ import 'package:managerfoodandcoffee/src/controller_getx/drawer_controller.dart'
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/alert_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/giohang_user.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/body_product.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -14,11 +18,11 @@ import 'package:managerfoodandcoffee/src/utils/constants.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:managerfoodandcoffee/src/utils/will_pop_scope.dart';
 
-import '../../../firebasehelper/firebasestore_helper.dart';
+import '../../../firebase_helper/firebasestore_helper.dart';
 
 class HomePage extends StatefulWidget {
-  final String tenban;
-  const HomePage({super.key, required this.tenban});
+  final TableModel table;
+  const HomePage({super.key, required this.table});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -35,7 +39,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
+    Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
         return onBackPressed(context);
@@ -47,7 +51,7 @@ class _HomePageState extends State<HomePage> {
           backgroundColor: colorScheme(context).primary,
           elevation: 0,
           title: Text(
-            "BÀN ${widget.tenban}",
+            "BÀN ${widget.table.tenban}",
             style: text(context).titleMedium?.copyWith(
                 fontWeight: FontWeight.bold,
                 color: colorScheme(context).tertiary),
@@ -64,6 +68,7 @@ class _HomePageState extends State<HomePage> {
           centerTitle: true,
           actions: [
             gioHang(),
+            notifications(),
           ],
         ),
         body: Column(
@@ -141,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                     controller: pageViewController,
                     itemCount: controllerCategory.categories.length,
                     itemBuilder: (context, index) {
-                      return MyBodyProduct(tenBan: widget.tenban);
+                      return MyBodyProduct(tenBan: widget.table.tenban);
                     },
                   ),
                 );
@@ -155,7 +160,7 @@ class _HomePageState extends State<HomePage> {
 
   StreamBuilder<List<GioHang>> gioHang() {
     return StreamBuilder(
-      stream: FirestoreHelper.readgiohang(widget.tenban),
+      stream: FirestoreHelper.readgiohang(widget.table.tenban),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Center(
@@ -189,12 +194,12 @@ class _HomePageState extends State<HomePage> {
                     child: IconButton(
                       onPressed: () {
                         Get.to(
-                          () => CartProduct(tenban: widget.tenban),
+                          () => CartProduct(table: widget.table),
                         );
                       },
                       icon: Icon(
-                        Icons.shopping_bag,
-                        size: 32,
+                        CupertinoIcons.cart_fill,
+                        size: 30,
                         color: Theme.of(context).colorScheme.onPrimaryContainer,
                       ),
                     ),
@@ -206,6 +211,21 @@ class _HomePageState extends State<HomePage> {
           child: CircularProgressIndicator(),
         );
       },
+    );
+  }
+
+  Widget notifications() {
+    return IconButton(
+      onPressed: () {
+        Get.to(
+          () => const AlertScreen(),
+        );
+      },
+      icon: Icon(
+        CupertinoIcons.bell_fill,
+        size: 30,
+        color: Theme.of(context).colorScheme.onPrimaryContainer,
+      ),
     );
   }
 }
