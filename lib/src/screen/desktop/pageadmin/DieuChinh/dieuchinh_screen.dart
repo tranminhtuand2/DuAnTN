@@ -5,8 +5,9 @@ import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/constants/size.dart';
 
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
-import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
+// import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
 import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
 
 // import 'package:managerfoodandcoffee/src/controller/CRUD_controller_header.dart';
@@ -132,7 +133,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Danh Sách Bàn"),
+                      Text(
+                        "Danh Sách Bàn",
+                        style: Theme.of(context).textTheme.displayLarge,
+                      ),
                       //thong bao
                       StreamBuilder(
                         stream: FirestoreHelper.readtinhtrangtt(),

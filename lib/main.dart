@@ -10,8 +10,6 @@ import 'package:managerfoodandcoffee/src/reponsive/desktop_screen.dart';
 import 'package:managerfoodandcoffee/src/reponsive/mobile_screen.dart';
 import 'package:managerfoodandcoffee/src/reponsive/reponsive_layout.dart';
 import 'package:managerfoodandcoffee/src/reponsive/tablet_screen.dart';
-import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
-import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:managerfoodandcoffee/src/utils/theme_data.dart';
 
 void main() async {

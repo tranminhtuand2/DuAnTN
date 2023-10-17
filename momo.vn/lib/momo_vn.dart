@@ -6,7 +6,8 @@ import 'dart:convert' as convert;
 class MomoVn {
   // Response codes from platform
   static const _CODE_PAYMENT_SUCCESS = 0; //User xác nhận thanh toán thành công
-  static const _CODE_PAYMENT_TIMEOUT = 5; // Hết thời gian thực hiện giao dịch (Timeout transaction)
+  static const _CODE_PAYMENT_TIMEOUT =
+      5; // Hết thời gian thực hiện giao dịch (Timeout transaction)
   static const _CODE_PAYMENT_CANCEL = 6; // Người dùng huỷ thanh toán
   static const _CODE_PAYMENT_ERROR = 7; // Lỗi Không xác định
 
@@ -48,7 +49,8 @@ class MomoVn {
         break;
       default:
         eventName = EVENT_PAYMENT_ERROR;
-        payload = PaymentResponse(false, _CODE_PAYMENT_ERROR, '', '', 'Lỗi không xác định', '', '');
+        payload = PaymentResponse(
+            false, _CODE_PAYMENT_ERROR, '', '', 'Lỗi không xác định', '', '');
     }
     _eventEmitter.emit(eventName, null, payload);
   }
@@ -69,15 +71,18 @@ class MomoVn {
     bool error = false;
     String mes = '';
     if (options.merchantCode == null) {
-      mes = 'merchantcode is required. Please check if key is present in options.';
+      mes =
+          'merchantcode is required. Please check if key is present in options.';
       error = true;
     }
     if (options.merchantName.isEmpty) {
-      mes = 'merchantcode is required. Please check if key is present in options.';
+      mes =
+          'merchantcode is required. Please check if key is present in options.';
       error = true;
     }
     if (options.partner.isEmpty) {
-      mes = 'merchantcode is required. Please check if key is present in options.';
+      mes =
+          'merchantcode is required. Please check if key is present in options.';
       error = true;
     }
     if (Platform.isIOS && (options.appScheme.isEmpty)) {
@@ -89,10 +94,13 @@ class MomoVn {
       error = true;
     }
     if (options.description == null || options.description!.isEmpty) {
-      mes = 'description is required. Please check if key is present in options.';
+      mes =
+          'description is required. Please check if key is present in options.';
       error = true;
     }
-    return error ? PaymentResponse(false, _CODE_PAYMENT_ERROR, '', '', mes, '', '') : PaymentResponse(true, _CODE_PAYMENT_SUCCESS, '', '', '', '', '');
+    return error
+        ? PaymentResponse(false, _CODE_PAYMENT_ERROR, '', '', mes, '', '')
+        : PaymentResponse(true, _CODE_PAYMENT_SUCCESS, '', '', '', '', '');
   }
 }
 
@@ -105,7 +113,8 @@ class PaymentResponse {
   String? message;
   String? extra;
 
-  PaymentResponse(this.isSuccess, this.status, this.token, this.phoneNumber, this.message, this.data, this.extra);
+  PaymentResponse(this.isSuccess, this.status, this.token, this.phoneNumber,
+      this.message, this.data, this.extra);
 
   static PaymentResponse fromMap(Map<dynamic, dynamic> map) {
     bool? isSuccess = map["isSuccess"];
@@ -116,7 +125,8 @@ class PaymentResponse {
     String? message = map["message"];
     String? extra = "";
     extra = map["extra"];
-    return new PaymentResponse(isSuccess, status, token, phoneNumber, data, message, extra);
+    return new PaymentResponse(
+        isSuccess, status, token, phoneNumber, data, message, extra);
   }
 }
 
