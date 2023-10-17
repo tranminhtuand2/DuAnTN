@@ -1,20 +1,23 @@
-import 'package:badges/badges.dart' as badges;
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/constants/size.dart';
+
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
-import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
-import 'package:managerfoodandcoffee/src/firebasehelper/firebasestore_helper.dart';
+// import 'package:managerfoodandcoffee/src/controller/alertthongbao.dart';
+import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
+
 // import 'package:managerfoodandcoffee/src/controller/CRUD_controller_header.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/headercrud_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/sanphamcrud_screen.dart';
 
 import '../../../../controller_getx/brightness_controller.dart';
+import '../../../../firebase_helper/firebasestore_helper.dart';
 
 class dieuchinhSceen extends StatefulWidget {
-  const dieuchinhSceen({super.key});
+  dieuchinhSceen({super.key});
 
   @override
   State<dieuchinhSceen> createState() => _dieuchinhSceenState();
@@ -122,7 +125,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
         child: SingleChildScrollView(
           child: Column(
             children: [
-              SizedBox(
+              Container(
                 width: double.infinity,
                 height: 100,
                 child: Padding(
@@ -130,7 +133,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text("Danh Sách Bàn"),
+                      Text(
+                        "Danh Sách Bàn",
+                        style: Theme.of(context).textTheme.displayLarge,
+                      ),
                       //thong bao
                       StreamBuilder(
                         stream: FirestoreHelper.readtinhtrangtt(),
@@ -151,20 +157,19 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
 
                             return badges.Badge(
                               position: badges.BadgePosition.topStart(),
-                              badgeAnimation:
-                                  const badges.BadgeAnimation.fade(),
+                              badgeAnimation: badges.BadgeAnimation.fade(),
                               //lấy dự liệu order
                               badgeContent: Text(
                                 "${tinhtrangtt!.length}",
-                                style: const TextStyle(fontSize: 20),
+                                style: TextStyle(fontSize: 20),
                               ),
                               child: IconButton(
                                 onPressed: () {},
-                                icon: const Icon(Icons.notifications),
+                                icon: Icon(Icons.notifications),
                               ),
                             );
                           }
-                          return const Icon(Icons.notifications);
+                          return Icon(Icons.notifications);
                         },
                       )
                       //end thong bao
@@ -198,7 +203,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                           child: GridView.builder(
                             itemCount: table!.length,
                             gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount:
                                   6, // Bạn có thể thay đổi số cột ở đây
                               mainAxisSpacing:
@@ -229,13 +234,13 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                     return badges.Badge(
                                       position: badges.BadgePosition.topStart(),
                                       badgeAnimation:
-                                          const badges.BadgeAnimation.fade(),
+                                          badges.BadgeAnimation.fade(),
                                       //lấy dự liệu order
                                       badgeContent: Text(
                                         "${giohangtb!.length}",
-                                        style: const TextStyle(fontSize: 20),
+                                        style: TextStyle(fontSize: 20),
                                       ),
-                                      child: giohangtb.isNotEmpty
+                                      child: giohangtb.length > 0
                                           ? InkWell(
                                               onTap: () {
                                                 Get.to(() => giohang_admin(
@@ -247,8 +252,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                                   borderRadius:
                                                       BorderRadius.circular(20),
                                                 ),
-                                                margin:
-                                                    const EdgeInsets.all(10),
+                                                margin: EdgeInsets.all(10),
                                                 height: 300,
                                                 width: 150,
                                                 child: SingleChildScrollView(
@@ -267,7 +271,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                                               ),
                                             )
                                           : Container(
-                                              margin: const EdgeInsets.all(10),
+                                              margin: EdgeInsets.all(10),
                                               height: 300,
                                               width: 150,
                                               child: SingleChildScrollView(
