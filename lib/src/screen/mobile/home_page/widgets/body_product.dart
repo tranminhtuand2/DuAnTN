@@ -24,7 +24,8 @@ class MyBodyProduct extends StatefulWidget {
   State<MyBodyProduct> createState() => _MyBodyProductState();
 }
 
-class _MyBodyProductState extends State<MyBodyProduct> {
+class _MyBodyProductState extends State<MyBodyProduct>
+    with AutomaticKeepAliveClientMixin {
   final controller = Get.put(ProductController());
   final brightnessController = Get.put(BrightnessController());
 
@@ -205,6 +206,9 @@ class _MyBodyProductState extends State<MyBodyProduct> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class BlurBackground extends StatelessWidget {

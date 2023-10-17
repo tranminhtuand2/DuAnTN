@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
+import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 import 'package:managerfoodandcoffee/src/model/diachimap_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
@@ -177,7 +178,9 @@ class FirestoreHelper {
     final tableColection = FirebaseFirestore.instance.collection("table");
     final uid = tableColection.doc().id;
     final docref = tableColection.doc(uid);
-    final newtable = TableModel(tenban: table.tenban, maban: uid).toJson();
+    final newtable =
+        TableModel(tenban: table.tenban, maban: uid, isSelected: false)
+            .toJson();
     try {
       await docref.set(newtable);
     } catch (e) {
@@ -196,10 +199,14 @@ class FirestoreHelper {
   static Future updatetable(TableModel table) async {
     final headerCollection = FirebaseFirestore.instance.collection("table");
     final docRef = headerCollection.doc(table.maban);
-    final newtable =
-        TableModel(tenban: table.tenban, maban: table.maban).toJson();
+    // final newtable = TableModel(
+    //         tenban: table.tenban,
+    //         maban: table.maban,
+    //         isSelected: table.isSelected)
+    //     .toJson();
     try {
-      await docRef.update(newtable);
+      print('UPDATE');
+      await docRef.update(table.toJson());
     } catch (e) {
       Get.snackbar("lỗi", e.toString());
     }
@@ -302,12 +309,12 @@ class FirestoreHelper {
   //creater
 
   static Future<void> createtinhtrang(
-      tinhtrangTT tinhtrang, String table) async {
+      tinhtrangTT tinhtrang, TableModel table) async {
     final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
 
-    final docRef = tinhtrangCl.doc(table);
+    final docRef = tinhtrangCl.doc(table.tenban);
     final newtinhtrang =
-        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table)
+        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table.tenban)
             .toJson();
     try {
       await docRef.set(newtinhtrang);
@@ -343,5 +350,33 @@ class FirestoreHelper {
         e.toString(),
       );
     }
+  }
+
+  ////////////////////////////NOTIFICATION ///////////////////////////
+  static Future<void> createMagiamGia() async {
+    final couponsColection = FirebaseFirestore.instance.collection("coupons");
+    final uid = couponsColection.doc().id;
+    final docRef = couponsColection.doc(uid);
+    final coupons = Coupons(
+      beginDay: "14/10/2023",
+      endDay: "16/10/2023",
+      data: 'HATHECHI20',
+      persent: 20,
+      isEnable: true,
+    );
+    try {
+      await docRef.set(
+        coupons.toJson(),
+      );
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Stream<List<Coupons>> getDataCoupons() {
+    final couponsColection = FirebaseFirestore.instance.collection("coupons");
+
+    return couponsColection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => Coupons.fromsnapshot(e)).toList());
   }
 }

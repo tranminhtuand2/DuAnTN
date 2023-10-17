@@ -109,10 +109,10 @@ class _QuanityButtonProductState extends State<QuanityButtonProduct> {
                     backgroundColor: colorScheme(context).primary,
                     height: 60,
                     text: Text(
-                      'THÊM : ${formatPrice(widget.price! * count)} VNĐ',
-                      style: text(context)
-                          .titleMedium
-                          ?.copyWith(color: colorScheme(context).tertiary),
+                      'THÊM: ${formatPrice(widget.price! * count)} VNĐ',
+                      style: text(context).titleSmall?.copyWith(
+                          color: colorScheme(context).tertiary,
+                          fontWeight: FontWeight.bold),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                     ),

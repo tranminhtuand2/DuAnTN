@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/item_wallet.dart';
@@ -7,16 +9,16 @@ import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 class ShowPayment extends StatefulWidget {
   const ShowPayment({
     super.key,
-    required this.onTap,
+    required this.currentMethod,
   });
-  final Function? onTap;
+  final Function(int) currentMethod;
   @override
   State<ShowPayment> createState() => _ShowPaymentState();
 }
 
 class _ShowPaymentState extends State<ShowPayment> {
-  final _showPayment = ValueNotifier(false);
-  int isSelected = 0;
+  final _showPayment = ValueNotifier(true);
+  final _currentSelected = ValueNotifier<int>(0);
 
   List listWidgetPayment = [
     const ItemWallet(
@@ -47,14 +49,14 @@ class _ShowPaymentState extends State<ShowPayment> {
                     Row(
                       children: [
                         Icon(CupertinoIcons.money_dollar),
-                        SizedBox(width: 16),
+                        SizedBox(width: 10),
                         Text('Chọn phương thức thanh toán')
                       ],
                     ),
                     Icon(CupertinoIcons.chevron_down)
                   ],
                 ),
-                secondChild: listPayment(context),
+                secondChild: listPayment(),
                 crossFadeState: value
                     ? CrossFadeState.showSecond
                     : CrossFadeState.showFirst,
@@ -65,7 +67,7 @@ class _ShowPaymentState extends State<ShowPayment> {
     );
   }
 
-  Widget listPayment(BuildContext context) {
+  Widget listPayment() {
     return Column(
       children: [
         Container(
@@ -91,21 +93,23 @@ class _ShowPaymentState extends State<ShowPayment> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                setState(() {
-                  isSelected = index;
-                  widget.onTap?.call(isSelected);
-                });
+                _currentSelected.value = index;
+                widget.currentMethod(index);
               },
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   listWidgetPayment[index],
-                  isSelected == index
-                      ? const Icon(
-                          Icons.check,
-                          color: Colors.green,
-                        )
-                      : const SizedBox(),
+                  ValueListenableBuilder(
+                    valueListenable: _currentSelected,
+                    builder: (context, value, child) {
+                      return Visibility(
+                        visible: value == index,
+                        replacement: const SizedBox(),
+                        child: const Icon(Icons.check),
+                      );
+                    },
+                  ),
                 ],
               ),
             );

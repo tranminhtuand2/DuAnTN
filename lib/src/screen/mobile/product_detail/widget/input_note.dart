@@ -21,7 +21,7 @@ Widget inputNoteProduct(
         hintText: 'Bạn có gì muốn nhắn tới nhà hàng không ?',
         border: InputBorder.none,
       ),
-      maxLines: 1,
+      maxLines: null,
     ),
   );
 }

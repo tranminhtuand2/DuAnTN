@@ -3,6 +3,8 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
@@ -10,12 +12,12 @@ import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 class LocationCheckPage extends StatefulWidget {
   final double vido;
   final double kinhdo;
-  final String tenban;
+  final TableModel table;
   const LocationCheckPage(
       {super.key,
       required this.vido,
       required this.kinhdo,
-      required this.tenban});
+      required this.table});
 
   @override
   State<LocationCheckPage> createState() => _LocationCheckPageState();
@@ -51,9 +53,12 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
     double distance = Geolocator.distanceBetween(targetLat, targetLon,
         currentPosition.latitude, currentPosition.longitude);
     if (distance <= 1000008800.0) {
-      // Điều kiện đáp ứng, chuyển hướng tới trang đăng nhập.
+      //Thay đổi trạng thái đã chọn bàn
+      final controllerTable = Get.put(TableController());
+      controllerTable.updateSelectedTable(widget.table);
       Get.back();
-      Get.offAll(() => HomeScreen(tenban: widget.tenban));
+      // Điều kiện đáp ứng, chuyển hướng tới trang đăng nhập.
+      Get.offAll(() => HomeScreen(tableModel: widget.table));
     } else {
       // Người dùng không ở trong phạm vi 100m, hiển thị thông báo hoặc thực hiện hành động khác.
       // showCustomSnackBar(
@@ -71,6 +76,7 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: colorScheme(context).primaryContainer,
       actions: [
         titleError.isEmpty
             ? const SizedBox()

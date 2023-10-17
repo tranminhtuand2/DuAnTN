@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/model/header_model.dart';
 import 'package:progress_dialog2/progress_dialog2.dart';
-import '../../../../../../../firebasehelper/firebasestore_helper.dart';
+import '../../../../../../../firebase_helper/firebasestore_helper.dart';
 
 class editheader_Dialog extends StatefulWidget {
   final HeaderModel header;

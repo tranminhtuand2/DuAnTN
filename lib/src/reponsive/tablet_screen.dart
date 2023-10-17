@@ -6,14 +6,14 @@ class TabletScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return const Scaffold(
         body: Center(
       child: Column(
         children: [
-          Lottie.asset(
-            'images/cf1.json',
-            fit: BoxFit.fill,
-          ),
+          // Lottie.asset(
+          //   'images/cf1.json',
+          //   fit: BoxFit.fill,
+          // ),
         ],
       ),
     ));
