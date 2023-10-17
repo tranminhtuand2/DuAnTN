@@ -1,7 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:managerfoodandcoffee/firebase_options.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
