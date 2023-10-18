@@ -1,0 +1,55 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "DuAnTN",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "DuAnTN (profile mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "Flutter Web - Custom Chrome Profile",
+            "request": "launch",
+            "type": "dart",
+            "args": [
+                "--web-port=5000"
+            ],
+            "preLaunchTask": "flutter: flutter run -d web",
+            // "postDebugTask": "flutter: flutter run -d web"
+        },
+        {
+            "name": "DuAnTN (release mode)",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "momo.vn",
+            "cwd": "momo.vn",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "momo.vn (profile mode)",
+            "cwd": "momo.vn",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "momo.vn (release mode)",
+            "cwd": "momo.vn",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

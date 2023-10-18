@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/google_signin_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
 // import 'package:managerfoodandcoffee/src/controller/CRUD_controller_header.dart';
@@ -48,12 +49,23 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
   }
 
+  final googleSignInController = Get.put(GoogleSignInController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("bán hàng"),
-      // ),
+      appBar: AppBar(
+        title: Obx(
+          () => Text(googleSignInController.email.value),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              googleSignInController.logoutGoogle();
+            },
+            icon: const Icon(Icons.logout),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionBubble(
         items: <Bubble>[
           Bubble(
