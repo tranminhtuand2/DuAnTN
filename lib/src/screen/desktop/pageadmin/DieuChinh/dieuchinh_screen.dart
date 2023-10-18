@@ -1,17 +1,20 @@
-import 'package:badges/badges.dart' as badges;
 import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/constants/size.dart';
+
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/google_signin_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
+
 // import 'package:managerfoodandcoffee/src/controller/CRUD_controller_header.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/headercrud_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/page_crud/sanphamcrud_screen.dart';
 
 import '../../../../controller_getx/brightness_controller.dart';
+import '../../../../firebase_helper/firebasestore_helper.dart';
 
 class dieuchinhSceen extends StatefulWidget {
   const dieuchinhSceen({super.key});
@@ -141,7 +144,10 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text("Danh Sách Bàn"),
+                      Text(
+                        "Danh Sách Bàn",
+                        style: Theme.of(context).textTheme.displayLarge,
+                      ),
                       //thong bao
                       StreamBuilder(
                         stream: FirestoreHelper.readtinhtrangtt(),

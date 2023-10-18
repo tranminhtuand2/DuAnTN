@@ -34,7 +34,7 @@ class GoogleSignInController extends GetxController {
           email.value = user.email!;
           urlAvatar.value = user.photoURL!;
 
-          Get.to(() => const dieuchinhSceen());
+          Get.to(() => dieuchinhSceen());
         }
 
         // GoogleSignInAccount? googleSignInAccount = kIsWeb
