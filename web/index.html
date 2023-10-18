@@ -1,4 +1,7 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html>
+<html>
+
+<head>
   <!--
     If you are serving your web app in a path other than the root, change the
     href value below to reflect the base path you are serving from.
@@ -17,6 +20,9 @@
   <meta charset="UTF-8">
   <meta content="IE=Edge" http-equiv="X-UA-Compatible">
   <meta name="description" content="A new Flutter project.">
+  <meta name="google-signin-client_id"
+    content="204912491565-dffn6tg7eslkeogdhrhocv8sf7fsumbm.apps.googleusercontent.com" />
+  <!-- <meta name="google-signin-client_id" content="1:204912491565:web:43f0347c5bc699e331cca4" /> -->
 
   <!-- iOS meta tags & icons -->
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -45,7 +51,7 @@
       margin: 0;
       min-height: 100%;
       background-color: #42a5f5;
-          background-size: 100% 100%;
+      background-size: 100% 100%;
     }
 
     .center {
@@ -58,19 +64,22 @@
     }
 
     .contain {
-      display:block;
-      width:100%; height:100%;
+      display: block;
+      width: 100%;
+      height: 100%;
       object-fit: contain;
     }
 
     .stretch {
-      display:block;
-      width:100%; height:100%;
+      display: block;
+      width: 100%;
+      height: 100%;
     }
 
     .cover {
-      display:block;
-      width:100%; height:100%;
+      display: block;
+      width: 100%;
+      height: 100%;
       object-fit: cover;
     }
 
@@ -101,35 +110,49 @@
       document.body.style.background = "transparent";
     }
   </script>
-  <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport">
+  <!-- <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" name="viewport"> -->
 </head>
+
 <body>
   <picture id="splash">
-      <source srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x" media="(prefers-color-scheme: light)">
-      <source srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x" media="(prefers-color-scheme: dark)">
-      <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
+    <source
+      srcset="splash/img/light-1x.png 1x, splash/img/light-2x.png 2x, splash/img/light-3x.png 3x, splash/img/light-4x.png 4x"
+      media="(prefers-color-scheme: light)">
+    <source
+      srcset="splash/img/dark-1x.png 1x, splash/img/dark-2x.png 2x, splash/img/dark-3x.png 3x, splash/img/dark-4x.png 4x"
+      media="(prefers-color-scheme: dark)">
+    <img class="center" aria-hidden="true" src="splash/img/light-1x.png" alt="">
   </picture>
   <script>
     let useHtml = true;
-    window.addEventListener('load', function(ev) {
+    window.addEventListener('load', function (ev) {
       // Download main.dart.js
       _flutter.loader.loadEntrypoint({
         serviceWorker: {
           serviceWorkerVersion: serviceWorkerVersion,
         },
-        onEntrypointLoaded: async function(engineInitializer) {
+        onEntrypointLoaded: async function (engineInitializer) {
           let config = {
-          renderer: useHtml ? "html" : "canvaskit",
-        };
-          await engineInitializer.initializeEngine().then(function(appRunner) {
+            renderer: useHtml ? "html" : "canvaskit",
+          };
+          await engineInitializer.initializeEngine().then(function (appRunner) {
             appRunner.runApp();
-            
-            
+
+
           });
         }
       });
     });
   </script>
+  <script>
+    if ("serviceWorker" in navigator) {
+      window.addEventListener("load", function () {
+        navigator.serviceWorker.register("../firebase-messaging-sw.js");
+      });
+    }
+  </script>
 
+  <script src="main.dart.js" type="application/javascript"></script>
+</body>
 
-</body></html>
+</html>
