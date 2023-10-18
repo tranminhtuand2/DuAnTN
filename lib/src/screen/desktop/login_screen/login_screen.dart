@@ -138,7 +138,8 @@ class LoginScreen extends StatelessWidget {
                           urlImage:
                               'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png',
                           onClick: () {
-                            Get.put(GoogleSignInController()).loginGoogle();
+                            Get.put(GoogleSignInController())
+                                .loginGoogleInWeb();
                           },
                         ),
                         const SizedBox(height: 10),
