@@ -39,8 +39,8 @@ class TAppTheme {
   );
   static const darkColorScheme = ColorScheme(
     brightness: Brightness.dark,
-    primary: Color.fromARGB(255, 71, 70, 70),
-    onPrimary: Color.fromARGB(255, 36, 36, 36),
+    primary: Color.fromARGB(255, 27, 30, 45),
+    onPrimary: Color.fromARGB(255, 41, 44, 60),
     primaryContainer: Color.fromARGB(255, 101, 101, 101),
     onPrimaryContainer: Color(0xFFFFFFFF),
     secondary: Color.fromARGB(255, 63, 63, 63),
