@@ -49,19 +49,20 @@ class MenuScreen extends GetView<MyDrawerController> {
           children: [
             buttonBack(context),
             StreamBuilder(
-                stream: FirestoreHelper.readtable(),
-                builder: (context, snapshot) {
+              stream: FirestoreHelper.readtable(),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasData) {
                   //Sắp xếp tên bàn theo thứ tự nhỏ đén lớn theo tên bàn
                   int compareByTenBan(TableModel a, TableModel b) {
                     return int.parse(a.tenban).compareTo(int.parse(b.tenban));
                   }
 
                   snapshot.data!.sort(compareByTenBan);
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
                   return Expanded(
                     child: Column(
                       children: [
@@ -176,7 +177,10 @@ class MenuScreen extends GetView<MyDrawerController> {
                       ],
                     ),
                   );
-                }),
+                }
+                return const SizedBox();
+              },
+            ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/constants/size.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
@@ -101,7 +102,7 @@ class _TablePageState extends State<TablePage> {
                 crossAxisSpacing:
                     20.0, // Điều chỉnh khoảng cách giữa các mục theo chiều ngang
               ),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
               itemBuilder: (context, index) {
                 final tableindex = table[index];
                 return FittedBox(
@@ -125,11 +126,11 @@ class _TablePageState extends State<TablePage> {
                               position: badges.BadgePosition.topStart(),
                               badgeAnimation:
                                   const badges.BadgeAnimation.fade(),
-                              //lấy dự liệu order
+                              showBadge: giohangtb!.isNotEmpty,
                               badgeContent: Padding(
                                 padding: const EdgeInsets.all(4.0),
                                 child: Text(
-                                  "${giohangtb!.length}",
+                                  "${giohangtb.length}",
                                   style: text(context)
                                       .titleMedium
                                       ?.copyWith(fontWeight: FontWeight.bold),
@@ -142,30 +143,48 @@ class _TablePageState extends State<TablePage> {
                                 },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 40),
+                                      vertical: 30, horizontal: 40),
                                   decoration: BoxDecoration(
-                                    gradient: giohangtb.isNotEmpty
-                                        ? LinearGradient(
-                                            begin: Alignment.bottomLeft,
-                                            end: Alignment.topRight,
-                                            colors: [
-                                              const Color(0xFF58D9D9)
-                                                  .withOpacity(0.3),
-                                              const Color(0xFF5747EF)
-                                                  .withOpacity(0.3),
-                                            ],
-                                          )
-                                        : null,
+                                    gradient: !Get.put(BrightnessController())
+                                            .isDarkMode
+                                            .value
+                                        ? giohangtb.isNotEmpty
+                                            ? LinearGradient(
+                                                begin: Alignment.bottomLeft,
+                                                end: Alignment.topRight,
+                                                colors: [
+                                                  color.surfaceVariant
+                                                      .withOpacity(0.3),
+                                                  color.onSurfaceVariant
+                                                      .withOpacity(0.3),
+                                                ],
+                                              )
+                                            : null
+                                        : giohangtb.isEmpty
+                                            ? LinearGradient(
+                                                begin: Alignment.bottomLeft,
+                                                end: Alignment.topRight,
+                                                colors: [
+                                                  color.surfaceVariant
+                                                      .withOpacity(0.3),
+                                                  color.onSurfaceVariant
+                                                      .withOpacity(0.3),
+                                                ],
+                                              )
+                                            : null,
                                     color: color.onPrimary,
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Column(
                                     children: [
                                       Image.asset(
-                                        "/images/bill1.png",
-                                        height: 150,
-                                        width: 100,
+                                        giohangtb.isEmpty
+                                            ? "/images/table1.png"
+                                            : '/images/order.png',
+                                        height: 80,
+                                        width: 80,
                                       ),
+                                      const SizedBox(height: 16),
                                       Text(
                                         "Bàn ${tableindex.tenban}",
                                         style: text(context).titleSmall,
