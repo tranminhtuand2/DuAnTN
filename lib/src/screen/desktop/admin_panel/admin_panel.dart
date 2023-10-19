@@ -56,5 +56,6 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     const TablePage(),
     const TablePage(),
     const TablePage(),
+    const TablePage(),
   ];
 }
