@@ -9,9 +9,27 @@ class ProductController extends GetxController {
 
   Future<void> fetchProduct(String categories) async {
     try {
+      products.clear();
       isLoading.value = true;
       // Lắng nghe stream và cập nhật sản phẩm khi có dữ liệu mới
       FirestoreHelper.filletsp(categories).listen((List<SanPham> productList) {
+        products.value = productList;
+        //Tạo thời gian delay cho trải nghiệm đỡ giật cục
+        Future.delayed(const Duration(milliseconds: 150), () {
+          isLoading.value = false;
+        });
+      });
+    } catch (e) {
+      print('Error fetching products: $e');
+    }
+  }
+
+  Future<void> fetchAllProduct() async {
+    try {
+      products.clear();
+      isLoading.value = true;
+      // Lắng nghe stream và cập nhật sản phẩm khi có dữ liệu mới
+      FirestoreHelper.readsp().listen((List<SanPham> productList) {
         products.value = productList;
         //Tạo thời gian delay cho trải nghiệm đỡ giật cục
         Future.delayed(const Duration(milliseconds: 150), () {

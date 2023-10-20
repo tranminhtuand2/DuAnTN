@@ -11,13 +11,13 @@ firebase.initializeApp({
     measurementId: "G-718BNZ61C3"
 });
 
-const messaging1 = firebase.messaging();
-const supported = await isSupported()
-if (!supported) {
-    throw new Error(NOTIFICATIONS_NOT_SUPPORTED)
-}
+const messaging = firebase.messaging();
+// const supported = await isSupported()
+// if (!supported) {
+//     throw new Error(NOTIFICATIONS_NOT_SUPPORTED)
+// }
 const vapidKey = 'BEeyGbXI0y0HJLcWZ5jDqDi_FClLQ7BNgfEHcBVz7kOd6P3Z9iUD7n9SKPd6IfH7DIyCt3mfnd4kauqOH-mgBhQ'
-const messaging = getMessaging();
+// const messaging = getMessaging();
 const messagingToken = await getToken(messaging, { vapidKey })
 
 // Optional:

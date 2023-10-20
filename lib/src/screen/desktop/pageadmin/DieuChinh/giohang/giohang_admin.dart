@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
-import 'package:managerfoodandcoffee/src/constants/size.dart';
+import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 
 class giohang_admin extends StatefulWidget {
@@ -18,7 +18,6 @@ class _giohang_adminState extends State<giohang_admin> {
   bool thanhtoan = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     thanhtoan = false;
   }
@@ -45,12 +44,12 @@ class _giohang_adminState extends State<giohang_admin> {
                   stream: FirestoreHelper.readgiohang(widget.tenban),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
                     if (snapshot.hasError) {
-                      return Center(
+                      return const Center(
                         child: Text("lỗi"),
                       );
                     }
@@ -63,7 +62,7 @@ class _giohang_adminState extends State<giohang_admin> {
                           itemCount: giohang!.length,
                           itemBuilder: (context, index) {
                             final giohangindex = giohang[index];
-                            return Container(
+                            return SizedBox(
                               width: SizeConfig.screenWidth / 2,
                               child: Padding(
                                 padding: const EdgeInsets.all(20),
@@ -76,9 +75,9 @@ class _giohang_adminState extends State<giohang_admin> {
                                       SizedBox(
                                         width: getProportionateScreenWidth(20),
                                         child: Container(
-                                          padding: EdgeInsets.all(10),
+                                          padding: const EdgeInsets.all(10),
                                           decoration: BoxDecoration(
-                                            color: Color(0xFFF5F6F9),
+                                            color: const Color(0xFFF5F6F9),
                                             borderRadius:
                                                 BorderRadius.circular(12),
                                           ),
@@ -106,7 +105,7 @@ class _giohang_adminState extends State<giohang_admin> {
                                           ),
                                           Text.rich(
                                             TextSpan(
-                                              text: "\ ${giohangindex.giasp}",
+                                              text: " ${giohangindex.giasp}",
                                               children: [
                                                 TextSpan(
                                                     text:
@@ -127,7 +126,7 @@ class _giohang_adminState extends State<giohang_admin> {
                         ),
                       );
                     }
-                    return Center(
+                    return const Center(
                       child: CircularProgressIndicator(),
                     );
                   },
@@ -136,12 +135,12 @@ class _giohang_adminState extends State<giohang_admin> {
                   stream: FirestoreHelper.readtinhtrang(widget.tenban),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     }
                     if (snapshot.hasError) {
-                      return Center(
+                      return const Center(
                         child: Text("lỗi"),
                       );
                     }
@@ -161,13 +160,13 @@ class _giohang_adminState extends State<giohang_admin> {
                           width: double.infinity,
                           height: 50,
                           child: thanhtoan == false
-                              ? Text(
+                              ? const Text(
                                   "vui lòng chờ khách hàng chọn món hoàn tất")
-                              : Text("xác nhận đợn hàng"),
+                              : const Text("xác nhận đợn hàng"),
                         ),
                       );
                     }
-                    return Container(
+                    return const SizedBox(
                       height: 50,
                       width: double.infinity,
                       child: Center(

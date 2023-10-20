@@ -2,7 +2,7 @@ import 'package:floating_action_bubble/floating_action_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:badges/badges.dart' as badges;
-import 'package:managerfoodandcoffee/src/constants/size.dart';
+import 'package:managerfoodandcoffee/src/utils/size.dart';
 
 import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/google_signin_controller.dart';
