@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/constants/size.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
@@ -179,8 +178,8 @@ class _TablePageState extends State<TablePage> {
                                     children: [
                                       Image.asset(
                                         giohangtb.isEmpty
-                                            ? "/images/table1.png"
-                                            : '/images/order.png',
+                                            ? "assets/images/table1.png"
+                                            : 'assets/images/order.png',
                                         height: 80,
                                         width: 80,
                                       ),
@@ -205,9 +204,7 @@ class _TablePageState extends State<TablePage> {
             );
           }
           return const Center(
-            child: Column(
-              children: [CircularProgressIndicator(), Text("đang tải dữ liệu")],
-            ),
+            child: CircularProgressIndicator(),
           );
         },
       ),

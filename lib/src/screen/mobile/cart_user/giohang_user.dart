@@ -8,7 +8,7 @@ import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
-import 'package:managerfoodandcoffee/src/constants/size.dart';
+import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';

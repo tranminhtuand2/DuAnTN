@@ -45,7 +45,7 @@ class _InputFieldState extends State<InputField> {
         cursorColor: Colors.black,
         keyboardType: widget.inputType,
         validator: widget.validator,
-        style: const TextStyle(color: Colors.black),
+        // style: const TextStyle(color: Colors.black),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: widget.controller,
         obscureText: widget.isPassword && _isShowEye,

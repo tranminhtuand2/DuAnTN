@@ -5,6 +5,8 @@ import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:managerfoodandcoffee/src/reponsive/desktop_screen.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/admin_panel.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/login_screen/login_screen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/dieuchinh_screen.dart';
 
 class GoogleSignInController extends GetxController {
@@ -34,7 +36,7 @@ class GoogleSignInController extends GetxController {
           email.value = user.email!;
           urlAvatar.value = user.photoURL!;
 
-          Get.to(() => dieuchinhSceen());
+          Get.to(() => const AdminPanelScreen());
         }
 
         // GoogleSignInAccount? googleSignInAccount = kIsWeb

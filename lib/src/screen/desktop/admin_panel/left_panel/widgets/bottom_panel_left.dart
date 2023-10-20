@@ -46,16 +46,20 @@ Widget bottomPanelLeft(BuildContext context) {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                "Nền tối",
-                style: text(context).titleSmall,
+              Expanded(
+                child: Text(
+                  "Nền tối",
+                  style: text(context).titleSmall,
+                ),
               ),
-              Switch(
-                value: !brightnessController.isDarkMode.value,
-                onChanged: (bool newValue) {
-                  brightnessController.toggleDarkMode();
-                  saveBrightnessPreference(!newValue);
-                },
+              Expanded(
+                child: Switch(
+                  value: !brightnessController.isDarkMode.value,
+                  onChanged: (bool newValue) {
+                    brightnessController.toggleDarkMode();
+                    saveBrightnessPreference(!newValue);
+                  },
+                ),
               ),
             ],
           ),

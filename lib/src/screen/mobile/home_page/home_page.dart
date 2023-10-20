@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/categorry_controller.dart';
@@ -138,10 +139,13 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         selectedindex = value;
                       });
-                      controller.fetchProduct(
-                          controllerCategory.categories[value].tendanhmuc);
-                      // log("message $value ${controllerCategory.categories[value].tendanhmuc}");
-                      // log(controller.products[value].tensp.toString());
+
+                      if (kIsWeb && selectedindex == 0) {
+                        controller.fetchAllProduct();
+                      } else {
+                        controller.fetchProduct(
+                            controllerCategory.categories[value].tendanhmuc);
+                      }
                     },
                     controller: pageViewController,
                     itemCount: controllerCategory.categories.length,

@@ -3,7 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/firebase_options.dart';
-import 'package:managerfoodandcoffee/src/constants/size.dart';
+import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/drawer_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebase_messaging.dart';
@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         theme: brightnessController.isDarkMode.value ? lightTheme : darkTheme,
         home: const ReponsiveLayout(
           moblie: MobileScreen(),
-          tablet: MobileScreen(),
+          tablet: DesktopScreen(),
           desktop: DesktopScreen(),
         ),
       ),
