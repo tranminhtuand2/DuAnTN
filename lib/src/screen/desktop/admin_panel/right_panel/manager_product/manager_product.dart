@@ -7,8 +7,10 @@ import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/common_widget/input_search.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/categorry_controller.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/data_edit_product_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_product/CRUD_product/crud_product.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/shimmer_loading.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
@@ -26,6 +28,7 @@ class _ManagerProductPageState extends State<ManagerProductPage> {
   final controllerCategory = Get.put(CategoryController());
   int selectedindex = 0;
   final _controllerSearch = TextEditingController();
+  final controllerDataEdit = Get.put(DataEditProductController());
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +40,7 @@ class _ManagerProductPageState extends State<ManagerProductPage> {
       child: Row(
         children: [
           Expanded(
-            flex: 5,
+            flex: 2,
             child: Container(
               width: double.infinity,
               height: double.infinity,
@@ -148,62 +151,69 @@ class _ManagerProductPageState extends State<ManagerProductPage> {
                                   itemBuilder: (context, index) {
                                     final sanphamindex =
                                         controller.products[index];
-                                    return Container(
-                                      // padding: const EdgeInsets.symmetric(
-                                      //     vertical: 20, horizontal: 30),
-                                      // margin: const EdgeInsets.all(16),
-                                      decoration: BoxDecoration(
-                                        color: color.onPrimary,
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                      child: Stack(
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.all(30.0),
-                                            child: cacheNetWorkImage(
-                                              sanphamindex.hinhanh,
-                                              height: double.infinity,
-                                              width: double.infinity,
-                                              fit: BoxFit.contain,
-                                            ),
-                                          ),
-                                          Container(
-                                            decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              gradient: LinearGradient(
-                                                begin: Alignment.topCenter,
-                                                end: Alignment.bottomCenter,
-                                                colors: [
-                                                  colorScheme(context)
-                                                      .background
-                                                      .withOpacity(0),
-                                                  colorScheme(context)
-                                                      .background
-                                                      .withOpacity(0.2),
-                                                ],
+                                    return InkWell(
+                                      onTap: () {
+                                        controllerDataEdit.setData(
+                                            sanPham: sanphamindex);
+                                      },
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                          color: color.onPrimary,
+                                          borderRadius:
+                                              BorderRadius.circular(8),
+                                        ),
+                                        child: Stack(
+                                          children: [
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(30.0),
+                                              child: cacheNetWorkImage(
+                                                sanphamindex.hinhanh,
+                                                height: double.infinity,
+                                                width: double.infinity,
+                                                fit: BoxFit.contain,
                                               ),
                                             ),
-                                          ),
-                                          Positioned(
-                                            bottom: 0,
-                                            child: Text(
-                                              sanphamindex.tensp.toUpperCase(),
-                                              style: text(context)
-                                                  .titleSmall
-                                                  ?.copyWith(
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                            Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                gradient: LinearGradient(
+                                                  begin: Alignment.topCenter,
+                                                  end: Alignment.bottomCenter,
+                                                  colors: [
+                                                    colorScheme(context)
+                                                        .background
+                                                        .withOpacity(0),
+                                                    colorScheme(context)
+                                                        .background
+                                                        .withOpacity(0.2),
+                                                  ],
+                                                ),
+                                              ),
                                             ),
-                                          ),
-                                          Positioned(
-                                            right: 0,
-                                            child: Text(
-                                              "${formatPrice(sanphamindex.giasp)} VNĐ",
-                                              style: text(context).titleMedium,
+                                            Positioned(
+                                              right: 0,
+                                              child: Text(
+                                                sanphamindex.tensp
+                                                    .toUpperCase(),
+                                                style: text(context)
+                                                    .titleSmall
+                                                    ?.copyWith(
+                                                        fontWeight:
+                                                            FontWeight.bold),
+                                              ),
                                             ),
-                                          ),
-                                        ],
+                                            Positioned(
+                                              bottom: 0,
+                                              child: Text(
+                                                "${formatPrice(sanphamindex.giasp)} VNĐ",
+                                                style:
+                                                    text(context).titleMedium,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     );
                                   },
@@ -224,7 +234,6 @@ class _ManagerProductPageState extends State<ManagerProductPage> {
           ),
           const SizedBox(width: 16),
           Expanded(
-            flex: 3,
             child: Container(
               width: double.infinity,
               height: double.infinity,
@@ -232,9 +241,7 @@ class _ManagerProductPageState extends State<ManagerProductPage> {
               decoration: BoxDecoration(
                   color: color.onPrimary.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(8)),
-              child: const Center(
-                child: Text("Left"),
-              ),
+              child: const CRUDProductTab(),
             ),
           ),
         ],

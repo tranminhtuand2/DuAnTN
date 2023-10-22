@@ -178,7 +178,7 @@ class LoginScreen extends StatelessWidget {
           width: double.maxFinite,
           height: double.maxFinite,
           child: Image.asset(
-            'assets/images/br_desktop1.jpg',
+            '/assets/images/bgdesktop.jpg',
             filterQuality: FilterQuality.none,
             fit: BoxFit.cover,
           ),

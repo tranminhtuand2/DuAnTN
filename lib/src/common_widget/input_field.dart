@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 
 class InputField extends StatefulWidget {
@@ -13,6 +14,7 @@ class InputField extends StatefulWidget {
     this.validator,
     this.maxLength,
     this.enable = true,
+    this.textInputFormatters,
   });
   final TextEditingController controller;
   final String labelText;
@@ -21,6 +23,7 @@ class InputField extends StatefulWidget {
   final TextInputType inputType;
   final double? height;
   final int? maxLength;
+  final List<FilteringTextInputFormatter>? textInputFormatters;
 
   final String? Function(String?)? validator; // Hàm validator
   @override
@@ -42,18 +45,20 @@ class _InputFieldState extends State<InputField> {
       height: widget.height,
       child: TextFormField(
         enabled: widget.enable,
-        cursorColor: Colors.black,
+        cursorColor: colorScheme(context).onBackground,
         keyboardType: widget.inputType,
         validator: widget.validator,
-        // style: const TextStyle(color: Colors.black),
+        style: TextStyle(color: colorScheme(context).onBackground),
         autovalidateMode: AutovalidateMode.onUserInteraction,
         controller: widget.controller,
         obscureText: widget.isPassword && _isShowEye,
         maxLength: widget.maxLength,
+        maxLines: null,
+        inputFormatters: widget.textInputFormatters,
         decoration: InputDecoration(
           filled: true,
-          // fillColor: Colors.amber,
-          fillColor: colorScheme(context).secondary.withOpacity(0.2),
+
+          fillColor: colorScheme(context).onPrimary,
           prefixIcon: widget.prefixIcon,
           suffixIcon: widget.isPassword
               ? GestureDetector(
@@ -92,7 +97,8 @@ class _InputFieldState extends State<InputField> {
           //   ),
           // ),
           labelText: widget.labelText,
-          labelStyle: const TextStyle(fontSize: 12, color: Colors.black),
+          labelStyle:
+              TextStyle(fontSize: 12, color: colorScheme(context).onBackground),
         ),
       ),
     );
