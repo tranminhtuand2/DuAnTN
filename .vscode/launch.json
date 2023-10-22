@@ -16,14 +16,15 @@
             "flutterMode": "profile"
         },
         {
-            "name": "Flutter Web - Custom Chrome Profile",
+            "name": "Debug",
             "request": "launch",
             "type": "dart",
             "args": [
-                "--web-port=5000"
-            ],
-            "preLaunchTask": "flutter: flutter run -d web",
-            // "postDebugTask": "flutter: flutter run -d web"
+                "-d",
+                "web-server",
+                "--web-port",
+                "8080"
+            ]
         },
         {
             "name": "DuAnTN (release mode)",
