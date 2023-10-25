@@ -157,9 +157,9 @@ class FirestoreHelper {
   }
 
   //delete
-  static Future deletedanhmuc(DanhMuc danhmuc) async {
+  static Future deletedanhmuc(String idDanhmuc) async {
     final headerCollection = FirebaseFirestore.instance.collection("danhmuc");
-    final docRef = headerCollection.doc(danhmuc.iddanhmuc).delete();
+    final docRef = headerCollection.doc(idDanhmuc).delete();
   }
 
   /// dia chi map
