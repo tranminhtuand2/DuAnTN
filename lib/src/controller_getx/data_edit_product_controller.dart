@@ -6,7 +6,7 @@ class DataEditProductController extends GetxController {
   final nameController = TextEditingController();
   final descriptionController = TextEditingController();
   final priceController = TextEditingController();
-  String? selectedValue;
+  var selectedValue = Rx<String?>(null);
   var urlImage = ''.obs;
   var isEdit = false.obs;
   var product =
@@ -16,7 +16,7 @@ class DataEditProductController extends GetxController {
     nameController.text = sanPham.tensp;
     descriptionController.text = sanPham.mieuta;
     priceController.text = sanPham.giasp.toString();
-    selectedValue = sanPham.danhmuc;
+    selectedValue.value = sanPham.danhmuc;
     urlImage.value = sanPham.hinhanh;
     isEdit.value = true;
     product.value = sanPham;
@@ -26,7 +26,7 @@ class DataEditProductController extends GetxController {
     nameController.clear();
     descriptionController.clear();
     priceController.clear();
-    selectedValue = '';
+    selectedValue.value = null;
     urlImage.value = '';
     isEdit.value = false;
   }
