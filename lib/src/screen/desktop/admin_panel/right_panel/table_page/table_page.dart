@@ -1,11 +1,15 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/first_widget.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/second_widget.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
-import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
+import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class TablePage extends StatefulWidget {
@@ -16,6 +20,10 @@ class TablePage extends StatefulWidget {
 }
 
 class _TablePageState extends State<TablePage> {
+  // final valueNotifier = ValueNotifier(false);
+  bool isExpanded = false;
+  bool thanhtoan = false;
+
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -69,144 +77,48 @@ class _TablePageState extends State<TablePage> {
           )
         ],
       ),
-      body: StreamBuilder(
-        stream: FirestoreHelper.readtable(),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-          if (snapshot.hasError) {
-            return SingleChildScrollView(
-              child: Text("Lỗi: ${snapshot.error.toString()}"),
-            );
-          }
-          if (snapshot.hasData) {
-            final table = snapshot.data;
-            //Sắp xếp tên bàn theo thứ tự nhỏ đén lớn theo tên bàn
-            int compareByTenBan(TableModel a, TableModel b) {
-              return int.parse(a.tenban).compareTo(int.parse(b.tenban));
-            }
+      body: LayoutBuilder(
+        builder: (
+          BuildContext context,
+          BoxConstraints constraints,
+        ) =>
+            Row(
+          children: [
+            AnimatedContainer(
+              width: !isExpanded
+                  ? constraints.maxWidth
+                  : constraints.maxWidth / 1.5,
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.fastOutSlowIn,
 
-            table?.sort(compareByTenBan);
-
-            return GridView.builder(
-              itemCount: table!.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 6, // Bạn có thể thay đổi số cột ở đây
-                // mainAxisExtent: MediaQuery.sizeOf(context).height * 0.25
-                mainAxisSpacing:
-                    30.0, // Điều chỉnh khoảng cách giữa các mục theo chiều dọc
-                crossAxisSpacing:
-                    20.0, // Điều chỉnh khoảng cách giữa các mục theo chiều ngang
-              ),
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-              itemBuilder: (context, index) {
-                final tableindex = table[index];
-                return FittedBox(
-                  child: StreamBuilder(
-                    stream: FirestoreHelper.readgiohang(tableindex.tenban),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      if (snapshot.hasError) {
-                        return SingleChildScrollView(
-                          child: Text("Lỗi: ${snapshot.error.toString()}"),
-                        );
-                      }
-                      if (snapshot.hasData) {
-                        final giohangtb = snapshot.data;
-                        return Center(
-                          child: badges.Badge(
-                              position: badges.BadgePosition.topStart(),
-                              badgeAnimation:
-                                  const badges.BadgeAnimation.fade(),
-                              showBadge: giohangtb!.isNotEmpty,
-                              badgeContent: Padding(
-                                padding: const EdgeInsets.all(4.0),
-                                child: Text(
-                                  "${giohangtb.length}",
-                                  style: text(context)
-                                      .titleMedium
-                                      ?.copyWith(fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  Get.to(() =>
-                                      giohang_admin(tenban: tableindex.tenban));
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 30, horizontal: 40),
-                                  decoration: BoxDecoration(
-                                    gradient: !Get.put(BrightnessController())
-                                            .isDarkMode
-                                            .value
-                                        ? giohangtb.isNotEmpty
-                                            ? LinearGradient(
-                                                begin: Alignment.bottomLeft,
-                                                end: Alignment.topRight,
-                                                colors: [
-                                                  color.surfaceVariant
-                                                      .withOpacity(0.3),
-                                                  color.onSurfaceVariant
-                                                      .withOpacity(0.3),
-                                                ],
-                                              )
-                                            : null
-                                        : giohangtb.isEmpty
-                                            ? LinearGradient(
-                                                begin: Alignment.bottomLeft,
-                                                end: Alignment.topRight,
-                                                colors: [
-                                                  color.surfaceVariant
-                                                      .withOpacity(0.3),
-                                                  color.onSurfaceVariant
-                                                      .withOpacity(0.3),
-                                                ],
-                                              )
-                                            : null,
-                                    color: color.onPrimary,
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  child: Column(
-                                    children: [
-                                      Image.asset(
-                                        giohangtb.isEmpty
-                                            ? "assets/images/table1.png"
-                                            : 'assets/images/order.png',
-                                        height: 80,
-                                        width: 80,
-                                      ),
-                                      const SizedBox(height: 16),
-                                      Text(
-                                        "Bàn ${tableindex.tenban}",
-                                        style: text(context).titleSmall,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )),
-                        );
-                      }
-                      return SingleChildScrollView(
-                        child: Text("Lỗi: ${snapshot.error.toString()}"),
-                      );
+              child: WillPopScope(
+                  onWillPop: () async => true,
+                  child: FirstWidget(
+                    isExpandedValue: isExpanded,
+                    isExpanded: (value) {
+                      setState(() {
+                        isExpanded = value;
+                      });
                     },
-                  ),
-                );
-              },
-            );
-          }
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
-        },
+                  )), //,
+            ),
+            AnimatedContainer(
+              width: !isExpanded
+                  ? 0
+                  : constraints.maxWidth - constraints.maxWidth / 1.5,
+              duration: const Duration(milliseconds: 1000),
+              curve: Curves.fastOutSlowIn,
+              child: SecondWidget(
+                isExpanded: (value) {
+                  setState(() {
+                    isExpanded = value;
+                  });
+                },
+                isExpandedValue: isExpanded,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

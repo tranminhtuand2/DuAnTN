@@ -54,10 +54,10 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
   }
 
   List listPage = [
+    const TablePage(),
     const ManagerProductPage(),
     const UploadAndViewImage(),
     const crud_header(),
-    const TablePage(),
     const TablePage(),
     const TablePage(),
   ];

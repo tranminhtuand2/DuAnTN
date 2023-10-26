@@ -7,6 +7,7 @@ import 'package:managerfoodandcoffee/src/model/table_model.dart';
 
 class TableController extends GetxController {
   var tables = <TableModel>[].obs;
+  var tableName = '#'.obs; // Không được để trống
 
   Future<void> addTable(List<TableModel> lists) async {
     if (lists.isNotEmpty) {
