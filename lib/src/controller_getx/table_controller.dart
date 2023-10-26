@@ -9,6 +9,8 @@ class TableController extends GetxController {
   var tables = <TableModel>[].obs;
   var tableName = '#'.obs; // Không được để trống
 
+  var isExpanded = false.obs;
+
   Future<void> addTable(List<TableModel> lists) async {
     if (lists.isNotEmpty) {
       //Sắp xếp tên bàn theo thứ tự nhỏ đén lớn theo tên bàn
