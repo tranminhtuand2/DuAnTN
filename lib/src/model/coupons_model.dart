@@ -25,18 +25,18 @@ class Coupons {
     required this.endDay,
     required this.data,
     required this.persent,
-    required this.soluotdung,
     required this.isEnable,
+    required this.soluotdung,
   });
 
   factory Coupons.fromJson(Map<String, dynamic> json) => Coupons(
+        soluotdung: json['soluotdung'],
         id: json['id'],
         beginDay: json["begin_day"],
         endDay: json["end_day"],
         data: json["data"],
         persent: json["persent"],
         isEnable: json["isEnable"],
-        soluotdung: json['soluotdung'],
       );
 
   Map<String, dynamic> toJson() => {
