@@ -34,9 +34,9 @@ class Coupons {
         beginDay: json["begin_day"],
         endDay: json["end_day"],
         data: json["data"],
-        soluotdung: json['soluotdung'],
         persent: json["persent"],
         isEnable: json["isEnable"],
+        soluotdung: json['soluotdung'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -44,9 +44,9 @@ class Coupons {
         "begin_day": beginDay,
         "end_day": endDay,
         "data": data,
-        "soluotdung": soluotdung,
         "persent": persent,
         "isEnable": isEnable,
+        "soluotdung": soluotdung,
       };
   factory Coupons.fromsnapshot(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -55,9 +55,9 @@ class Coupons {
       beginDay: snapshot['begin_day'],
       endDay: snapshot['end_day'],
       data: snapshot['data'],
-      soluotdung: snapshot['soluotdung'],
       persent: snapshot['persent'],
       isEnable: snapshot['isEnable'],
+      soluotdung: snapshot['soluotdung'],
     );
   }
 }

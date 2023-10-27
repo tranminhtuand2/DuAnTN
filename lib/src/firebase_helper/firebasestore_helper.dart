@@ -353,7 +353,7 @@ class FirestoreHelper {
     }
   }
 
-  ////////////////////////////NOTIFICATION ///////////////////////////
+  ////////////////////////////COUPONS ///////////////////////////
   static Future<void> createMagiamGia({
     required String beginDay,
     required String endDay,
