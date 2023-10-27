@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
+import 'package:managerfoodandcoffee/src/utils/format_date.dart';
 import 'package:ticket_widget/ticket_widget.dart';
 
 class NotificationPage extends StatefulWidget {
@@ -28,6 +29,12 @@ class _NotificationPageState extends State<NotificationPage> {
                 itemCount: couponsList?.length,
                 itemBuilder: (context, index) {
                   Coupons coupons = couponsList![index];
+                  //Kiểm tra số lượng lượt dùng và ngày hết hạn, nếu không đủ điều kiện sẽ tự động tắt mgg
+                  if (coupons.soluotdung <= 0 ||
+                      FormatDate().compareDate(coupons.endDay)) {
+                    coupons.isEnable = false;
+                    FirestoreHelper.updateMagiamGia(coupons);
+                  }
                   double width = MediaQuery.sizeOf(context).width;
                   return GestureDetector(
                     onLongPress: () {
@@ -40,14 +47,16 @@ class _NotificationPageState extends State<NotificationPage> {
                     child: TicketWidget(
                       margin: const EdgeInsets.symmetric(vertical: 4),
                       width: width,
-                      height: 170,
+                      height: 200,
                       child: CouponItem(
+                        soluotdung: coupons.soluotdung,
                         discount: '${coupons.persent}%',
                         details: '\'${coupons.data}\'',
                         validDate:
                             'Áp dụng từ ${coupons.beginDay} - ${coupons.endDay}',
                         startColor: Colors.teal,
                         endColor: Colors.teal[100]!,
+                        isEnable: coupons.isEnable,
                       ),
                     ),
                   );
@@ -70,6 +79,8 @@ class CouponItem extends StatelessWidget {
   final String validDate;
   final Color startColor;
   final Color endColor;
+  final bool isEnable;
+  final int soluotdung;
 
   const CouponItem({
     super.key,
@@ -78,6 +89,8 @@ class CouponItem extends StatelessWidget {
     required this.validDate,
     required this.startColor,
     required this.endColor,
+    required this.isEnable,
+    required this.soluotdung,
   });
 
   @override
@@ -89,11 +102,20 @@ class CouponItem extends StatelessWidget {
           padding: const EdgeInsets.all(20),
           margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [startColor, endColor],
-            ),
+            gradient: !isEnable
+                ? const LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Color.fromARGB(255, 255, 255, 255),
+                      Color.fromARGB(255, 2, 2, 2)
+                    ],
+                  )
+                : LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [startColor, endColor],
+                  ),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Column(
@@ -107,9 +129,17 @@ class CouponItem extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 10),
               Text(
                 validDate,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.white.withOpacity(0.7),
+                ),
+              ),
+              const SizedBox(height: 10),
+              Text(
+                'Còn $soluotdung lượt sử dụng',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.white.withOpacity(0.7),
@@ -128,7 +158,7 @@ class CouponItem extends StatelessWidget {
                 const BoxDecoration(color: Colors.red, shape: BoxShape.circle),
             child: Center(
               child: Text(
-                discount,
+                !isEnable ? "0%" : discount,
                 style: const TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.bold,
@@ -141,15 +171,18 @@ class CouponItem extends StatelessWidget {
         Positioned(
           bottom: 24,
           right: 24,
-          child: IconButton(
-              onPressed: () {
-                Clipboard.setData(ClipboardData(text: details));
-                showCustomSnackBar(
-                    title: 'Copy',
-                    message: "Đã sao chép mã giảm giá",
-                    type: Type.success);
-              },
-              icon: const Icon(Icons.copy)),
+          child: Visibility(
+            visible: isEnable,
+            child: IconButton(
+                onPressed: () {
+                  Clipboard.setData(ClipboardData(text: details));
+                  showCustomSnackBar(
+                      title: 'Copy',
+                      message: "Đã sao chép mã giảm giá",
+                      type: Type.success);
+                },
+                icon: const Icon(Icons.copy)),
+          ),
         ),
       ],
     );
