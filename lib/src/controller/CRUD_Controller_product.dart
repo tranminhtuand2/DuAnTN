@@ -319,7 +319,8 @@ class _UploadAndViewImageState extends State<UploadAndViewImage> {
                                                       onPressed: () {
                                                         FirestoreHelper
                                                             .deletedanhmuc(
-                                                                danhmuc[i]);
+                                                                danhmuc[i]
+                                                                    .iddanhmuc!);
                                                         Navigator.of(context)
                                                             .pop();
                                                         // Sau khi dialog đóng xong, thực hiện các thay đổi cần thiết tại đây để làm tươi lại màn hình.

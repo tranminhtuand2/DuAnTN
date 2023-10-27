@@ -1,10 +1,7 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/item_wallet.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
-import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class ShowPayment extends StatefulWidget {
   const ShowPayment({

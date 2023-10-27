@@ -15,6 +15,8 @@ class InputField extends StatefulWidget {
     this.maxLength,
     this.enable = true,
     this.textInputFormatters,
+    this.readOnly = false,
+    this.onTap,
   });
   final TextEditingController controller;
   final String labelText;
@@ -23,7 +25,9 @@ class InputField extends StatefulWidget {
   final TextInputType inputType;
   final double? height;
   final int? maxLength;
+  final bool? readOnly;
   final List<FilteringTextInputFormatter>? textInputFormatters;
+  final Function? onTap;
 
   final String? Function(String?)? validator; // Hàm validator
   @override
@@ -44,6 +48,10 @@ class _InputFieldState extends State<InputField> {
     return SizedBox(
       height: widget.height,
       child: TextFormField(
+        readOnly: widget.readOnly!,
+        onTap: () {
+          widget.onTap?.call();
+        },
         enabled: widget.enable,
         cursorColor: colorScheme(context).onBackground,
         keyboardType: widget.inputType,

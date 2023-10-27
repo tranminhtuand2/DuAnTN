@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
@@ -14,12 +13,11 @@ import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_dialog.dart';
 import 'package:managerfoodandcoffee/src/common_widget/raw_snack_bar.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/categorry_controller.dart';
-
 import 'package:managerfoodandcoffee/src/controller_getx/data_edit_product_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
-import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
+import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class CRUDProductTab extends StatefulWidget {
   const CRUDProductTab({super.key});
@@ -30,7 +28,6 @@ class CRUDProductTab extends StatefulWidget {
 
 class _CRUDProductTabState extends State<CRUDProductTab> {
   String _imageFile = '';
-
   Uint8List? selectedImageInBytes;
   // String linkanh = "";
   // final _nameController = TextEditingController();
@@ -41,27 +38,36 @@ class _CRUDProductTabState extends State<CRUDProductTab> {
   final controllerDataEdit = Get.put(DataEditProductController());
   final categoryController = Get.put(CategoryController());
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void _submitForm() async {
     if (formKey.currentState!.validate()) {
       // Gọi phương thức uploadImage
       try {
         if (controllerDataEdit.urlImage.value.isEmpty) {
           await uploadImage(selectedImageInBytes!);
+          controllerDataEdit.isEdit.value
+              ? deleteImageByURL(controllerDataEdit.product.value.hinhanh)
+              : null;
         }
-        await FirestoreHelper.creadsp(
-          SanPham(
-            tensp: controllerDataEdit.nameController.text,
-            giasp: int.parse(controllerDataEdit.priceController.text),
-            mieuta: controllerDataEdit.descriptionController.text,
-            danhmuc: controllerDataEdit.selectedValue.toString(),
-            hinhanh: controllerDataEdit.urlImage.value,
-          ),
-        );
+        !controllerDataEdit.isEdit.value
+            ? await FirestoreHelper.creadsp(
+                SanPham(
+                  tensp: controllerDataEdit.nameController.text,
+                  giasp: int.parse(controllerDataEdit.priceController.text),
+                  mieuta: controllerDataEdit.descriptionController.text,
+                  danhmuc: controllerDataEdit.selectedValue.toString(),
+                  hinhanh: controllerDataEdit.urlImage.value,
+                ),
+              )
+            : FirestoreHelper.updatesp(
+                SanPham(
+                    tensp: controllerDataEdit.nameController.text,
+                    giasp: int.parse(controllerDataEdit.priceController.text),
+                    mieuta: controllerDataEdit.descriptionController.text,
+                    danhmuc: controllerDataEdit.selectedValue.toString(),
+                    hinhanh: controllerDataEdit.urlImage.value,
+                    idsp: controllerDataEdit.product.value.idsp),
+              );
+        controllerDataEdit.removeData();
       } catch (e) {
         showRawSnackBar("Vui lòng chọn hình ảnh nếu bạn quên :)");
       }
@@ -107,7 +113,6 @@ class _CRUDProductTabState extends State<CRUDProductTab> {
         width: targetWidth,
         // height: targetHeight,
       );
-
       // Chuyển hình ảnh đã resize thành dạng bytes
       Uint8List resizedImageBytes =
           Uint8List.fromList(img.encodeJpg(resizedImage));
@@ -293,48 +298,53 @@ class _CRUDProductTabState extends State<CRUDProductTab> {
                   ),
                   const SizedBox(height: 10),
                   Obx(
-                    () => Container(
-                      height: 54,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 2),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          color: colorScheme(context).onPrimary),
-                      child: DropdownButtonFormField(
-                        alignment: Alignment.center,
-                        value: controllerDataEdit.selectedValue,
-                        decoration: const InputDecoration(
-                          border: InputBorder.none,
-                        ),
-                        autovalidateMode: AutovalidateMode.onUserInteraction,
-                        isExpanded: true,
-                        hint: const Text("Chọn danh mục sản phẩm"),
-                        items: categoryController.categories.map((element) {
-                          return DropdownMenuItem(
-                              alignment: Alignment.center,
-                              value: element.tendanhmuc,
-                              child: Text(element.tendanhmuc.toUpperCase()));
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            controllerDataEdit.selectedValue = value.toString();
-                            print(controllerDataEdit.selectedValue);
-                          });
-                        },
-                        validator: (value) {
-                          if (value == null) {
-                            return 'Mời chọn danh mục món';
-                          }
-                          return null;
-                        },
+                    () => DropdownButtonFormField(
+                      alignment: Alignment.center,
+                      value: controllerDataEdit.selectedValue.value,
+                      decoration: InputDecoration(
+                        contentPadding:
+                            const EdgeInsets.symmetric(vertical: 20),
+                        border: InputBorder.none,
+                        filled: true,
+                        fillColor: colorScheme(context).onPrimary,
                       ),
+                      borderRadius: BorderRadius.circular(12),
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                      isExpanded: true,
+                      hint: Text(
+                        "Chọn danh mục sản phẩm",
+                        style: text(context).titleSmall,
+                      ),
+                      items: categoryController.categories
+                          .where((element) =>
+                              element != categoryController.categories.first)
+                          .map((element) {
+                        return DropdownMenuItem(
+                            alignment: Alignment.center,
+                            value: element.tendanhmuc,
+                            child: Text(element.tendanhmuc.toUpperCase()));
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          controllerDataEdit.selectedValue.value =
+                              value.toString();
+                          print(controllerDataEdit.selectedValue);
+                        });
+                      },
+                      validator: (value) {
+                        if (value == null) {
+                          return 'Mời chọn danh mục món';
+                        }
+                        return null;
+                      },
                     ),
                   ),
                   const SizedBox(height: 20),
                   Obx(
                     () => InkWell(
                       onTap: () => pickImage(),
-                      child: _imageFile.isNotEmpty
+                      child: _imageFile.isNotEmpty &&
+                              controllerDataEdit.urlImage.isEmpty
                           ? ClipRRect(
                               borderRadius: BorderRadius.circular(8),
                               child: Image.memory(
@@ -381,7 +391,12 @@ class _CRUDProductTabState extends State<CRUDProductTab> {
                   children: [
                     Expanded(
                       child: MyButton(
-                        onTap: () => _submitForm(),
+                        onTap: () {
+                          _submitForm();
+                          setState(() {
+                            _imageFile = '';
+                          });
+                        },
                         backgroundColor: colorScheme(context).inversePrimary,
                         height: 60,
                         text: Text(
@@ -431,7 +446,12 @@ class _CRUDProductTabState extends State<CRUDProductTab> {
                   ],
                 )
               : MyButton(
-                  onTap: () => _submitForm(),
+                  onTap: () {
+                    _submitForm();
+                    setState(() {
+                      _imageFile = '';
+                    });
+                  },
                   backgroundColor: colorScheme(context).inversePrimary,
                   height: 60,
                   text: Text(

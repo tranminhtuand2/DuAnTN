@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:buttons_tabbar/buttons_tabbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,6 +12,7 @@ import 'package:managerfoodandcoffee/src/controller_getx/categorry_controller.da
 import 'package:managerfoodandcoffee/src/controller_getx/data_edit_product_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_product/CRUD_categories/crud_categoies.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_product/CRUD_product/crud_product.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/shimmer_loading.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -241,8 +244,66 @@ class _ManagerProductPageState extends State<ManagerProductPage> {
               decoration: BoxDecoration(
                   color: color.onPrimary.withOpacity(0.4),
                   borderRadius: BorderRadius.circular(8)),
-              child: const CRUDProductTab(),
+              child: tabBar(context),
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  DefaultTabController tabBar(BuildContext context) {
+    return DefaultTabController(
+      length: 2,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ButtonsTabBar(
+            contentPadding: const EdgeInsets.symmetric(horizontal: 50),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: colorScheme(context).onBackground.withOpacity(0.25),
+              gradient: const LinearGradient(
+                begin: Alignment.centerLeft,
+                end: Alignment.centerRight,
+                colors: [Color(0xFF58D9D9), Color(0xFF5747EF)],
+              ),
+            ),
+            unselectedDecoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              color: colorScheme(context).onBackground.withOpacity(0.05),
+            ),
+            labelStyle: TextStyle(
+              color: colorScheme(context).onBackground,
+            ),
+            unselectedLabelStyle: TextStyle(
+              color: colorScheme(context).onBackground,
+            ),
+            // Add your tabs here
+            tabs: const [
+              Tab(
+                text: 'Món',
+                icon: Icon(
+                  CupertinoIcons.pencil_ellipsis_rectangle,
+                  size: 16,
+                ),
+              ),
+              Tab(
+                text: 'Danh mục',
+                icon: Icon(
+                  CupertinoIcons.list_bullet,
+                  size: 16,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          const Expanded(
+            child: TabBarView(children: [
+              Center(child: CRUDProductTab()),
+              Center(child: CRUDCategoriesTab()),
+            ]),
           ),
         ],
       ),

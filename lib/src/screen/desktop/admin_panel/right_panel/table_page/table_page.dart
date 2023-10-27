@@ -1,12 +1,11 @@
+import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
-import 'package:managerfoodandcoffee/src/model/table_model.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
-import 'package:badges/badges.dart' as badges;
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/first_widget.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/second_widget.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
-import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class TablePage extends StatefulWidget {
   const TablePage({super.key});
@@ -16,6 +15,10 @@ class TablePage extends StatefulWidget {
 }
 
 class _TablePageState extends State<TablePage> {
+  bool isExpanded = false;
+  bool thanhtoan = false;
+  final tableController = Get.put(TableController());
+
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
@@ -40,6 +43,7 @@ class _TablePageState extends State<TablePage> {
               }
               if (snapshot.hasData) {
                 final tinhtrangtt = snapshot.data;
+
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: badges.Badge(
