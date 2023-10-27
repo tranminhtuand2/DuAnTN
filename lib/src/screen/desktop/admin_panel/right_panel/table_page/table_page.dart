@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/first_widget.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/second_widget.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
+
+import '../../../../../controller_getx/brightness_controller.dart';
+import '../../../../../model/table_model.dart';
+import '../../../../../utils/texttheme.dart';
+import '../../../pageadmin/DieuChinh/giohang/giohang_admin.dart';
 
 class TablePage extends StatefulWidget {
   const TablePage({super.key});
