@@ -353,11 +353,12 @@ class FirestoreHelper {
     }
   }
 
-  ////////////////////////////NOTIFICATION ///////////////////////////
+  ////////////////////////////COUPONS ///////////////////////////
   static Future<void> createMagiamGia({
     required String beginDay,
     required String endDay,
     required String data,
+    required int soluotdung,
     required int persent,
   }) async {
     final couponsColection = FirebaseFirestore.instance.collection("coupons");
@@ -368,6 +369,7 @@ class FirestoreHelper {
       beginDay: beginDay,
       endDay: endDay,
       data: data,
+      soluotdung: soluotdung,
       persent: persent,
       isEnable: true,
     );

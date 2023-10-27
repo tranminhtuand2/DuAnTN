@@ -17,6 +17,7 @@ class Coupons {
   String data;
   int persent;
   bool isEnable;
+  int soluotdung;
 
   Coupons({
     required this.id,
@@ -24,6 +25,7 @@ class Coupons {
     required this.endDay,
     required this.data,
     required this.persent,
+    required this.soluotdung,
     required this.isEnable,
   });
 
@@ -34,6 +36,7 @@ class Coupons {
         data: json["data"],
         persent: json["persent"],
         isEnable: json["isEnable"],
+        soluotdung: json['soluotdung'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -43,6 +46,7 @@ class Coupons {
         "data": data,
         "persent": persent,
         "isEnable": isEnable,
+        "soluotdung": soluotdung,
       };
   factory Coupons.fromsnapshot(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
@@ -53,6 +57,7 @@ class Coupons {
       data: snapshot['data'],
       persent: snapshot['persent'],
       isEnable: snapshot['isEnable'],
+      soluotdung: snapshot['soluotdung'],
     );
   }
 }
