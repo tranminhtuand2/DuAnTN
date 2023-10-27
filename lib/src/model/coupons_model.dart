@@ -17,6 +17,7 @@ class Coupons {
   String data;
   int persent;
   bool isEnable;
+  int soluotdung;
 
   Coupons({
     required this.id,
@@ -24,6 +25,7 @@ class Coupons {
     required this.endDay,
     required this.data,
     required this.persent,
+    required this.soluotdung,
     required this.isEnable,
   });
 
@@ -32,6 +34,7 @@ class Coupons {
         beginDay: json["begin_day"],
         endDay: json["end_day"],
         data: json["data"],
+        soluotdung: json['soluotdung'],
         persent: json["persent"],
         isEnable: json["isEnable"],
       );
@@ -41,6 +44,7 @@ class Coupons {
         "begin_day": beginDay,
         "end_day": endDay,
         "data": data,
+        "soluotdung": soluotdung,
         "persent": persent,
         "isEnable": isEnable,
       };
@@ -51,6 +55,7 @@ class Coupons {
       beginDay: snapshot['begin_day'],
       endDay: snapshot['end_day'],
       data: snapshot['data'],
+      soluotdung: snapshot['soluotdung'],
       persent: snapshot['persent'],
       isEnable: snapshot['isEnable'],
     );
