@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
 import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
@@ -378,5 +379,22 @@ class FirestoreHelper {
 
     return couponsColection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((e) => Coupons.fromsnapshot(e)).toList());
+  }
+
+  //hoá đơn
+  //creat invoice
+  static Future<void> createhoadon(Invoice hoadon) async {
+    final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
+    final uid = hoadonCl.doc().id;
+    final docRef = hoadonCl.doc(uid);
+    // final newtinhtrang =
+    //     tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table.tenban)
+    //         .toJson();
+    final newhoadon = hoadon.toJson();
+    try {
+      await docRef.set(newhoadon);
+    } catch (e) {
+      Get.snackbar("lỗi", e.toString());
+    }
   }
 }

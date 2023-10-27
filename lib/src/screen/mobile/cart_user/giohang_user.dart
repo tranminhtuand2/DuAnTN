@@ -417,7 +417,7 @@ class _CartProductState extends State<CartProduct> {
               }
               return const CircularProgressIndicator();
             },
-          )
+          ),
         ],
       ),
       actions: [

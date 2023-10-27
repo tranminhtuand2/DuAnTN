@@ -40,7 +40,6 @@ class _TablePageState extends State<TablePage> {
               }
               if (snapshot.hasData) {
                 final tinhtrangtt = snapshot.data;
-
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: badges.Badge(

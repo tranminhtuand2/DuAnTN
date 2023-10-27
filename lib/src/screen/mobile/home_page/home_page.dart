@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/categorry_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/drawer_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
+
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
@@ -37,6 +38,12 @@ class _HomePageState extends State<HomePage> {
   final controller = Get.put(ProductController());
   final controllerCategory = Get.put(CategoryController());
   final pageViewController = PageController();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
