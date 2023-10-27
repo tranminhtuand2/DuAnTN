@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/alert_screen.dart';
 
@@ -21,7 +22,9 @@ class FirebaseMessagingApi {
     // print('User granted permission: ${settings.authorizationStatus}');
 
     //Hỏi quyền
-    await _firebaseMessaging.requestPermission();
+    if (!kIsWeb) {
+      await _firebaseMessaging.requestPermission();
+    }
 
     // final token = await _firebaseMessaging.getToken();
 

@@ -353,21 +353,49 @@ class FirestoreHelper {
   }
 
   ////////////////////////////NOTIFICATION ///////////////////////////
-  static Future<void> createMagiamGia() async {
+  static Future<void> createMagiamGia({
+    required String beginDay,
+    required String endDay,
+    required String data,
+    required int persent,
+  }) async {
     final couponsColection = FirebaseFirestore.instance.collection("coupons");
     final uid = couponsColection.doc().id;
     final docRef = couponsColection.doc(uid);
     final coupons = Coupons(
-      beginDay: "14/10/2023",
-      endDay: "16/10/2023",
-      data: 'HATHECHI20',
-      persent: 20,
+      id: uid,
+      beginDay: beginDay,
+      endDay: endDay,
+      data: data,
+      persent: persent,
       isEnable: true,
     );
     try {
-      await docRef.set(
-        coupons.toJson(),
-      );
+      await docRef.set(coupons.toJson());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> updateMagiamGia(Coupons coupon) async {
+    final couponsColection = FirebaseFirestore.instance.collection("coupons");
+
+    final docRef = couponsColection.doc(coupon.id);
+
+    try {
+      await docRef.update(coupon.toJson());
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  static Future<void> dateleMagiamGia(Coupons coupon) async {
+    final couponsColection = FirebaseFirestore.instance.collection("coupons");
+
+    final docRef = couponsColection.doc(coupon.id);
+
+    try {
+      await docRef.delete();
     } catch (e) {
       print(e);
     }
