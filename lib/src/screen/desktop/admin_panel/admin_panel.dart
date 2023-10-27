@@ -4,6 +4,7 @@ import 'package:managerfoodandcoffee/src/controller/CRUD_Controller_product.dart
 import 'package:managerfoodandcoffee/src/controller/CRUD_controller_header.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/navigate_panel_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/left_panel/left_panel.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_coupons/manager_coupons.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_product/manager_product.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/table_page.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -54,11 +55,17 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
   }
 
   List listPage = [
+    const ManagerCoupons(),
     const TablePage(),
+    const Center(child: Text('Quản lý bàn')),
     const ManagerProductPage(),
-    const UploadAndViewImage(),
-    const crud_header(),
-    const TablePage(),
-    const TablePage(),
+    const Center(child: Text('Hóa Đơn')),
+    const Center(child: Text('Thống kê')),
   ];
 }
+  // const TablePage(),
+  //   const Center(child: Text('Quản lý bàn')),
+  //   const ManagerProductPage(),
+  //   const Center(child: Text('Quản lý khuyến mãi')),
+  //   const Center(child: Text('Hóa Đơn')),
+  //   const Center(child: Text('Thống kê')),

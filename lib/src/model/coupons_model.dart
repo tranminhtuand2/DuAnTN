@@ -11,6 +11,7 @@ Coupons couponsFromJson(String str) => Coupons.fromJson(json.decode(str));
 String couponsToJson(Coupons data) => json.encode(data.toJson());
 
 class Coupons {
+  String id;
   String beginDay;
   String endDay;
   String data;
@@ -18,6 +19,7 @@ class Coupons {
   bool isEnable;
 
   Coupons({
+    required this.id,
     required this.beginDay,
     required this.endDay,
     required this.data,
@@ -26,6 +28,7 @@ class Coupons {
   });
 
   factory Coupons.fromJson(Map<String, dynamic> json) => Coupons(
+        id: json['id'],
         beginDay: json["begin_day"],
         endDay: json["end_day"],
         data: json["data"],
@@ -34,6 +37,7 @@ class Coupons {
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "begin_day": beginDay,
         "end_day": endDay,
         "data": data,
@@ -43,6 +47,7 @@ class Coupons {
   factory Coupons.fromsnapshot(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return Coupons(
+      id: snapshot['id'],
       beginDay: snapshot['begin_day'],
       endDay: snapshot['end_day'],
       data: snapshot['data'],

@@ -9,7 +9,13 @@ class TableController extends GetxController {
   var tables = <TableModel>[].obs;
   var tableName = '#'.obs; // Không được để trống
 
-  var isExpanded = false.obs;
+  var isExpanded = false.obs; //biến để đóng mở tab bên phải table page
+
+  var totalPrice = 0.obs;
+
+  void updateTotalPrice(int price) {
+    totalPrice.value = price;
+  }
 
   Future<void> addTable(List<TableModel> lists) async {
     if (lists.isNotEmpty) {
