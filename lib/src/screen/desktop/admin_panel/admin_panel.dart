@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/navigate_panel_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/left_panel/left_panel.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_coupons/manager_coupons.dart';
@@ -54,7 +55,18 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
 
   List listPage = [
     const TablePage(),
-    const Center(child: Text('Quản lý bàn')),
+    Center(
+        child: Column(
+      children: [
+        Text('Quản lý bàn'),
+        InkWell(
+          onTap: () {
+            Get.dialog(Crud_table());
+          },
+          child: Text("thêm bàn"),
+        )
+      ],
+    )),
     const ManagerProductPage(),
     const ManagerCoupons(),
     const Center(child: Text('Hóa Đơn')),

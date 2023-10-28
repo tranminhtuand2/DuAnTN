@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 
@@ -427,6 +428,11 @@ class _giohang_adminState extends State<giohang_admin> {
                           print(formattedDate);
                           // print(TimeOfDay.fromDateTime(DateTime.now()));
                           FirestoreHelper.createhoadon(newhoadon);
+                          FirestoreHelper.deleteAllgiohang(widget.tenban);
+                          FirestoreHelper.updatetable(TableModel(
+                              tenban: widget.tenban,
+                              isSelected: false,
+                              maban: widget.tenban));
                         },
                         child: SizedBox(
                           height: 50,
@@ -434,33 +440,7 @@ class _giohang_adminState extends State<giohang_admin> {
                         ),
                       )
                     ],
-                  )
-                  // StreamBuilder(
-                  //   stream: FirestoreHelper.readgiohang(widget.tenban),
-                  //   builder: (context, snapshot) {
-                  //     if (snapshot.connectionState == ConnectionState.waiting) {
-                  //       return const Center(
-                  //         child: CircularProgressIndicator(),
-                  //       );
-                  //     }
-                  //     if (snapshot.hasError) {
-                  //       return const Center(
-                  //         child: Text("lỗi"),
-                  //       );
-                  //     }
-                  //     if (snapshot.hasData) {
-                  //       final giohang = snapshot.data;
-                  //       tongtien = 0;
-                  //       for (var i = 0; i < giohang!.length; i++) {
-                  //         tongtien += giohang[i].soluong * giohang[i].giasp;
-                  //       }
-                  //     }
-                  //     return const Center(
-                  //       child: CircularProgressIndicator(),
-                  //     );
-                  //   },
-                  // ),
-                  ),
+                  )),
             )
           ],
         ));

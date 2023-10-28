@@ -179,10 +179,10 @@ class FirestoreHelper {
   //create a table
   static Future<void> createdtable(TableModel table) async {
     final tableColection = FirebaseFirestore.instance.collection("table");
-    final uid = tableColection.doc().id;
-    final docref = tableColection.doc(uid);
+
+    final docref = tableColection.doc(table.tenban);
     final newtable =
-        TableModel(tenban: table.tenban, maban: uid, isSelected: false)
+        TableModel(tenban: table.tenban, maban: table.tenban, isSelected: false)
             .toJson();
     try {
       await docref.set(newtable);
@@ -202,14 +202,14 @@ class FirestoreHelper {
   static Future updatetable(TableModel table) async {
     final headerCollection = FirebaseFirestore.instance.collection("table");
     final docRef = headerCollection.doc(table.maban);
-    // final newtable = TableModel(
-    //         tenban: table.tenban,
-    //         maban: table.maban,
-    //         isSelected: table.isSelected)
-    //     .toJson();
+    final newtable = TableModel(
+            tenban: table.tenban,
+            maban: table.maban,
+            isSelected: table.isSelected)
+        .toJson();
     try {
       print('UPDATE');
-      await docRef.update(table.toJson());
+      await docRef.update(newtable);
     } catch (e) {
       Get.snackbar("lỗi", e.toString());
     }
@@ -290,6 +290,18 @@ class FirestoreHelper {
     final docRef = giohangColection.doc(giohang.idsp).delete();
   }
 
+  //delete all giohang
+  static Future deleteAllgiohang(String table) async {
+    final giohangColection = FirebaseFirestore.instance
+        .collection("giohang")
+        .doc("table")
+        .collection(table);
+    var snapshot = await giohangColection.get();
+    for (var doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
+  }
+
   ///enđ gio hang
   ///s
   ///tinh trang
@@ -327,17 +339,7 @@ class FirestoreHelper {
   }
 
   //update
-  //   static Future updatetable(TableModel table) async {
-  //   final headerCollection = FirebaseFirestore.instance.collection("table");
-  //   final docRef = headerCollection.doc(table.maban);
-  //   final newtable =
-  //       TableModel(tenban: table.tenban, maban: table.maban).toJson();
-  //   try {
-  //     await docRef.update(newtable);
-  //   } catch (e) {
-  //     Get.snackbar("lỗi", e.toString());
-  //   }
-  // }
+
   static Future updatetinhtrang(tinhtrangTT tinhtrang, String table) async {
     final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
 
