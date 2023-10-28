@@ -127,7 +127,8 @@ class FirestoreHelper {
     final uid = danhmucColection.doc().id;
     final docRef = danhmucColection.doc(uid);
     final newdanhmuc =
-        DanhMuc(tendanhmuc: danhmuc.tendanhmuc, iddanhmuc: uid).toJson();
+        DanhMuc(tendanhmuc: danhmuc.tendanhmuc.toLowerCase(), iddanhmuc: uid)
+            .toJson();
 
     try {
       await docRef.set(newdanhmuc);
@@ -147,9 +148,10 @@ class FirestoreHelper {
   static Future updatedanhmuc(DanhMuc danhmuc) async {
     final headerCollection = FirebaseFirestore.instance.collection("danhmuc");
     final docRef = headerCollection.doc(danhmuc.iddanhmuc);
-    final newdanhmuc =
-        DanhMuc(tendanhmuc: danhmuc.tendanhmuc, iddanhmuc: danhmuc.iddanhmuc)
-            .toJson();
+    final newdanhmuc = DanhMuc(
+            tendanhmuc: danhmuc.tendanhmuc.toLowerCase(),
+            iddanhmuc: danhmuc.iddanhmuc)
+        .toJson();
     try {
       await docRef.update(newdanhmuc);
     } catch (e) {
@@ -353,11 +355,12 @@ class FirestoreHelper {
     }
   }
 
-  ////////////////////////////NOTIFICATION ///////////////////////////
+  ////////////////////////////COUPONS ///////////////////////////
   static Future<void> createMagiamGia({
     required String beginDay,
     required String endDay,
     required String data,
+    required int soluotdung,
     required int persent,
   }) async {
     final couponsColection = FirebaseFirestore.instance.collection("coupons");
@@ -368,6 +371,7 @@ class FirestoreHelper {
       beginDay: beginDay,
       endDay: endDay,
       data: data,
+      soluotdung: soluotdung,
       persent: persent,
       isEnable: true,
     );

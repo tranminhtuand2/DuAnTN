@@ -53,10 +53,10 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
   }
 
   List listPage = [
-    const ManagerCoupons(),
     const TablePage(),
     const Center(child: Text('Quản lý bàn')),
     const ManagerProductPage(),
+    const ManagerCoupons(),
     const Center(child: Text('Hóa Đơn')),
     const Center(child: Text('Thống kê')),
   ];
