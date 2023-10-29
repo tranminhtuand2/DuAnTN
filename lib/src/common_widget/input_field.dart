@@ -17,6 +17,8 @@ class InputField extends StatefulWidget {
     this.textInputFormatters,
     this.readOnly = false,
     this.onTap,
+    this.maxLines,
+    this.backgroundColor,
   });
   final TextEditingController controller;
   final String labelText;
@@ -24,10 +26,11 @@ class InputField extends StatefulWidget {
   final bool isPassword, enable;
   final TextInputType inputType;
   final double? height;
-  final int? maxLength;
+  final int? maxLength, maxLines;
   final bool? readOnly;
   final List<FilteringTextInputFormatter>? textInputFormatters;
   final Function? onTap;
+  final Color? backgroundColor;
 
   final String? Function(String?)? validator; // Hàm validator
   @override
@@ -61,12 +64,11 @@ class _InputFieldState extends State<InputField> {
         controller: widget.controller,
         obscureText: widget.isPassword && _isShowEye,
         maxLength: widget.maxLength,
-        maxLines: null,
+        maxLines: widget.maxLines,
         inputFormatters: widget.textInputFormatters,
         decoration: InputDecoration(
           filled: true,
-
-          fillColor: colorScheme(context).onPrimary,
+          fillColor: widget.backgroundColor ?? colorScheme(context).onPrimary,
           prefixIcon: widget.prefixIcon,
           suffixIcon: widget.isPassword
               ? GestureDetector(

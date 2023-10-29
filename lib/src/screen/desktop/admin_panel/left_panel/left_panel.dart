@@ -40,7 +40,7 @@ class _LeftPanelState extends State<LeftPanel> {
                     child: Text(
                       "COFFEE WIND",
                       style: text(context).titleLarge?.copyWith(
-                          fontFamily: GoogleFonts.ubuntu().fontFamily,
+                          fontFamily: GoogleFonts.merienda().fontFamily,
                           fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -119,11 +119,11 @@ class _LeftPanelState extends State<LeftPanel> {
       title: 'Bàn',
       index: 0,
     ),
-    MainListTile(
-      icon: CupertinoIcons.layers,
-      title: 'Quản lý bàn',
-      index: 1,
-    ),
+    // MainListTile(
+    //   icon: CupertinoIcons.layers,
+    //   title: 'Quản lý bàn',
+    //   index: 1,
+    // ),
     MainListTile(
       icon: CupertinoIcons.flame,
       title: 'Quản lý món',

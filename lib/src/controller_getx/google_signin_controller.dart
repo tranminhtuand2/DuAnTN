@@ -75,6 +75,6 @@ class GoogleSignInController extends GetxController {
     }
     log("logout");
 
-    Get.offAll(() => const DesktopScreen());
+    Get.offAll(() => const LoginScreen());
   }
 }
