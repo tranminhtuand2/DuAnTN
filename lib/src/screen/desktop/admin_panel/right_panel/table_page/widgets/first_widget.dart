@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manage_table/manager_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
@@ -23,52 +24,68 @@ class _FirstWidgetState extends State<FirstWidget> {
     ColorScheme color = colorScheme(context);
 
     return Column(
-      crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          child: StreamBuilder(
-            stream: FirestoreHelper.readtinhtrangtt(),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError) {
-                return SingleChildScrollView(
-                  child: Text("Lỗi: ${snapshot.error.toString()}"),
-                );
-              }
-              if (snapshot.hasData) {
-                final tinhtrangtt = snapshot.data;
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            CircleAvatar(
+              radius: 16,
+              backgroundColor: color.surfaceVariant,
+              child: IconButton(
+                onPressed: () => Get.dialog(const CreateTable()),
+                icon: Icon(
+                  Icons.add,
+                  size: 16,
+                  color: color.primary,
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 30),
+              child: StreamBuilder(
+                stream: FirestoreHelper.readtinhtrangtt(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
+                  if (snapshot.hasError) {
+                    return SingleChildScrollView(
+                      child: Text("Lỗi: ${snapshot.error.toString()}"),
+                    );
+                  }
+                  if (snapshot.hasData) {
+                    final tinhtrangtt = snapshot.data;
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: badges.Badge(
-                    position: badges.BadgePosition.topStart(),
-                    badgeAnimation: const badges.BadgeAnimation.fade(),
-                    //lấy dự liệu order
-                    badgeContent: Padding(
-                      padding: const EdgeInsets.all(4.0),
-                      child: Text(
-                        "${tinhtrangtt!.length}",
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: badges.Badge(
+                        position: badges.BadgePosition.topStart(),
+                        badgeAnimation: const badges.BadgeAnimation.fade(),
+                        //lấy dự liệu order
+                        badgeContent: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Text(
+                            "${tinhtrangtt!.length}",
+                          ),
+                        ),
+                        child: IconButton(
+                          onPressed: () {},
+                          icon: Icon(
+                            Icons.notifications,
+                            size: 32,
+                            color: color.surfaceVariant,
+                          ),
+                        ),
                       ),
-                    ),
-                    child: IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.notifications,
-                        size: 32,
-                        color: color.onBackground,
-                      ),
-                    ),
-                  ),
-                );
-              }
-              return const Icon(Icons.notifications);
-            },
-          ),
+                    );
+                  }
+                  return const Icon(Icons.notifications);
+                },
+              ),
+            ),
+          ],
         ),
         Expanded(
           child: StreamBuilder(
@@ -118,7 +135,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                               child: Container(
                                 margin: const EdgeInsets.all(16),
                                 child: badges.Badge(
-                                    position: badges.BadgePosition.topStart(),
+                                    position: badges.BadgePosition.topEnd(),
                                     badgeAnimation:
                                         const badges.BadgeAnimation.fade(),
                                     showBadge: giohangtb!.isNotEmpty,
@@ -145,9 +162,16 @@ class _FirstWidgetState extends State<FirstWidget> {
                                                   true;
                                             },
                                       child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 40, horizontal: 50),
+                                        width: 180,
+                                        height: 180,
+                                        // padding: const EdgeInsets.symmetric(
+                                        //     vertical: 40, horizontal: 50),
                                         decoration: BoxDecoration(
+                                          border: Border.all(
+                                            width: 0.3,
+                                            color: colorScheme(context)
+                                                .surfaceVariant,
+                                          ),
                                           gradient: !Get.put(
                                                       BrightnessController())
                                                   .isDarkMode
@@ -182,19 +206,45 @@ class _FirstWidgetState extends State<FirstWidget> {
                                           borderRadius:
                                               BorderRadius.circular(8),
                                         ),
-                                        child: Column(
+                                        child: Stack(
                                           children: [
-                                            Image.asset(
-                                              giohangtb.isEmpty
-                                                  ? "assets/images/table1.png"
-                                                  : 'assets/images/order.png',
-                                              height: 60,
-                                              width: 60,
+                                            Positioned(
+                                              top: 10,
+                                              left: 20,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Bàn".toUpperCase(),
+                                                    style: text(context)
+                                                        .titleSmall,
+                                                  ),
+                                                  Text(
+                                                      int.parse(tableindex
+                                                                  .tenban) <
+                                                              10
+                                                          ? "0${tableindex.tenban}"
+                                                          : tableindex.tenban,
+                                                      style: text(context)
+                                                          .displayMedium
+                                                          ?.copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold)),
+                                                ],
+                                              ),
                                             ),
-                                            const SizedBox(height: 16),
-                                            Text(
-                                              "Bàn ${tableindex.tenban}",
-                                              style: text(context).titleMedium,
+                                            Positioned(
+                                              bottom: 10,
+                                              right: 10,
+                                              child: Image.asset(
+                                                giohangtb.isEmpty
+                                                    ? "assets/images/table1.png"
+                                                    : 'assets/images/order.png',
+                                                height: 60,
+                                                width: 60,
+                                              ),
                                             ),
                                           ],
                                         ),
@@ -211,129 +261,6 @@ class _FirstWidgetState extends State<FirstWidget> {
                     }).toList()),
                   ),
                 );
-                // GridView.builder(
-                //   itemCount: table!.length,
-                //   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                //     crossAxisCount: tableController.isExpanded.value
-                //         ? 4 //Thêm Obx nếu muốn thay đổi trạng thái ở đây
-                //         : 6, // Bạn có thể thay đổi số cột ở đây
-                //     // mainAxisExtent: MediaQuery.sizeOf(context).height * 0.25
-                //     mainAxisSpacing:
-                //         30.0, // Điều chỉnh khoảng cách giữa các mục theo chiều dọc
-                //     crossAxisSpacing:
-                //         20.0, // Điều chỉnh khoảng cách giữa các mục theo chiều ngang
-                //   ),
-                //   padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 40),
-                //   itemBuilder: (context, index) {
-                //     final tableindex = table[index];
-                //     return StreamBuilder(
-                //       stream: FirestoreHelper.readgiohang(tableindex.tenban),
-                //       builder: (context, snapshot) {
-                //         if (snapshot.connectionState == ConnectionState.waiting) {
-                //           return const Center(
-                //             child: CircularProgressIndicator(),
-                //           );
-                //         }
-                //         if (snapshot.hasError) {
-                //           return SingleChildScrollView(
-                //             child: Text("Lỗi: ${snapshot.error.toString()}"),
-                //           );
-                //         }
-                //         if (snapshot.hasData) {
-                //           final giohangtb = snapshot.data;
-                //           return FittedBox(
-                //             child: Center(
-                //               child: badges.Badge(
-                //                   position: badges.BadgePosition.topStart(),
-                //                   badgeAnimation: const badges.BadgeAnimation.fade(),
-                //                   showBadge: giohangtb!.isNotEmpty,
-                //                   badgeContent: Padding(
-                //                     padding: const EdgeInsets.all(4.0),
-                //                     child: Text(
-                //                       "${giohangtb.length}",
-                //                       style: text(context)
-                //                           .titleMedium
-                //                           ?.copyWith(fontWeight: FontWeight.bold),
-                //                     ),
-                //                   ),
-                //                   child: InkWell(
-                //                     onTap: tableController.isExpanded.value
-                //                         ? () {
-                //                             Get.put(TableController())
-                //                                 .tableName
-                //                                 .value = tableindex.tenban;
-                //                           }
-                //                         : () {
-                //                             // Get.to(() => giohang_admin(
-                //                             //     tenban: tableindex.tenban));
-                //                             Get.put(TableController())
-                //                                 .tableName
-                //                                 .value = tableindex.tenban;
-                //                             tableController.isExpanded.value =
-                //                                 !tableController.isExpanded.value;
-                //                           },
-                //                     child: Container(
-                //                       padding: const EdgeInsets.symmetric(
-                //                           vertical: 30, horizontal: 40),
-                //                       decoration: BoxDecoration(
-                //                         gradient: !Get.put(BrightnessController())
-                //                                 .isDarkMode
-                //                                 .value
-                //                             ? giohangtb.isNotEmpty
-                //                                 ? LinearGradient(
-                //                                     begin: Alignment.bottomLeft,
-                //                                     end: Alignment.topRight,
-                //                                     colors: [
-                //                                       color.surfaceVariant
-                //                                           .withOpacity(0.3),
-                //                                       color.onSurfaceVariant
-                //                                           .withOpacity(0.3),
-                //                                     ],
-                //                                   )
-                //                                 : null
-                //                             : giohangtb.isEmpty
-                //                                 ? LinearGradient(
-                //                                     begin: Alignment.bottomLeft,
-                //                                     end: Alignment.topRight,
-                //                                     colors: [
-                //                                       color.surfaceVariant
-                //                                           .withOpacity(0.3),
-                //                                       color.onSurfaceVariant
-                //                                           .withOpacity(0.3),
-                //                                     ],
-                //                                   )
-                //                                 : null,
-                //                         color: color.onPrimary,
-                //                         borderRadius: BorderRadius.circular(8),
-                //                       ),
-                //                       child: Column(
-                //                         children: [
-                //                           Image.asset(
-                //                             giohangtb.isEmpty
-                //                                 ? "assets/images/table1.png"
-                //                                 : 'assets/images/order.png',
-                //                             height: 80,
-                //                             width: 80,
-                //                           ),
-                //                           const SizedBox(height: 16),
-                //                           Text(
-                //                             "Bàn ${tableindex.tenban}",
-                //                             style: text(context).titleSmall,
-                //                           ),
-                //                         ],
-                //                       ),
-                //                     ),
-                //                   )),
-                //             ),
-                //           );
-                //         }
-                //         return SingleChildScrollView(
-                //           child: Text("Lỗi: ${snapshot.error.toString()}"),
-                //         );
-                //       },
-                //     );
-                //   },
-                // );
               }
               return const Center(
                 child: CircularProgressIndicator(),

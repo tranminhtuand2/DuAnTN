@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 
-import 'package:managerfoodandcoffee/src/controller/CRUD_table.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manage_table/manager_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/google_signin_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
@@ -90,7 +90,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
             titleStyle: const TextStyle(fontSize: 12, color: Colors.white),
             onPress: () {
               _animationController!.reverse();
-              Get.dialog(const Crud_table());
+              Get.dialog(const CreateTable());
             },
           ),
           Bubble(

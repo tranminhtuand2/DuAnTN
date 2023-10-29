@@ -91,32 +91,34 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
       ],
       content: SizedBox(
         height: MediaQuery.sizeOf(context).height * 0.5,
-        child: Column(
-          children: [
-            Lottie.asset(
-              "assets/images/location.json",
-              animate: true,
-            ),
-            const Spacer(),
-            titleError.isNotEmpty
-                ? Text(
-                    titleError,
-                    style: text(context).titleMedium?.copyWith(
-                          color: Colors.red,
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              Lottie.asset(
+                "assets/images/location.json",
+                animate: true,
+              ),
+              const Spacer(),
+              titleError.isNotEmpty
+                  ? Text(
+                      titleError,
+                      style: text(context).titleMedium?.copyWith(
+                            color: Colors.red,
+                          ),
+                    )
+                  : Column(
+                      children: [
+                        Text(
+                          "Đang kiểm tra...",
+                          style: text(context).titleMedium,
                         ),
-                  )
-                : Column(
-                    children: [
-                      Text(
-                        "Đang kiểm tra...",
-                        style: text(context).titleMedium,
-                      ),
-                      Lottie.asset("assets/images/ani_loading.json",
-                          animate: true, width: 100, height: 100),
-                    ],
-                  ),
-            const SizedBox(height: 50),
-          ],
+                        Lottie.asset("assets/images/ani_loading.json",
+                            animate: true, width: 100, height: 100),
+                      ],
+                    ),
+              const SizedBox(height: 50),
+            ],
+          ),
         ),
       ),
     );

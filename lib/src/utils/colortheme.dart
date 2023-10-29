@@ -5,8 +5,8 @@ var colorScheme = (BuildContext context) => Theme.of(context).colorScheme;
 class TAppTheme {
   static const lightColorScheme = ColorScheme(
     brightness: Brightness.light,
-    primary: Color.fromARGB(255, 73, 161, 108),
-    // primary: Color.fromARGB(255, 98, 181, 193),
+    // primary: Color.fromARGB(255, 0, 132, 255),
+    primary: Color.fromARGB(255, 92, 180, 136),
     onPrimary: Color.fromARGB(255, 255, 255, 255),
     primaryContainer: Color.fromARGB(255, 255, 255, 255),
     onPrimaryContainer: Color.fromARGB(255, 255, 255, 255),
@@ -28,7 +28,7 @@ class TAppTheme {
     surface: Color.fromARGB(255, 255, 255, 255),
     onSurface: Color(0xFF1C1B1F),
     surfaceVariant: Color.fromARGB(255, 255, 255, 255),
-    onSurfaceVariant: Color.fromARGB(255, 255, 255, 255),
+    onSurfaceVariant: Color.fromARGB(255, 0, 132, 255),
     inverseSurface: Color(0xFF313033),
     onInverseSurface: Color.fromARGB(255, 255, 255, 255),
     inversePrimary: Color.fromARGB(255, 34, 137, 37),
