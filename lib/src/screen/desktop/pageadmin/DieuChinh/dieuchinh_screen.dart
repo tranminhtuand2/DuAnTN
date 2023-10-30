@@ -5,7 +5,7 @@ import 'package:badges/badges.dart' as badges;
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manage_table/manager_table.dart';
-import 'package:managerfoodandcoffee/src/controller_getx/google_signin_controller.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/pageadmin/DieuChinh/giohang/giohang_admin.dart';
 
@@ -52,7 +52,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
     _animation = Tween<double>(begin: 0, end: 1).animate(curvedAnimation);
   }
 
-  final googleSignInController = Get.put(GoogleSignInController());
+  final googleSignInController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,7 +63,7 @@ class _dieuchinhSceenState extends State<dieuchinhSceen>
         actions: [
           IconButton(
             onPressed: () {
-              googleSignInController.logoutGoogle();
+              googleSignInController.logout();
             },
             icon: const Icon(Icons.logout),
           ),

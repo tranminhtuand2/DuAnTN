@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
-import 'package:managerfoodandcoffee/src/common_widget/input_field.dart';
-import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
-import 'package:managerfoodandcoffee/src/controller_getx/google_signin_controller.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/admin_panel.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/login_screen/widget/login_panel.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/login_screen/widget/register_panel.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
@@ -22,10 +19,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.sizeOf(context);
-    // ignore: no_leading_underscores_for_local_identifiers
-    final _controllerUsername = TextEditingController();
-    // ignore: no_leading_underscores_for_local_identifiers
-    final _controllerPassword = TextEditingController();
+
     return Scaffold(
       body: Stack(
         children: [
@@ -33,16 +27,6 @@ class _LoginScreenState extends State<LoginScreen> {
             width: size.width,
             height: size.height,
             decoration: const BoxDecoration(
-              // gradient: LinearGradient(
-              //   begin: Alignment.topLeft,
-              //   end: Alignment.bottomRight,
-              //   colors: [
-              //     Color.fromARGB(251, 148, 251, 251),
-              //     Color.fromARGB(255, 102, 171, 178),
-              //     Color.fromARGB(255, 183, 124, 238),
-              //     Color.fromARGB(255, 213, 101, 170),
-              //   ],
-              // ),
               image: DecorationImage(
                 colorFilter: ColorFilter.mode(
                     Color.fromARGB(255, 126, 126, 126), BlendMode.overlay),
@@ -77,262 +61,19 @@ class _LoginScreenState extends State<LoginScreen> {
                           color: colorScheme(context).primary,
                           padding: const EdgeInsets.symmetric(horizontal: 100),
                           child: isLogin
-                              ? SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Chào mừng quay lại \nHãy đăng nhập để bắt đầu ',
-                                        style: text(context)
-                                            .titleLarge
-                                            ?.copyWith(
-                                                fontFamily:
-                                                    GoogleFonts.spaceGrotesk()
-                                                        .fontFamily,
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        height: 40,
-                                      ),
-                                      InputField(
-                                          controller: _controllerUsername,
-                                          inputType: TextInputType.emailAddress,
-                                          labelText: 'Email',
-                                          prefixIcon: const Icon(Icons.email),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return "Vui lòng điền vào địa chỉ email";
-                                            }
-                                            if (!RegExp(
-                                                    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-                                                .hasMatch(value)) {
-                                              return "Địa chỉ email không hợp lệ";
-                                            }
-                                            return null;
-                                          }),
-                                      const SizedBox(height: 20),
-                                      InputField(
-                                        controller: _controllerPassword,
-                                        inputType: TextInputType.text,
-                                        prefixIcon: const Icon(Icons.lock),
-                                        labelText: 'Nhập mật khẩu',
-                                        maxLines: 1,
-                                        isPassword: true,
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Vui lòng điền vào mật khẩu";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      MyButton(
-                                        onTap: () {
-                                          Get.to(
-                                              () => const AdminPanelScreen());
-                                        },
-                                        backgroundColor: colorScheme(context)
-                                            .onSurfaceVariant,
-                                        height: 54,
-                                        text: Text(
-                                          'Đăng nhập',
-                                          style: text(context)
-                                              .titleSmall
-                                              ?.copyWith(
-                                                  color: colorScheme(context)
-                                                      .tertiary,
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                setState(() {
-                                                  isLogin = !isLogin;
-                                                });
-                                              },
-                                              child: Text(
-                                                'Đăng ký ngay',
-                                                textAlign: TextAlign.left,
-                                                style: text(context)
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color:
-                                                            colorScheme(context)
-                                                                .tertiary),
-                                              ),
-                                            ),
-                                            InkWell(
-                                              onTap: () {},
-                                              child: Text(
-                                                'Quên mật khẩu?',
-                                                textAlign: TextAlign.right,
-                                                style: text(context)
-                                                    .titleSmall
-                                                    ?.copyWith(
-                                                        color:
-                                                            colorScheme(context)
-                                                                .tertiary),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      const Divider(),
-                                      const SizedBox(height: 10),
-                                      BtnLogin(
-                                        color: Colors.transparent,
-                                        title: "Đăng nhập với Google",
-                                        colorTitle:
-                                            colorScheme(context).tertiary,
-                                        urlImage:
-                                            'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png',
-                                        onClick: () {
-                                          Get.put(GoogleSignInController())
-                                              .loginGoogleInWeb();
-                                        },
-                                      ),
-                                      const SizedBox(height: 10),
-                                    ],
-                                  ),
+                              ? LoginPanel(
+                                  onTapTitle: (value) {
+                                    setState(() {
+                                      isLogin = value;
+                                    });
+                                  },
                                 )
-                              : SingleChildScrollView(
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        'Đăng ký để sử dụng dịch vụ ',
-                                        style: text(context)
-                                            .titleLarge
-                                            ?.copyWith(
-                                                fontFamily:
-                                                    GoogleFonts.spaceGrotesk()
-                                                        .fontFamily,
-                                                fontWeight: FontWeight.bold),
-                                      ),
-                                      const SizedBox(
-                                        height: 40,
-                                      ),
-                                      InputField(
-                                          controller: _controllerUsername,
-                                          inputType: TextInputType.emailAddress,
-                                          labelText: 'Email',
-                                          prefixIcon: const Icon(Icons.email),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return "Vui lòng điền vào địa chỉ email";
-                                            }
-                                            if (!RegExp(
-                                                    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-                                                .hasMatch(value)) {
-                                              return "Địa chỉ email không hợp lệ";
-                                            }
-                                            return null;
-                                          }),
-                                      const SizedBox(height: 20),
-                                      InputField(
-                                          controller: _controllerUsername,
-                                          inputType: TextInputType.text,
-                                          labelText: 'Họ và tên',
-                                          prefixIcon: const Icon(Icons.email),
-                                          validator: (value) {
-                                            if (value!.isEmpty) {
-                                              return "Vui lòng điền vào địa chỉ email";
-                                            }
-                                            if (!RegExp(
-                                                    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$")
-                                                .hasMatch(value)) {
-                                              return "Địa chỉ email không hợp lệ";
-                                            }
-                                            return null;
-                                          }),
-                                      const SizedBox(height: 20),
-                                      InputField(
-                                        controller: _controllerPassword,
-                                        inputType: TextInputType.text,
-                                        prefixIcon: const Icon(Icons.lock),
-                                        labelText: 'Nhập mật khẩu',
-                                        maxLines: 1,
-                                        isPassword: true,
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Vui lòng điền vào mật khẩu";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      InputField(
-                                        controller: _controllerPassword,
-                                        inputType: TextInputType.text,
-                                        prefixIcon: const Icon(Icons.lock),
-                                        labelText: 'Nhập lại mật khẩu',
-                                        maxLines: 1,
-                                        isPassword: true,
-                                        validator: (value) {
-                                          if (value!.isEmpty) {
-                                            return "Vui lòng điền vào mật khẩu";
-                                          }
-                                          return null;
-                                        },
-                                      ),
-                                      const SizedBox(
-                                        height: 20,
-                                      ),
-                                      MyButton(
-                                        onTap: () {
-                                          // Get.to(
-                                          //     () => const AdminPanelScreen());
-                                        },
-                                        backgroundColor: colorScheme(context)
-                                            .onSurfaceVariant,
-                                        height: 54,
-                                        text: Text(
-                                          'Đăng ký',
-                                          style: text(context)
-                                              .titleSmall
-                                              ?.copyWith(
-                                                  fontWeight: FontWeight.bold),
-                                        ),
-                                      ),
-                                      Container(
-                                        width: double.infinity,
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 10),
-                                        child: InkWell(
-                                          onTap: () {
-                                            setState(() {
-                                              isLogin = !isLogin;
-                                            });
-                                          },
-                                          child: Text(
-                                            'Đăng nhập ngay',
-                                            textAlign: TextAlign.right,
-                                            style: text(context)
-                                                .titleSmall
-                                                ?.copyWith(
-                                                    color: colorScheme(context)
-                                                        .tertiary),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                              : RegisterPanel(
+                                  onTapTitle: (value) {
+                                    setState(() {
+                                      isLogin = value;
+                                    });
+                                  },
                                 ),
                         ),
                       ),
