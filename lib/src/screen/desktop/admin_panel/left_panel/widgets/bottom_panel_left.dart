@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
-import 'package:managerfoodandcoffee/src/controller_getx/google_signin_controller.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
 
 import 'package:managerfoodandcoffee/src/shared_preferences/shared_preference.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -21,7 +21,7 @@ Widget bottomPanelLeft(BuildContext context) {
           type: MaterialType.transparency,
           child: ListTile(
             hoverColor: colorScheme(context).primary.withOpacity(0.4),
-            onTap: () => Get.put(GoogleSignInController()).logoutGoogle(),
+            onTap: () => Get.put(AuthController()).logout(),
             titleAlignment: ListTileTitleAlignment.center,
             contentPadding: const EdgeInsets.symmetric(vertical: 6),
             leading: Container(

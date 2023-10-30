@@ -26,65 +26,72 @@ class _FirstWidgetState extends State<FirstWidget> {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            CircleAvatar(
-              radius: 16,
-              backgroundColor: color.surfaceVariant,
-              child: IconButton(
-                onPressed: () => Get.dialog(const CreateTable()),
-                icon: Icon(
-                  Icons.add,
-                  size: 16,
-                  color: color.primary,
+            Row(
+              children: [],
+            ),
+            Row(
+              children: [
+                CircleAvatar(
+                  radius: 16,
+                  backgroundColor: color.surfaceVariant,
+                  child: IconButton(
+                    onPressed: () => Get.dialog(const CreateTable()),
+                    icon: Icon(
+                      Icons.add,
+                      size: 16,
+                      color: color.primary,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30),
-              child: StreamBuilder(
-                stream: FirestoreHelper.readtinhtrangtt(),
-                builder: (context, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  if (snapshot.hasError) {
-                    return SingleChildScrollView(
-                      child: Text("Lỗi: ${snapshot.error.toString()}"),
-                    );
-                  }
-                  if (snapshot.hasData) {
-                    final tinhtrangtt = snapshot.data;
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 30),
+                  child: StreamBuilder(
+                    stream: FirestoreHelper.readtinhtrangtt(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (snapshot.hasError) {
+                        return SingleChildScrollView(
+                          child: Text("Lỗi: ${snapshot.error.toString()}"),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        final tinhtrangtt = snapshot.data;
 
-                    return Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: badges.Badge(
-                        position: badges.BadgePosition.topStart(),
-                        badgeAnimation: const badges.BadgeAnimation.fade(),
-                        //lấy dự liệu order
-                        badgeContent: Padding(
-                          padding: const EdgeInsets.all(4.0),
-                          child: Text(
-                            "${tinhtrangtt!.length}",
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: badges.Badge(
+                            position: badges.BadgePosition.topStart(),
+                            badgeAnimation: const badges.BadgeAnimation.fade(),
+                            //lấy dự liệu order
+                            badgeContent: Padding(
+                              padding: const EdgeInsets.all(4.0),
+                              child: Text(
+                                "${tinhtrangtt!.length}",
+                              ),
+                            ),
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.notifications,
+                                size: 32,
+                                color: color.surfaceVariant,
+                              ),
+                            ),
                           ),
-                        ),
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.notifications,
-                            size: 32,
-                            color: color.surfaceVariant,
-                          ),
-                        ),
-                      ),
-                    );
-                  }
-                  return const Icon(Icons.notifications);
-                },
-              ),
-            ),
+                        );
+                      }
+                      return const Icon(Icons.notifications);
+                    },
+                  ),
+                ),
+              ],
+            )
           ],
         ),
         Expanded(
