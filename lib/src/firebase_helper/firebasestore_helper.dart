@@ -357,6 +357,14 @@ class FirestoreHelper {
     }
   }
 
+  //delete tinhtrang
+  //delete
+  static Future deletetinhtrang(String table) async {
+    final tinhtrangban = FirebaseFirestore.instance.collection("tinhtrang");
+
+    final docRef = tinhtrangban.doc(table).delete();
+  }
+
   ////////////////////////////COUPONS ///////////////////////////
   static Future<void> createMagiamGia({
     required String beginDay,
@@ -416,15 +424,19 @@ class FirestoreHelper {
   }
 
   //hoá đơn
-  //creat invoice
-  static Future<void> createhoadon(Invoice hoadon) async {
+  static Future<void> createhoadon1(List<GioHang> giohang, String date,
+      String nhanvien, double tongtien) async {
     final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
     final uid = hoadonCl.doc().id;
     final docRef = hoadonCl.doc(uid);
-    // final newtinhtrang =
-    //     tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table.tenban)
-    //         .toJson();
-    final newhoadon = hoadon.toJson();
+
+    final newhoadon = Invoice(
+            id: uid,
+            products: giohang,
+            date: date,
+            nhanvien: nhanvien,
+            totalAmount: tongtien)
+        .toJson();
     try {
       await docRef.set(newhoadon);
     } catch (e) {

@@ -375,7 +375,7 @@ class _CartProductState extends State<CartProduct> {
 
   void createPaymentStatus() async {
     await FirestoreHelper.createtinhtrang(
-        tinhtrangTT(trangthai: "success"), widget.table);
+        tinhtrangTT(trangthai: "ordered"), widget.table);
     Get.defaultDialog(
       title: "Thanh toán",
       content: Column(
@@ -400,7 +400,7 @@ class _CartProductState extends State<CartProduct> {
               if (snapshot.hasData) {
                 final tinhtrang = snapshot.data;
                 for (var i = 0; i < tinhtrang!.length; i++) {
-                  if (tinhtrang[i].trangthai == "xacnhan" &&
+                  if (tinhtrang[i].trangthai == "ordered" &&
                       tinhtrang[i].idtinhtrang == widget.table.tenban) {
                     showSnackbar(tongtienthanhtoan);
                     return Text(

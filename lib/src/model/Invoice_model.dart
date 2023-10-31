@@ -6,11 +6,13 @@ class Invoice {
   List<GioHang> products; // Danh sách các sản phẩm trong hoá đơn
   // Email khách hàng
   String date; // Ngày tạo hoá đơn
-  int totalAmount; // Tổng tiền hoá đơn
+  String nhanvien;
+  double totalAmount; // Tổng tiền hoá đơn
   Invoice({
     this.id,
     required this.products,
     required this.date,
+    required this.nhanvien,
     required this.totalAmount,
   });
   factory Invoice.fromSnapshot(DocumentSnapshot snapshot) {
@@ -21,6 +23,7 @@ class Invoice {
           .map((product) => GioHang.fromSnapshot(product))
           .toList(),
       date: data['date'],
+      nhanvien: data['nhanvien'],
       totalAmount: data['totalAmount'].toDouble(),
     );
   }
@@ -28,6 +31,7 @@ class Invoice {
         'id': id,
         'products': products.map((product) => product.toJson()).toList(),
         'date': date,
+        'nhanvien': nhanvien,
         'totalAmount': totalAmount,
       };
 }

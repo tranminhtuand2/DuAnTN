@@ -81,6 +81,11 @@ class _FirstWidgetState extends State<FirstWidget> {
                       }
                       if (snapshot.hasData) {
                         final tinhtrangtt = snapshot.data;
+                        for (var i = 0; i < tinhtrangtt!.length; i++) {
+                          if (tinhtrangtt[i].trangthai == "ordered") {
+                            showSnackbar(tinhtrangtt[i].idtinhtrang.toString());
+                          }
+                        }
 
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -91,11 +96,71 @@ class _FirstWidgetState extends State<FirstWidget> {
                             badgeContent: Padding(
                               padding: const EdgeInsets.all(4.0),
                               child: Text(
-                                "${tinhtrangtt!.length}",
+                                "${tinhtrangtt.length}",
                               ),
                             ),
                             child: IconButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: Text('Danh sách trạng thái'),
+                                      content: SizedBox(
+                                        height: 300,
+                                        width:
+                                            300, // Điều chỉnh kích thước tùy theo nhu cầu của bạn
+                                        child: ListView.builder(
+                                          itemCount: tinhtrangtt.length,
+                                          itemBuilder: (context, index) {
+                                            final tinhtranttindex =
+                                                tinhtrangtt[index];
+                                            return Padding(
+                                              padding: const EdgeInsets.all(20),
+                                              child: Container(
+                                                height: 50,
+                                                decoration: BoxDecoration(
+                                                  color: tinhtranttindex
+                                                              .trangthai ==
+                                                          "ordered"
+                                                      ? Colors.green
+                                                      : Colors.grey,
+                                                  borderRadius:
+                                                      BorderRadius.circular(22),
+                                                ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 10),
+                                                      child: Text(
+                                                          "Bàn ${tinhtranttindex.idtinhtrang.toString()}:"),
+                                                    ),
+                                                    Text(
+                                                        "Đã xác nhận đơn hàng"),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                      actions: <Widget>[
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context)
+                                                .pop(); // Đóng hộp thoại.
+                                          },
+                                          child: Text('Đóng'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
                               icon: Icon(
                                 Icons.notifications,
                                 size: 32,
@@ -296,5 +361,12 @@ class _FirstWidgetState extends State<FirstWidget> {
         ),
       ],
     );
+  }
+
+  Future<void> showSnackbar(String tenban) async {
+    await Future.delayed(
+        Duration(seconds: 0)); // This ensures the build has completed
+    Get.snackbar("Đã xác nhận ban số $tenban", "Vui lòng chuẩn bị  VNĐ",
+        duration: Duration(seconds: 2));
   }
 }
