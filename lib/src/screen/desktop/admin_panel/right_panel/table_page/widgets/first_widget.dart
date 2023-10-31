@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manage_table/manager_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
@@ -19,6 +20,7 @@ class FirstWidget extends StatefulWidget {
 
 class _FirstWidgetState extends State<FirstWidget> {
   final tableController = Get.put(TableController());
+  final authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     ColorScheme color = colorScheme(context);
@@ -29,7 +31,24 @@ class _FirstWidgetState extends State<FirstWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              children: [],
+              children: [
+                const SizedBox(width: 10),
+                authController.urlAvatar.value != ''
+                    ? CircleAvatar(
+                        radius: 14,
+                        backgroundImage:
+                            NetworkImage(authController.urlAvatar.value),
+                      )
+                    : const CircleAvatar(
+                        radius: 14,
+                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                      ),
+                const SizedBox(width: 8),
+                Text(
+                  authController.userName.value ?? 'Guest',
+                  style: text(context).titleMedium?.copyWith(),
+                )
+              ],
             ),
             Row(
               children: [
