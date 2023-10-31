@@ -1,4 +1,6 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
+// ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
+import 'dart:math';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -6,10 +8,15 @@ import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/show_product.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
+
+import '../../../../../../model/card_model.dart';
+import '../../../../../../model/table_model.dart';
 
 class SecondWidget extends StatefulWidget {
   const SecondWidget({
@@ -25,11 +32,19 @@ class SecondWidget extends StatefulWidget {
 class _SecondWidgetState extends State<SecondWidget> {
   bool thanhtoan = false;
   final tableController = Get.put(TableController());
+  List<GioHang> products = [];
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    products = [];
+  }
 
   @override
   Widget build(BuildContext context) {
-    // ignore: unused_local_variable
     ColorScheme color = colorScheme(context);
+    var now = DateTime.now();
+    String formattedDate = "${now.day}-${now.month}-${now.year}";
     return Obx(
       () => Scaffold(
         backgroundColor: colorScheme(context).onPrimary,
@@ -77,9 +92,17 @@ class _SecondWidgetState extends State<SecondWidget> {
                           final giohang = snapshot.data;
                           //Tính tổng số tiền sử dụng getX
                           int totalPrice = 0;
+                          products = [];
                           for (var giohangindex in giohang!) {
                             totalPrice +=
                                 giohangindex.soluong * giohangindex.giasp;
+                          }
+                          for (var i = 0; i < giohang.length; i++) {
+                            products.add(GioHang(
+                                tensp: giohang[i].tensp,
+                                giasp: giohang[i].giasp,
+                                soluong: giohang[i].soluong,
+                                hinhanh: giohang[i].hinhanh));
                           }
                           WidgetsBinding.instance
                               .addPostFrameCallback((timeStamp) {
@@ -253,7 +276,74 @@ class _SecondWidgetState extends State<SecondWidget> {
                     ),
                     Expanded(
                       child: MyButton(
-                        onTap: () {},
+                        onTap: () {
+                          if (products.isEmpty) {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('thông báo'),
+                                  content: Text('bàn trống '),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        // 2. Đóng hộp thoại khi nút được nhấn.
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          } else {
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertDialog(
+                                  title: Text('thông báo'),
+                                  content:
+                                      Text('thanh toán hoá đơn thành công '),
+                                  actions: <Widget>[
+                                    TextButton(
+                                      onPressed: () {
+                                        // 2. Đóng hộp thoại khi nút được nhấn.
+                                        Navigator.of(context).pop();
+                                      },
+                                      child: Text('OK'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                            print(
+                                formatPrice(tableController.totalPrice.value));
+                            print(formattedDate);
+                            print(tableController.tableName.value);
+                            // xử lý thanh toán hoá đơn
+                            //thêm hoá đơn
+                            FirestoreHelper.createhoadon1(
+                              products,
+                              formattedDate,
+                              "minhtuan",
+                              double.parse(
+                                formatPrice(tableController.totalPrice.value),
+                              ),
+                            );
+                            // xoá giỏ hàng
+                            FirestoreHelper.deleteAllgiohang(
+                                tableController.tableName.value);
+                            //cập nhập lại trạng thái bàn
+                            FirestoreHelper.updatetable(TableModel(
+                                tenban: tableController.tableName.value,
+                                isSelected: false,
+                                maban: tableController.tableName.value));
+                            //xoá tình trạng thanhtoan
+                            FirestoreHelper.deletetinhtrang(
+                                tableController.tableName.value);
+                            //end
+                          }
+                        },
                         backgroundColor: Colors.blue,
                         height: 46,
                         text: Text(

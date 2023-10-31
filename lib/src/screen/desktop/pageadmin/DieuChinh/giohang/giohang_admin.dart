@@ -420,19 +420,20 @@ class _giohang_adminState extends State<giohang_admin> {
                       // ),
                       InkWell(
                         onTap: () {
-                          Invoice newhoadon = Invoice(
-                              products: products,
-                              date: formattedDate,
-                              totalAmount: tongtien);
-                          print(tongtien);
-                          print(formattedDate);
-                          // print(TimeOfDay.fromDateTime(DateTime.now()));
-                          FirestoreHelper.createhoadon(newhoadon);
-                          FirestoreHelper.deleteAllgiohang(widget.tenban);
-                          FirestoreHelper.updatetable(TableModel(
-                              tenban: widget.tenban,
-                              isSelected: false,
-                              maban: widget.tenban));
+                          // Invoice newhoadon = Invoice(
+                          //     products: products,
+                          //     date: formattedDate,
+                          //     nhanvien: "minhtuan",
+                          //     totalAmount: tongtien);
+                          // print(tongtien);
+                          // print(formattedDate);
+                          // // print(TimeOfDay.fromDateTime(DateTime.now()));
+                          // FirestoreHelper.createhoadon(newhoadon);
+                          // FirestoreHelper.deleteAllgiohang(widget.tenban);
+                          // FirestoreHelper.updatetable(TableModel(
+                          //     tenban: widget.tenban,
+                          //     isSelected: false,
+                          //     maban: widget.tenban));
                         },
                         child: SizedBox(
                           height: 50,
