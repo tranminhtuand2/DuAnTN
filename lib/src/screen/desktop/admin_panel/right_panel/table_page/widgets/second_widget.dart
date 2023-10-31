@@ -177,6 +177,11 @@ class _SecondWidgetState extends State<SecondWidget> {
                                         ),
                                       ],
                                     ),
+                                    Text(
+                                      "Ghi chú: ${giohangindex.ghichu}",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    )
                                   ],
                                 ),
                               );
@@ -188,47 +193,6 @@ class _SecondWidgetState extends State<SecondWidget> {
                         );
                       },
                     ),
-                    StreamBuilder(
-                      stream: FirestoreHelper.readtinhtrang(
-                          tableController.tableName.toString()),
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return const Center(
-                            child: CircularProgressIndicator(),
-                          );
-                        }
-                        if (snapshot.hasError) {
-                          return const Center(
-                            child: Text("lỗi"),
-                          );
-                        }
-                        if (snapshot.hasData) {
-                          final tinhtrangthanhtoan = snapshot.data;
-                          for (var i = 0; i < tinhtrangthanhtoan!.length; i++) {
-                            if (tinhtrangthanhtoan[i].idtinhtrang ==
-                                tableController.tableName.toString()) {
-                              thanhtoan = true;
-                              break;
-                            }
-                          }
-                          return Center(
-                            child: thanhtoan == false
-                                ? const Text(
-                                    "vui lòng chờ khách hàng chọn món hoàn tất")
-                                : const Text("xác nhận đợn hàng"),
-                          );
-                        }
-                        return const Center(
-                          child: Row(
-                            children: [
-                              Text("vui long chờ khách hàng order xong  "),
-                              CircularProgressIndicator()
-                            ],
-                          ),
-                        );
-                      },
-                    )
                   ],
                 ),
               ),
