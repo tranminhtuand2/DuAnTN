@@ -99,6 +99,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                                             return Padding(
                                               padding: const EdgeInsets.all(20),
                                               child: Container(
+                                                height: 50,
                                                 decoration: BoxDecoration(
                                                   color: tinhtranttindex
                                                               .trangthai ==
@@ -119,8 +120,8 @@ class _FirstWidgetState extends State<FirstWidget> {
                                                       child: Text(
                                                           "Bàn ${tinhtranttindex.idtinhtrang.toString()}:"),
                                                     ),
-                                                    Text(tinhtranttindex
-                                                        .trangthai),
+                                                    Text(
+                                                        "Đã xác nhận đơn hàng"),
                                                   ],
                                                 ),
                                               ),
