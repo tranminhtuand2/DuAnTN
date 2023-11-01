@@ -432,6 +432,7 @@ class FirestoreHelper {
   }
 
   //hoá đơn
+  //create
   static Future<void> createHoadon(List<GioHang> giohang, String date,
       String nhanvien, double tongtien) async {
     final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
@@ -450,5 +451,12 @@ class FirestoreHelper {
     } catch (e) {
       Get.snackbar("lỗi", e.toString());
     }
+  }
+
+  //read hoa don
+  static Stream<List<Invoice>> readInvoices() {
+    final hoadonCollection = FirebaseFirestore.instance.collection("hoadon");
+    return hoadonCollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((doc) => Invoice.fromSnapshot(doc)).toList());
   }
 }

@@ -300,7 +300,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                     for (var i = 0;
                                         i < tinhtrang!.length;
                                         i++) {
-                                      if (tinhtrang[i].trangthai == "success" &&
+                                      if (tinhtrang[i].trangthai == "ordered" &&
                                           tinhtrang[i].idtinhtrang ==
                                               tableController.tableName
                                                   .toString()) {
@@ -356,11 +356,10 @@ class _SecondWidgetState extends State<SecondWidget> {
                                                     .tableName.value);
                                             //end
                                           },
-                                          backgroundColor:
-                                              Colors.grey.withOpacity(0.3),
+                                          backgroundColor: Colors.blue,
                                           height: 46,
                                           text: Text(
-                                            'Hoàn tất ',
+                                            'Xác nhận đơn hàng',
                                             style: TextStyle(
                                                 color: colorScheme(context)
                                                     .tertiary),
@@ -377,7 +376,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                           return AlertDialog(
                                             title: const Text('Thông báo'),
                                             content: const Text(
-                                                'Thanh toán hoá đơn thành công '),
+                                                'đã thanh toán thành công'),
                                             actions: <Widget>[
                                               TextButton(
                                                 onPressed: () {
@@ -392,7 +391,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                       );
 
                                       // xử lý thanh toán hoá đơn
-                                      //thêm hoá đơn
+                                      // thêm hoá đơn
                                       await FirestoreHelper.createHoadon(
                                           products,
                                           formattedDate,

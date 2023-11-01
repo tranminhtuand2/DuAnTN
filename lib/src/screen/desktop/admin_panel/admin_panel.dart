@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/hoadon/hoadonscreen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manage_table/manager_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/navigate_panel_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/left_panel/left_panel.dart';
@@ -57,7 +58,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     const TablePage(),
     const ManagerProductPage(),
     const ManagerCoupons(),
-    const Center(child: Text('Hóa Đơn')),
+    const hoaDonScreen(),
     const Center(child: Text('Thống kê')),
   ];
 }
