@@ -3,6 +3,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
+import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_screen.dart';
@@ -61,15 +62,15 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
       Get.offAll(() => HomeScreen(tableModel: widget.table));
     } else {
       // Người dùng không ở trong phạm vi 100m, hiển thị thông báo hoặc thực hiện hành động khác.
-      // showCustomSnackBar(
-      //     title: 'Cảnh báo',
-      //     message:
-      //         'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán',
-      //     type: Type.warning);
-      setState(() {
-        titleError =
-            'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán.';
-      });
+      showCustomSnackBar(
+          title: 'Cảnh báo',
+          message:
+              'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán',
+          type: Type.warning);
+      // setState(() {
+      //   titleError =
+      //       'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán.';
+      // });
     }
   }
 
@@ -89,36 +90,35 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
                   style: TextStyle(color: colorScheme(context).tertiary),
                 ))
       ],
-      content: SizedBox(
-        height: MediaQuery.sizeOf(context).height * 0.5,
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              Lottie.asset(
-                "assets/images/location.json",
-                animate: true,
-              ),
-              const Spacer(),
-              titleError.isNotEmpty
-                  ? Text(
-                      titleError,
-                      style: text(context).titleMedium?.copyWith(
-                            color: Colors.red,
-                          ),
-                    )
-                  : Column(
+      content: FittedBox(
+        child: Column(
+          children: [
+            Lottie.asset(
+              "assets/images/location.json",
+              animate: true,
+            ),
+            // const Spacer(),
+            titleError.isNotEmpty
+                ? Text(
+                    titleError,
+                    style: text(context).titleMedium?.copyWith(
+                          color: Colors.red,
+                        ),
+                  )
+                : SingleChildScrollView(
+                    child: Column(
                       children: [
                         Text(
                           "Đang kiểm tra...",
-                          style: text(context).titleMedium,
+                          style: text(context).displayMedium,
                         ),
                         Lottie.asset("assets/images/ani_loading.json",
-                            animate: true, width: 100, height: 100),
+                            animate: true, width: 200, height: 200),
                       ],
                     ),
-              const SizedBox(height: 50),
-            ],
-          ),
+                  ),
+            const SizedBox(height: 50),
+          ],
         ),
       ),
     );

@@ -105,11 +105,11 @@ class _FirstWidgetState extends State<FirstWidget> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text('Danh sách trạng thái'),
+                                      title: const Text('Tình trạng đơn'),
                                       content: SizedBox(
-                                        height: 300,
+                                        // height: 300,
                                         width:
-                                            300, // Điều chỉnh kích thước tùy theo nhu cầu của bạn
+                                            400, // Điều chỉnh kích thước tùy theo nhu cầu của bạn
                                         child: ListView.builder(
                                           itemCount: tinhtrangtt.length,
                                           itemBuilder: (context, index) {
@@ -139,8 +139,11 @@ class _FirstWidgetState extends State<FirstWidget> {
                                                       child: Text(
                                                           "Bàn ${tinhtranttindex.idtinhtrang.toString()}:"),
                                                     ),
-                                                    Text(
-                                                        "Đã xác nhận đơn hàng"),
+                                                    Text(tinhtranttindex
+                                                                .trangthai ==
+                                                            "ordered"
+                                                        ? "Đã xác nhận đơn hàng, hãy chuẩn bị món!"
+                                                        : "Đơn hàng đã được thanh toán, hãy chuẩn bị món!"),
                                                   ],
                                                 ),
                                               ),
@@ -154,7 +157,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                                             Navigator.of(context)
                                                 .pop(); // Đóng hộp thoại.
                                           },
-                                          child: Text('Đóng'),
+                                          child: const Text('Đóng'),
                                         ),
                                       ],
                                     );
@@ -365,8 +368,8 @@ class _FirstWidgetState extends State<FirstWidget> {
 
   Future<void> showSnackbar(String tenban) async {
     await Future.delayed(
-        Duration(seconds: 0)); // This ensures the build has completed
+        const Duration(seconds: 0)); // This ensures the build has completed
     Get.snackbar("Đã xác nhận ban số $tenban", "Vui lòng chuẩn bị  VNĐ",
-        duration: Duration(seconds: 2));
+        duration: const Duration(seconds: 2));
   }
 }

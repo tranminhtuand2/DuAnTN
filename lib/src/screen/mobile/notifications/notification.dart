@@ -37,11 +37,12 @@ class PushNotification {
     // String? payload,
   }) async {
     try {
+      final notificationDetails = await _notificationDetails();
       _notifications.show(
         id,
         title,
         body,
-        _notificationDetails(),
+        notificationDetails,
       );
     } catch (e) {
       print('Error when showing notification: $e');

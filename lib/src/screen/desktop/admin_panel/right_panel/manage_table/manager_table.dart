@@ -173,7 +173,14 @@ class _CreateTableState extends State<CreateTable> {
                                           Navigator.of(context).pop();
                                         },
                                         title: 'Xóa?',
-                                        content: 'Bạn chắc chắn muốn xóa?',
+                                        content: Text(
+                                          'Bạn chắc chắn muốn xóa?',
+                                          style: text(context)
+                                              .titleMedium
+                                              ?.copyWith(
+                                                  color: colorScheme(context)
+                                                      .tertiary),
+                                        ),
                                       ),
                                     );
                                   },
