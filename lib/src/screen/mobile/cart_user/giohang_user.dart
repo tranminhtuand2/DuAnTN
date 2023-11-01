@@ -8,10 +8,12 @@ import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
+import 'package:managerfoodandcoffee/src/common_widget/my_dialog.dart';
+import 'package:managerfoodandcoffee/src/utils/enum_status_payment.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
-import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
+import 'package:managerfoodandcoffee/src/model/payment_status_model.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/show_discount.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/cart_user/widgets/show_payment.dart';
@@ -191,18 +193,35 @@ class _CartProductState extends State<CartProduct> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 20, left: 20, right: 20),
-            child: MyButton(
-              onTap: () {
-                bottomSheetPayment(context);
+            child: StreamBuilder(
+              stream: FirestoreHelper.readgiohang(widget.table.tenban),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                if (snapshot.hasData) {
+                  if (snapshot.data!.isNotEmpty) {
+                    return MyButton(
+                      onTap: () {
+                        bottomSheetPayment(context);
+                      },
+                      backgroundColor: colorScheme(context).onSurfaceVariant,
+                      height: 60,
+                      text: Text(
+                        'Thanh toán',
+                        style: text(context)
+                            .titleMedium
+                            ?.copyWith(color: colorScheme(context).tertiary),
+                      ),
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                }
+                return const SizedBox();
               },
-              backgroundColor: colorScheme(context).primary,
-              height: 60,
-              text: Text(
-                'Thanh toán',
-                style: text(context)
-                    .titleMedium
-                    ?.copyWith(color: colorScheme(context).tertiary),
-              ),
             ),
           )
         ],
@@ -251,7 +270,7 @@ class _CartProductState extends State<CartProduct> {
                           switch (isSelectedPayment) {
                             case 0:
                               log('Cash');
-                              createPaymentStatus();
+                              createPaymentStatus(PaymentStatus.ordered);
                               break;
                             case 1:
                               log('MoMo');
@@ -330,12 +349,12 @@ class _CartProductState extends State<CartProduct> {
       // _setState();
     });
     log('THANH TOÁN THÀNH CÔNG');
-    await PushNotification.showNotification(
+    PushNotification.showNotification(
         id: 1,
         title: 'Thanh toán ${formatPrice(tongtienthanhtoan)} thành công',
         body: 'Vui lòng chờ đồ uống trong vài phút <3');
     //gọi hàm xác nhận thanh toán lên firebase
-    createPaymentStatus();
+    createPaymentStatus(PaymentStatus.success);
   }
 
   void _handlePaymentError(PaymentResponse response) async {
@@ -344,7 +363,7 @@ class _CartProductState extends State<CartProduct> {
       // _setState();
     });
     log('THANH TOÁN THẤT BẠI');
-    await PushNotification.showNotification(
+    PushNotification.showNotification(
         id: int.parse(widget.table.tenban),
         title: 'Thanh toán lỗi',
         body: 'Có lỗi trong quá trình thanh toán rồi :(');
@@ -373,70 +392,48 @@ class _CartProductState extends State<CartProduct> {
     }
   }
 
-  void createPaymentStatus() async {
-    await FirestoreHelper.createtinhtrang(
-        tinhtrangTT(trangthai: "ordered"), widget.table);
-    Get.defaultDialog(
-      title: "Thanh toán",
-      content: Column(
-        children: [
-          const Text(
-            "Xác nhận đơn hàng thành công \n vui lòng chờ nhân viên xác nhận",
-            textAlign: TextAlign.center,
-          ),
-          StreamBuilder(
-            stream: FirestoreHelper.readtinhtrang(widget.table.tenban),
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-              if (snapshot.hasError) {
-                return const Center(
-                  child: Text("lỗi"),
-                );
-              }
-              if (snapshot.hasData) {
-                final tinhtrang = snapshot.data;
-                for (var i = 0; i < tinhtrang!.length; i++) {
-                  if (tinhtrang[i].trangthai == "ordered" &&
-                      tinhtrang[i].idtinhtrang == widget.table.tenban) {
-                    showSnackbar(tongtienthanhtoan);
-                    return Text(
-                      "Đã xác nhận \n vui lòng chuẩn bị $tongtienthanhtoan vnđ",
-                      textAlign: TextAlign.center,
-                    );
-                  } else {
-                    Container(
-                      margin: const EdgeInsets.symmetric(vertical: 10),
-                      child: const Text("Vui lòng chờ"),
-                    );
-                  }
+  void createPaymentStatus(PaymentStatus status) async {
+    await FirestoreHelper.createtinhtrang(status, widget.table);
+    // xoá giỏ hàng
+    // await FirestoreHelper.deleteAllgiohang(widget.table.tenban);
+
+    Get.dialog(MyDialog(
+        hasTrailling: false,
+        title: 'Thanh Toán',
+        labelLeadingButton: 'Đóng',
+        content: StreamBuilder(
+          stream: FirestoreHelper.readtinhtrang(widget.table.tenban),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+
+            if (snapshot.hasData) {
+              final tinhtrang = snapshot.data;
+              for (var i = 0; i < tinhtrang!.length; i++) {
+                if (tinhtrang[i].trangthai == "ordered" &&
+                    tinhtrang[i].idtinhtrang == widget.table.tenban) {
+                  return Text(
+                    "Đã xác nhận thanh toán bằng tiền mặt. \nVui lòng chuẩn bị ${formatPrice(tongtienthanhtoan)} VNĐ",
+                    textAlign: TextAlign.center,
+                  );
+                } else if (tinhtrang[i].trangthai == "success" &&
+                    tinhtrang[i].idtinhtrang == widget.table.tenban) {
+                  return Text(
+                    "Thanh toán ${formatPrice(tongtienthanhtoan)} VNĐ thành công",
+                    textAlign: TextAlign.center,
+                  );
                 }
               }
-              return const CircularProgressIndicator();
-            },
-          ),
-        ],
-      ),
-      actions: [
-        MyButton(
-            onTap: () {
-              //quay lai trang san phẩm
-              Get.offAll(
-                () => HomePage(table: widget.table),
-              );
-            },
-            backgroundColor: colorScheme(context).primary,
-            height: 60,
-            text: Text(
-              'Thoát',
-              style: text(context)
-                  .titleMedium
-                  ?.copyWith(color: colorScheme(context).tertiary),
-            ))
-      ],
-    );
+            }
+            return const SizedBox();
+          },
+        ),
+        onTapLeading: () {
+          Get.offAll(() => HomePage(table: widget.table));
+        },
+        onTapTrailling: () {}));
   }
 }

@@ -1,6 +1,7 @@
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manage_table/manager_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
@@ -19,6 +20,7 @@ class FirstWidget extends StatefulWidget {
 
 class _FirstWidgetState extends State<FirstWidget> {
   final tableController = Get.put(TableController());
+  final authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     ColorScheme color = colorScheme(context);
@@ -29,7 +31,24 @@ class _FirstWidgetState extends State<FirstWidget> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
-              children: [],
+              children: [
+                const SizedBox(width: 10),
+                authController.urlAvatar.value != ''
+                    ? CircleAvatar(
+                        radius: 14,
+                        backgroundImage:
+                            NetworkImage(authController.urlAvatar.value),
+                      )
+                    : const CircleAvatar(
+                        radius: 14,
+                        backgroundImage: AssetImage('assets/images/avatar.png'),
+                      ),
+                const SizedBox(width: 8),
+                Text(
+                  authController.userName.value ?? 'Guest',
+                  style: text(context).titleMedium?.copyWith(),
+                )
+              ],
             ),
             Row(
               children: [
@@ -86,11 +105,11 @@ class _FirstWidgetState extends State<FirstWidget> {
                                   context: context,
                                   builder: (context) {
                                     return AlertDialog(
-                                      title: Text('Danh sách trạng thái'),
+                                      title: const Text('Tình trạng đơn'),
                                       content: SizedBox(
-                                        height: 300,
+                                        // height: 300,
                                         width:
-                                            300, // Điều chỉnh kích thước tùy theo nhu cầu của bạn
+                                            400, // Điều chỉnh kích thước tùy theo nhu cầu của bạn
                                         child: ListView.builder(
                                           itemCount: tinhtrangtt.length,
                                           itemBuilder: (context, index) {
@@ -120,8 +139,11 @@ class _FirstWidgetState extends State<FirstWidget> {
                                                       child: Text(
                                                           "Bàn ${tinhtranttindex.idtinhtrang.toString()}:"),
                                                     ),
-                                                    Text(
-                                                        "Đã xác nhận đơn hàng"),
+                                                    Text(tinhtranttindex
+                                                                .trangthai ==
+                                                            "ordered"
+                                                        ? "Đã xác nhận đơn hàng, hãy chuẩn bị món!"
+                                                        : "Đơn hàng đã được thanh toán, hãy chuẩn bị món!"),
                                                   ],
                                                 ),
                                               ),
@@ -135,7 +157,7 @@ class _FirstWidgetState extends State<FirstWidget> {
                                             Navigator.of(context)
                                                 .pop(); // Đóng hộp thoại.
                                           },
-                                          child: Text('Đóng'),
+                                          child: const Text('Đóng'),
                                         ),
                                       ],
                                     );
@@ -346,8 +368,8 @@ class _FirstWidgetState extends State<FirstWidget> {
 
   Future<void> showSnackbar(String tenban) async {
     await Future.delayed(
-        Duration(seconds: 0)); // This ensures the build has completed
+        const Duration(seconds: 0)); // This ensures the build has completed
     Get.snackbar("Đã xác nhận ban số $tenban", "Vui lòng chuẩn bị  VNĐ",
-        duration: Duration(seconds: 2));
+        duration: const Duration(seconds: 2));
   }
 }

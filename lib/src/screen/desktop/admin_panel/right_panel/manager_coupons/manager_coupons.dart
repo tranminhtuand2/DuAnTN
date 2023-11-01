@@ -11,6 +11,7 @@ import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/notification_page/notification_page.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/format_date.dart';
+import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:ticket_widget/ticket_widget.dart';
 
 class ManagerCoupons extends StatefulWidget {
@@ -278,7 +279,12 @@ class _ManagerCouponsState extends State<ManagerCoupons> {
           Navigator.of(context).pop();
         },
         title: 'Xóa?',
-        content: 'Bạn chắc chắn muốn xóa?',
+        content: Text(
+          'Bạn chắc chắn muốn xóa?',
+          style: text(context)
+              .titleMedium
+              ?.copyWith(color: colorScheme(context).tertiary),
+        ),
       ),
     );
   }

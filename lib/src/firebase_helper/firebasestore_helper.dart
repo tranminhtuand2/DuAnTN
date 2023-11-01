@@ -3,13 +3,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
-import 'package:managerfoodandcoffee/src/model/TTthanhtoan.dart';
+import 'package:managerfoodandcoffee/src/model/payment_status_model.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
 import 'package:managerfoodandcoffee/src/model/danhmuc_model.dart';
 import 'package:managerfoodandcoffee/src/model/diachimap_model.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
+import 'package:managerfoodandcoffee/src/utils/enum_status_payment.dart';
 
 import '../model/header_model.dart';
 
@@ -306,31 +307,37 @@ class FirestoreHelper {
   ///s
   ///tinh trang
   //read
-  static Stream<List<tinhtrangTT>> readtinhtrang(String table) {
+  static Stream<List<TinhTrangThanhToan>> readtinhtrang(String table) {
     final tinhtrangCollection =
         FirebaseFirestore.instance.collection("tinhtrang");
 
-    return tinhtrangCollection.snapshots().map((QuerySnapshot) =>
-        QuerySnapshot.docs.map((e) => tinhtrangTT.fromSnapshot(e)).toList());
+    return tinhtrangCollection.snapshots().map((QuerySnapshot) => QuerySnapshot
+        .docs
+        .map((e) => TinhTrangThanhToan.fromSnapshot(e))
+        .toList());
   }
 
-  static Stream<List<tinhtrangTT>> readtinhtrangtt() {
+  static Stream<List<TinhTrangThanhToan>> readtinhtrangtt() {
     final tinhtrangCollection =
         FirebaseFirestore.instance.collection("tinhtrang");
 
-    return tinhtrangCollection.snapshots().map((QuerySnapshot) =>
-        QuerySnapshot.docs.map((e) => tinhtrangTT.fromSnapshot(e)).toList());
+    return tinhtrangCollection.snapshots().map((QuerySnapshot) => QuerySnapshot
+        .docs
+        .map((e) => TinhTrangThanhToan.fromSnapshot(e))
+        .toList());
   }
   //creater
 
   static Future<void> createtinhtrang(
-      tinhtrangTT tinhtrang, TableModel table) async {
+      PaymentStatus status, TableModel table) async {
     final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
 
     final docRef = tinhtrangCl.doc(table.tenban);
-    final newtinhtrang =
-        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table.tenban)
-            .toJson();
+
+    final newtinhtrang = TinhTrangThanhToan(
+            trangthai: status == PaymentStatus.ordered ? "ordered" : 'success',
+            idtinhtrang: table.tenban)
+        .toJson();
     try {
       await docRef.set(newtinhtrang);
     } catch (e) {
@@ -340,12 +347,13 @@ class FirestoreHelper {
 
   //update
 
-  static Future updatetinhtrang(tinhtrangTT tinhtrang, String table) async {
+  static Future updatetinhtrang(
+      TinhTrangThanhToan tinhtrang, String table) async {
     final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
 
     final docRef = tinhtrangCl.doc(table);
     final newtinhtrang =
-        tinhtrangTT(trangthai: tinhtrang.trangthai, idtinhtrang: table)
+        TinhTrangThanhToan(trangthai: tinhtrang.trangthai, idtinhtrang: table)
             .toJson();
     try {
       await docRef.update(newtinhtrang);
@@ -424,7 +432,7 @@ class FirestoreHelper {
   }
 
   //hoá đơn
-  static Future<void> createhoadon1(List<GioHang> giohang, String date,
+  static Future<void> createHoadon(List<GioHang> giohang, String date,
       String nhanvien, double tongtien) async {
     final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
     final uid = hoadonCl.doc().id;

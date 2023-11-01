@@ -210,7 +210,12 @@ class _CRUDCategoriesTabState extends State<CRUDCategoriesTab> {
           Navigator.of(context).pop();
         },
         title: 'Xóa?',
-        content: 'Bạn chắc chắn muốn xóa?',
+        content: Text(
+          'Bạn chắc chắn muốn xóa?',
+          style: text(context)
+              .titleMedium
+              ?.copyWith(color: colorScheme(context).tertiary),
+        ),
       ),
     );
   }

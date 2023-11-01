@@ -17,7 +17,7 @@ class MyDialog extends StatelessWidget {
       : super(key: key);
 
   final String title;
-  final String content;
+  final Widget content;
   final String labelLeadingButton;
   final String labelTraillingButton;
   final Function() onTapLeading;
@@ -45,12 +45,13 @@ class MyDialog extends StatelessWidget {
                   fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            Text(
-              content,
-              style: text(context)
-                  .titleMedium
-                  ?.copyWith(color: colorScheme(context).tertiary),
-            ),
+            content,
+            // Text(
+            //   content,
+            //   style: text(context)
+            //       .titleMedium
+            //       ?.copyWith(color: colorScheme(context).tertiary),
+            // ),
             const SizedBox(
               height: 24,
             ),

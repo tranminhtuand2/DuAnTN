@@ -7,10 +7,11 @@ class MyButton extends StatelessWidget {
     required this.backgroundColor,
     required this.height,
     required this.text,
+    this.isDisable = false,
   });
 
   final Function onTap;
-
+  final bool? isDisable;
   final Color backgroundColor;
   final double height;
   final Text text;
@@ -22,14 +23,17 @@ class MyButton extends StatelessWidget {
       height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
+          backgroundColor:
+              isDisable! ? Colors.grey.withOpacity(0.3) : backgroundColor,
           shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.all(Radius.circular(8)),
           ),
         ),
-        onPressed: () async {
-          onTap();
-        },
+        onPressed: isDisable!
+            ? null
+            : () {
+                onTap();
+              },
         child: text,
       ),
     );
