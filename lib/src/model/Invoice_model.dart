@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
+import 'package:managerfoodandcoffee/src/model/giohanghd.dart';
 
 class Invoice {
   String? id; // Mã hoá đơn (nếu cần)
-  List<GioHang> products; // Danh sách các sản phẩm trong hoá đơn
+  List<GioHang1> products; // Danh sách các sản phẩm trong hoá đơn
   // Email khách hàng
   String date; // Ngày tạo hoá đơn
   String nhanvien;
@@ -17,13 +18,14 @@ class Invoice {
   });
   factory Invoice.fromSnapshot(DocumentSnapshot snapshot) {
     var data = snapshot.data() as Map<String, dynamic>;
-    // var products = (data['products'] as List<dynamic>) ?? [];
-    // var productList =
-    //     products.map((product) => GioHang.fromSnapshot(product)).toList();
+    var products = List<Map<String, dynamic>>.from(data['products']);
+    var productList = products
+        .map((productData) => GioHang1.fromSnapshot(productData))
+        .toList();
     return Invoice(
       id: data["id"],
-      // products: productList,
-      products: List.from(data['products']),
+      products: productList,
+      // products: List.from(data['products']),
       date: data['date'],
       nhanvien: data['nhanvien'],
       totalAmount: data['totalAmount'].toDouble(),

@@ -12,6 +12,7 @@ import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/utils/enum_status_payment.dart';
 
+import '../model/giohanghd.dart';
 import '../model/header_model.dart';
 
 class FirestoreHelper {
@@ -433,7 +434,7 @@ class FirestoreHelper {
 
   //hoá đơn
   //create
-  static Future<void> createHoadon(List<GioHang> giohang, String date,
+  static Future<void> createHoadon(List<GioHang1> giohang, String date,
       String nhanvien, double tongtien) async {
     final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
     final uid = hoadonCl.doc().id;

@@ -13,6 +13,7 @@ import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 import '../../../../../../model/card_model.dart';
+import '../../../../../../model/giohanghd.dart';
 import '../../../../../../model/table_model.dart';
 
 class SecondWidget extends StatefulWidget {
@@ -30,7 +31,7 @@ class _SecondWidgetState extends State<SecondWidget> {
   bool thanhtoan = false;
   final tableController = Get.put(TableController());
   final authController = Get.put(AuthController());
-  List<GioHang> products = [];
+  List<GioHang1> products = [];
 
   @override
   Widget build(BuildContext context) {
@@ -91,7 +92,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                 giohangindex.soluong * giohangindex.giasp;
 
                             products.add(
-                              GioHang(
+                              GioHang1(
                                   tensp: giohangindex.tensp,
                                   giasp: giohangindex.giasp,
                                   soluong: giohangindex.soluong,

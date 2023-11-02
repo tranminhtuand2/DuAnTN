@@ -85,10 +85,10 @@ class _hoaDonScreenState extends State<hoaDonScreen> {
                               DataCell(
                                 IconButton(
                                   onPressed: () {
-                                    Get.dialog(chitiethoadon(
-                                      hoadon: chitiethdindex,
-                                      id: chitiethdindex.id.toString(),
-                                    ));
+                                    _showChiTietHoaDon(chitiethdindex);
+                                    // Get.dialog(chitiethoadon(
+                                    //   hoadon: chitiethdindex,
+                                    // ));
                                   },
                                   icon: Icon(Icons.receipt_long),
                                 ),
@@ -114,12 +114,16 @@ class _hoaDonScreenState extends State<hoaDonScreen> {
       ),
     );
   }
+
+  void _showChiTietHoaDon(Invoice hoadon) {
+    Get.dialog(chitiethoadon(hoadon: hoadon));
+  }
 }
 
 class chitiethoadon extends StatefulWidget {
   final Invoice hoadon;
-  final String id;
-  chitiethoadon({super.key, required this.hoadon, required this.id});
+
+  chitiethoadon({super.key, required this.hoadon});
 
   @override
   State<chitiethoadon> createState() => _chitiethoadonState();
@@ -166,8 +170,8 @@ class _chitiethoadonState extends State<chitiethoadon> {
             Padding(
               padding: const EdgeInsets.all(15),
               child: Container(
-                height: 300,
-                width: 300,
+                height: SizeConfig.screenHeight,
+                width: SizeConfig.screenWidth,
                 child: ListView(
                   children: [
                     DataTable(
@@ -179,7 +183,7 @@ class _chitiethoadonState extends State<chitiethoadon> {
                       ],
                       rows: widget.hoadon.products.map((chitiethdindex) {
                         return DataRow(cells: [
-                          DataCell(Text(chitiethdindex.tensp)),
+                          DataCell(Text(chitiethdindex.tensp.toString())),
                           DataCell(Text(chitiethdindex.soluong.toString())),
                           DataCell(Text(chitiethdindex.giasp.toString())),
                           DataCell(Text(
