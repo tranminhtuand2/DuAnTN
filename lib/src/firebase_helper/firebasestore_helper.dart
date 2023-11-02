@@ -434,7 +434,7 @@ class FirestoreHelper {
   //hoá đơn
   //create
   static Future<void> createHoadon(List<GioHang> giohang, String date,
-      String nhanvien, double tongtien) async {
+      String nhanvien, double tongtien, String tableName) async {
     final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
     final uid = hoadonCl.doc().id;
     final docRef = hoadonCl.doc(uid);
@@ -444,7 +444,8 @@ class FirestoreHelper {
             products: giohang,
             date: date,
             nhanvien: nhanvien,
-            totalAmount: tongtien)
+            totalAmount: tongtien,
+            tableName: tableName)
         .toJson();
     try {
       await docRef.set(newhoadon);

@@ -8,18 +8,21 @@ class MyButton extends StatelessWidget {
     required this.height,
     required this.text,
     this.isDisable = false,
+    this.width,
   });
 
   final Function onTap;
   final bool? isDisable;
   final Color backgroundColor;
   final double height;
+
+  final double? width;
   final Text text;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: double.infinity,
+      width: width ?? double.infinity,
       height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(

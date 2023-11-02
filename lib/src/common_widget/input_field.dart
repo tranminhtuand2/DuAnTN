@@ -19,6 +19,7 @@ class InputField extends StatefulWidget {
     this.onTap,
     this.maxLines,
     this.backgroundColor,
+    this.contentPadding,
   });
   final TextEditingController controller;
   final String labelText;
@@ -31,6 +32,7 @@ class InputField extends StatefulWidget {
   final List<FilteringTextInputFormatter>? textInputFormatters;
   final Function? onTap;
   final Color? backgroundColor;
+  final EdgeInsetsGeometry? contentPadding;
 
   final String? Function(String?)? validator; // Hàm validator
   @override
@@ -68,6 +70,7 @@ class _InputFieldState extends State<InputField> {
         inputFormatters: widget.textInputFormatters,
         decoration: InputDecoration(
           filled: true,
+          contentPadding: widget.contentPadding,
           fillColor: widget.backgroundColor ?? colorScheme(context).onPrimary,
           prefixIcon: widget.prefixIcon,
           suffixIcon: widget.isPassword
