@@ -1,17 +1,26 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:convert';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/giohanghd.dart';
 
 class Invoice {
   String? id; // Mã hoá đơn (nếu cần)
-  List<GioHang1> products; // Danh sách các sản phẩm trong hoá đơn
+  List<GioHang> products; // Danh sách các sản phẩm trong hoá đơn
   // Email khách hàng
+  String tableName;
+  int? persentCoupons;
   String date; // Ngày tạo hoá đơn
   String nhanvien;
   double totalAmount; // Tổng tiền hoá đơn
   Invoice({
     this.id,
     required this.products,
+    required this.tableName,
+    this.persentCoupons,
     required this.date,
     required this.nhanvien,
     required this.totalAmount,
@@ -24,8 +33,9 @@ class Invoice {
         .toList();
     return Invoice(
       id: data["id"],
-      products: productList,
-      // products: List.from(data['products']),
+      products: List.from(data['products']),
+      persentCoupons: data['persentCoupons'],
+      tableName: data['tableName'],
       date: data['date'],
       nhanvien: data['nhanvien'],
       totalAmount: data['totalAmount'].toDouble(),
@@ -35,6 +45,8 @@ class Invoice {
         'id': id,
         'products': products.map((product) => product.toJson()).toList(),
         'date': date,
+        'persentCoupons': persentCoupons,
+        'tableName': tableName,
         'nhanvien': nhanvien,
         'totalAmount': totalAmount,
       };

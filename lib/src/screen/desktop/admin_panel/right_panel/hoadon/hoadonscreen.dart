@@ -4,7 +4,7 @@ import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.da
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 
-import '../../../../model/Invoice_model.dart';
+import '../../../../../model/Invoice_model.dart';
 
 class hoaDonScreen extends StatefulWidget {
   const hoaDonScreen({super.key});
