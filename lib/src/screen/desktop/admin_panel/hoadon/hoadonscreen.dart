@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
-import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 import '../../../../model/Invoice_model.dart';
 
@@ -38,7 +38,7 @@ class _hoaDonScreenState extends State<hoaDonScreen> {
               );
             }
             if (snapshot.hasData) {
-              final hoadon = snapshot.data;
+              List<Invoice>? hoadon = snapshot.data;
               double tongtien = 0;
               for (var i = 0; i < hoadon!.length; i++) {
                 tongtien += hoadon[i].totalAmount;
@@ -85,8 +85,10 @@ class _hoaDonScreenState extends State<hoaDonScreen> {
                               DataCell(
                                 IconButton(
                                   onPressed: () {
-                                    Get.dialog(
-                                        chitiethoadon(hoadon: chitiethdindex));
+                                    Get.dialog(chitiethoadon(
+                                      hoadon: chitiethdindex,
+                                      id: chitiethdindex.id.toString(),
+                                    ));
                                   },
                                   icon: Icon(Icons.receipt_long),
                                 ),
@@ -116,7 +118,8 @@ class _hoaDonScreenState extends State<hoaDonScreen> {
 
 class chitiethoadon extends StatefulWidget {
   final Invoice hoadon;
-  chitiethoadon({super.key, required this.hoadon});
+  final String id;
+  chitiethoadon({super.key, required this.hoadon, required this.id});
 
   @override
   State<chitiethoadon> createState() => _chitiethoadonState();
@@ -128,9 +131,10 @@ class _chitiethoadonState extends State<chitiethoadon> {
     return AlertDialog(
       title: Text(widget.hoadon.id.toString()),
       content: Container(
+        height: SizeConfig.screenHeight,
+        width: SizeConfig.screenWidth / 2,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          color: Colors.grey,
         ),
         child: Column(
           children: [
@@ -150,7 +154,7 @@ class _chitiethoadonState extends State<chitiethoadon> {
             ),
             Text('Địa chỉ cửa hàng: 54 Thủ Khoa Huân'),
             SizedBox(height: 10),
-            Text(DateTime.now().toString()),
+            Text(widget.hoadon.date),
             SizedBox(height: 20),
             Text(
               'Chi Tiết Hoá Đơn:',
@@ -159,12 +163,11 @@ class _chitiethoadonState extends State<chitiethoadon> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            Expanded(
-                child: Padding(
+            Padding(
               padding: const EdgeInsets.all(15),
               child: Container(
-                height: SizeConfig.screenHeight,
-                width: SizeConfig.screenWidth / 2,
+                height: 300,
+                width: 300,
                 child: ListView(
                   children: [
                     DataTable(
@@ -188,7 +191,7 @@ class _chitiethoadonState extends State<chitiethoadon> {
                   ],
                 ),
               ),
-            ))
+            ),
           ],
         ),
       ),

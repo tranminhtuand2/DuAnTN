@@ -17,8 +17,12 @@ class Invoice {
   });
   factory Invoice.fromSnapshot(DocumentSnapshot snapshot) {
     var data = snapshot.data() as Map<String, dynamic>;
+    // var products = (data['products'] as List<dynamic>) ?? [];
+    // var productList =
+    //     products.map((product) => GioHang.fromSnapshot(product)).toList();
     return Invoice(
       id: data["id"],
+      // products: productList,
       products: List.from(data['products']),
       date: data['date'],
       nhanvien: data['nhanvien'],
