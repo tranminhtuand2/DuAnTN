@@ -459,4 +459,10 @@ class FirestoreHelper {
     return hoadonCollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((doc) => Invoice.fromSnapshot(doc)).toList());
   }
+
+  //delete hoa don
+  static Future deletehoadon(Invoice hoadon) async {
+    final hoadonCollection = FirebaseFirestore.instance.collection("hoadon");
+    final docRef = hoadonCollection.doc(hoadon.id).delete();
+  }
 }
