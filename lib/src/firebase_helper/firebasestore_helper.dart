@@ -12,6 +12,7 @@ import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/utils/enum_status_payment.dart';
 
+import '../model/giohanghd.dart';
 import '../model/header_model.dart';
 
 class FirestoreHelper {
@@ -459,5 +460,19 @@ class FirestoreHelper {
     final hoadonCollection = FirebaseFirestore.instance.collection("hoadon");
     return hoadonCollection.snapshots().map((querySnapshot) =>
         querySnapshot.docs.map((doc) => Invoice.fromSnapshot(doc)).toList());
+  }
+
+  //read product in hoadon
+  // static Stream<List<GioHang>> listproductinvoice(String searchQuery) {
+  //   final sanphamCollection = FirebaseFirestore.instance.collection("hoadon");
+  //   Query query = sanphamCollection.where("id", isEqualTo: searchQuery);
+  //   return query.snapshots().map((QuerySnapshot) =>
+  //       QuerySnapshot.docs.map((e) => GioHang.fromSnapshot(e)).toList());
+  // }
+
+  //delete hoa don
+  static Future deletehoadon(Invoice hoadon) async {
+    final hoadonCollection = FirebaseFirestore.instance.collection("hoadon");
+    final docRef = hoadonCollection.doc(hoadon.id).delete();
   }
 }

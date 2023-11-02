@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
+import 'package:managerfoodandcoffee/src/model/giohanghd.dart';
 
 class Invoice {
   String? id; // Mã hoá đơn (nếu cần)
@@ -26,6 +27,10 @@ class Invoice {
   });
   factory Invoice.fromSnapshot(DocumentSnapshot snapshot) {
     var data = snapshot.data() as Map<String, dynamic>;
+    var products = List<Map<String, dynamic>>.from(data['products']);
+    var productList = products
+        .map((productData) => GioHang1.fromSnapshot(productData))
+        .toList();
     return Invoice(
       id: data["id"],
       products: List.from(data['products']),
