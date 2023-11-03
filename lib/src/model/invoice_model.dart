@@ -5,12 +5,12 @@ import 'package:managerfoodandcoffee/src/model/giohanghd.dart';
 class Invoice {
   String? id; // Mã hoá đơn (nếu cần)
   List<GioHang1> products; // Danh sách các sản phẩm trong hoá đơn
-  // Email khách hàng
   String tableName;
-  int? persentCoupons;
+  int? persentCoupons; // Phần trăm giảm giá khi áp khuyến mãi;
   String date; // Ngày tạo hoá đơn
   String nhanvien;
   double totalAmount; // Tổng tiền hoá đơn
+  double? totalAmountCoupons; // Tổng tiền hoá đơn đã giảm giá
   Invoice({
     this.id,
     required this.products,
@@ -19,6 +19,7 @@ class Invoice {
     required this.date,
     required this.nhanvien,
     required this.totalAmount,
+    this.totalAmountCoupons,
   });
   factory Invoice.fromSnapshot(DocumentSnapshot snapshot) {
     var data = snapshot.data() as Map<String, dynamic>;
@@ -34,6 +35,7 @@ class Invoice {
       date: data['date'],
       nhanvien: data['nhanvien'],
       totalAmount: data['totalAmount'].toDouble(),
+      totalAmountCoupons: data['totalAmountCoupons'].toDouble(),
     );
   }
   Map<String, dynamic> toJson() => {
@@ -44,5 +46,6 @@ class Invoice {
         'tableName': tableName,
         'nhanvien': nhanvien,
         'totalAmount': totalAmount,
+        "totalAmountCoupons": totalAmountCoupons
       };
 }

@@ -425,11 +425,26 @@ class FirestoreHelper {
     }
   }
 
-  static Stream<List<Coupons>> filterCoupons(String data) {
-    final couponsColection = FirebaseFirestore.instance.collection("coupons");
-    Query query = couponsColection.where("data", isEqualTo: data);
-    return query.snapshots().map((querySnapshot) =>
-        querySnapshot.docs.map((e) => Coupons.fromsnapshot(e)).toList());
+  static Stream<Coupons> filterCoupons(String data) {
+    final couponsCollection = FirebaseFirestore.instance.collection("coupons");
+    Query query =
+        couponsCollection.where("data", isEqualTo: data.toUpperCase());
+    return query.snapshots().map((querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        return Coupons.fromsnapshot(querySnapshot.docs[0]);
+      } else {
+        // Trả về một đối tượng Coupons trống nếu không có kết quả
+        return Coupons(
+          id: '',
+          beginDay: '',
+          endDay: '',
+          data: '',
+          persent: 0,
+          isEnable: false,
+          soluotdung: 0,
+        );
+      }
+    });
   }
 
   static Stream<List<Coupons>> getDataCoupons() {
@@ -441,20 +456,21 @@ class FirestoreHelper {
 
   //hoá đơn
   //create
-  static Future<void> createHoadon(List<GioHang1> giohang, String date,
-      String nhanvien, double tongtien, String tableName) async {
+  static Future<void> createHoadon(Invoice invoice) async {
     final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
     final uid = hoadonCl.doc().id;
     final docRef = hoadonCl.doc(uid);
 
     final newhoadon = Invoice(
-            id: uid,
-            products: giohang,
-            date: date,
-            nhanvien: nhanvien,
-            totalAmount: tongtien,
-            tableName: tableName)
-        .toJson();
+      id: uid,
+      products: invoice.products,
+      date: invoice.date,
+      nhanvien: invoice.nhanvien,
+      totalAmount: invoice.totalAmount,
+      tableName: invoice.tableName,
+      totalAmountCoupons: invoice.totalAmountCoupons,
+      persentCoupons: invoice.persentCoupons,
+    ).toJson();
     try {
       await docRef.set(newhoadon);
     } catch (e) {

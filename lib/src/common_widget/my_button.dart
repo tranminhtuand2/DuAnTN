@@ -17,7 +17,7 @@ class MyButton extends StatelessWidget {
   final double height;
 
   final double? width;
-  final Text text;
+  final Widget text;
 
   @override
   Widget build(BuildContext context) {

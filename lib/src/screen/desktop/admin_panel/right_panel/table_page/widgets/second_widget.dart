@@ -1,6 +1,4 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,27 +15,19 @@ import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
 import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/PDF/pdf_view.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/PDF/print_pdf.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/show_product.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
-import 'package:managerfoodandcoffee/src/utils/format_date.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import '../../../../../../model/card_model.dart';
 import '../../../../../../model/giohanghd.dart';
 import '../../../../../../model/table_model.dart';
 
 class SecondWidget extends StatefulWidget {
-  const SecondWidget({
-    Key? key,
-  }) : super(key: key);
+  const SecondWidget({Key? key}) : super(key: key);
 
-  // final Function(bool) isExpanded;
-  // bool isExpandedValue;
   @override
   State<SecondWidget> createState() => _SecondWidgetState();
 }
@@ -49,7 +39,6 @@ class _SecondWidgetState extends State<SecondWidget> {
   final couponsController = Get.put(CouponsController());
   final controllerData = TextEditingController();
   List<GioHang1> products = [];
-  late final Uint8List filePDF;
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +93,8 @@ class _SecondWidgetState extends State<SecondWidget> {
                         if (snapshot.hasData) {
                           final giohang = snapshot.data;
                           //Tính tổng số tiền sử dụng getX
-                          int totalPrice = 0;
+                          double totalPrice = 0;
+
                           products = [];
                           for (var giohangindex in giohang!) {
                             totalPrice +=
@@ -112,8 +102,10 @@ class _SecondWidgetState extends State<SecondWidget> {
 
                             products.add(
                               GioHang1(
+                                  idsp: giohangindex.idsp,
                                   tensp: giohangindex.tensp,
                                   giasp: giohangindex.giasp,
+                                  ghichu: giohangindex.ghichu,
                                   soluong: giohangindex.soluong,
                                   hinhanh: giohangindex.hinhanh),
                             );
@@ -277,7 +269,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                       Expanded(
                         flex: 3,
                         child: Text(
-                          'TỔNG: ${formatPrice(tableController.totalPrice.value)} VNĐ',
+                          'TỔNG: ${formatPrice(int.parse(tableController.totalPrice.value.toString()))} VNĐ',
                           overflow: TextOverflow.ellipsis,
                           textAlign: TextAlign.end,
                           style: text(context).titleMedium,
@@ -289,32 +281,20 @@ class _SecondWidgetState extends State<SecondWidget> {
                 Row(
                   children: [
                     Expanded(
-                      child: MyButton(
-                        onTap: () {
-                          Get.dialog(
-                            ShowProduct(
-                              tableName: tableController.tableName.value,
-                            ),
-                          );
-                        },
-                        backgroundColor: Colors.green,
-                        height: 46,
-                        text: Text(
-                          'Thêm món',
-                          style:
-                              TextStyle(color: colorScheme(context).tertiary),
-                        ),
-                      ),
-                    ),
-                    Expanded(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 3),
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
                         child: MyButton(
-                          onTap: () {},
-                          backgroundColor: colorScheme(context).inversePrimary,
+                          onTap: () {
+                            Get.dialog(
+                              ShowProduct(
+                                tableName: tableController.tableName.value,
+                              ),
+                            );
+                          },
+                          backgroundColor: Colors.green,
                           height: 46,
                           text: Text(
-                            'In hóa đơn',
+                            'Thêm món',
                             style:
                                 TextStyle(color: colorScheme(context).tertiary),
                           ),
@@ -322,79 +302,107 @@ class _SecondWidgetState extends State<SecondWidget> {
                       ),
                     ),
                     Expanded(
-                      child: StreamBuilder(
-                        stream: FirestoreHelper.readgiohang(
-                            tableController.tableName.toString()),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          if (snapshot.hasData) {
-                            if (snapshot.data.length > 0) {
-                              return StreamBuilder(
-                                stream: FirestoreHelper.readtinhtrang(
-                                    tableController.tableName.toString()),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return const Center(
-                                      child: CircularProgressIndicator(),
-                                    );
-                                  }
-                                  if (snapshot.hasData) {
-                                    final tinhtrang = snapshot.data;
-                                    for (var i = 0;
-                                        i < tinhtrang!.length;
-                                        i++) {
-                                      if (tinhtrang[i].trangthai == "ordered" &&
-                                          tinhtrang[i].idtinhtrang ==
-                                              tableController.tableName
-                                                  .toString()) {
-                                        return MyButton(
-                                          onTap: () async {
-                                            submitPayment(context);
-                                          },
-                                          backgroundColor: Colors.blue,
-                                          height: 46,
-                                          text: Text(
-                                            'Xác nhận đơn hàng',
-                                            style: TextStyle(
-                                                color: colorScheme(context)
-                                                    .tertiary),
-                                          ),
-                                        );
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8),
+                        child: StreamBuilder(
+                          stream: FirestoreHelper.readgiohang(
+                              tableController.tableName.toString()),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<dynamic> snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              if (snapshot.data.length > 0) {
+                                return StreamBuilder(
+                                  stream: FirestoreHelper.readtinhtrang(
+                                      tableController.tableName.toString()),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return const Center(
+                                        child: CircularProgressIndicator(),
+                                      );
+                                    }
+                                    if (snapshot.hasData) {
+                                      final tinhtrang = snapshot.data;
+                                      for (var i = 0;
+                                          i < tinhtrang!.length;
+                                          i++) {
+                                        if (tinhtrang[i].trangthai ==
+                                                "ordered" &&
+                                            tinhtrang[i].idtinhtrang ==
+                                                tableController.tableName
+                                                    .toString()) {
+                                          return MyButton(
+                                            onTap: () async {
+                                              submitPayment(context);
+                                            },
+                                            backgroundColor: Colors.blue,
+                                            height: 46,
+                                            text: Text(
+                                              'Xác nhận đơn hàng',
+                                              style: TextStyle(
+                                                  color: colorScheme(context)
+                                                      .tertiary),
+                                            ),
+                                          );
+                                        }
                                       }
                                     }
-                                  }
-                                  return MyButton(
-                                    onTap: () async {
-                                      final persent =
-                                          await applyCouponAndGetPercent();
-                                      filePDF = await generateInvoicePDF(
-                                          persent, formattedDate);
-                                      showPaymentDialog(context);
-                                    },
-                                    backgroundColor: Colors.blue,
-                                    height: 46,
-                                    text: Text(
-                                      'Thanh toán',
-                                      style: TextStyle(
-                                        color: colorScheme(context).tertiary,
+                                    return MyButton(
+                                      onTap: () async {
+                                        final persent =
+                                            await applyCouponAndGetPercent(
+                                                controllerData.text);
+                                        final Uint8List filePDF =
+                                            await generateInvoicePDF(
+                                                persent, formattedDate);
+                                        // ignore: use_build_context_synchronously
+                                        showPaymentDialog(
+                                            context,
+                                            filePDF,
+                                            persent > 0
+                                                ? tableController
+                                                        .totalPrice.value -
+                                                    (tableController
+                                                            .totalPrice.value *
+                                                        (persent) /
+                                                        100)
+                                                : tableController
+                                                    .totalPrice.value,
+                                            formattedDate);
+                                      },
+                                      backgroundColor: Colors.blue,
+                                      height: 46,
+                                      text: Obx(
+                                        () => couponsController.isLoading.value
+                                            ? const SizedBox(
+                                                width: 20,
+                                                height: 20,
+                                                child:
+                                                    CircularProgressIndicator())
+                                            : Text(
+                                                'Thanh toán',
+                                                style: TextStyle(
+                                                  color: colorScheme(context)
+                                                      .tertiary,
+                                                ),
+                                              ),
                                       ),
-                                    ),
-                                  );
-                                },
-                              );
-                            } else {
-                              return const SizedBox();
+                                    );
+                                  },
+                                );
+                              } else {
+                                return const SizedBox();
+                              }
                             }
-                          }
-                          return const SizedBox();
-                        },
+                            return const SizedBox();
+                          },
+                        ),
                       ),
                     ),
                   ],
@@ -407,29 +415,37 @@ class _SecondWidgetState extends State<SecondWidget> {
     );
   }
 
-  Future<int> applyCouponAndGetPercent() async {
+  Future<int> applyCouponAndGetPercent(String data) async {
     int percent = 0;
     if (controllerData.text.isNotEmpty) {
-      await couponsController.filterCoupons(controllerData.text.toUpperCase());
-      List<Coupons> list = couponsController.listCoupons;
-      if (list.isNotEmpty) {
-        if (!FormatDate().compareDate(list[0].endDay) &&
-            list[0].soluotdung > 0) {
-          percent = list[0].persent;
-          showCustomSnackBar(
-            title: "OK",
-            message: 'Áp dụng mã giảm giá thành công',
-            type: Type.success,
-          );
-        } else {
-          percent = 0;
-          showCustomSnackBar(
-            title: "Thất bại",
-            message: 'Mã đã hết hiệu lực hoặc số lượt sử dụng',
-            type: Type.error,
-          );
-        }
+      await couponsController.filterCoupons(controllerData.text);
+      final Coupons coupons = couponsController.coupons.value;
+      if (coupons.data == data.toUpperCase() && coupons.isEnable) {
+        percent = coupons.persent;
+        showCustomSnackBar(
+          title: "OK",
+          message: 'Áp dụng mã giảm giá thành công',
+          type: Type.success,
+        );
+        return percent;
+      } else {
+        percent = 0;
+        showCustomSnackBar(
+          title: "Thất bại",
+          message: 'Mã đã hết hiệu lực hoặc số lượt sử dụng',
+          type: Type.error,
+        );
+        return percent;
       }
+    } else {
+      couponsController.coupons.value = Coupons(
+          id: '',
+          beginDay: '',
+          endDay: '',
+          data: '',
+          persent: 0,
+          isEnable: false,
+          soluotdung: 0);
     }
     return percent;
   }
@@ -446,7 +462,8 @@ class _SecondWidgetState extends State<SecondWidget> {
     ));
   }
 
-  void showPaymentDialog(BuildContext context) {
+  void showPaymentDialog(BuildContext context, Uint8List filePDF,
+      double totalPrice, String formattedDate) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -455,7 +472,25 @@ class _SecondWidgetState extends State<SecondWidget> {
           content: SizedBox(
             width: MediaQuery.sizeOf(context).width * 0.3,
             height: MediaQuery.sizeOf(context).height * 0.7,
-            child: SfPdfViewer.memory(filePDF),
+            child: Stack(
+              children: [
+                SfPdfViewer.memory(filePDF),
+                Positioned(
+                    top: 6,
+                    right: 6,
+                    child: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(Icons.print, size: 30))),
+                Positioned(
+                    top: 6,
+                    right: 40,
+                    child: IconButton(
+                        onPressed: () {
+                          downloadPDF(filePDF, formattedDate);
+                        },
+                        icon: const Icon(Icons.download, size: 30))),
+              ],
+            ),
           ),
           labelLeadingButton: 'Tiền mặt',
           labelTraillingButton: 'Mã QR',
@@ -466,7 +501,7 @@ class _SecondWidgetState extends State<SecondWidget> {
             showDialogQRcode(
               context: context,
               tableName: tableController.tableName.value,
-              totalPrice: tableController.totalPrice.value,
+              totalPrice: totalPrice,
             );
           },
         );
@@ -477,7 +512,7 @@ class _SecondWidgetState extends State<SecondWidget> {
   void showDialogQRcode(
       {required BuildContext context,
       required String tableName,
-      required int totalPrice}) {
+      required double totalPrice}) {
     showDialog(
       context: context,
       builder: (context) {
@@ -506,7 +541,10 @@ class _SecondWidgetState extends State<SecondWidget> {
             const SizedBox(width: 20),
             MyButton(
                 width: MediaQuery.sizeOf(context).width * 0.1,
-                onTap: () => submitPayment(context),
+                onTap: () {
+                  Navigator.pop(context);
+                  submitPayment(context);
+                },
                 backgroundColor: colorScheme(context).onSurfaceVariant,
                 height: 50,
                 text: Text(
@@ -539,14 +577,37 @@ class _SecondWidgetState extends State<SecondWidget> {
                   title: "Thành công",
                   message: "Đã hoàn thành đơn hàng",
                   type: Type.success);
-              // xử lý thanh toán hoá đơn
+
+              //Giảm số lượt dùng mã giảm giá
+              final Coupons coupons = couponsController.coupons.value;
+
+              if (coupons.id != '') {
+                coupons.soluotdung--;
+                await FirestoreHelper.updateMagiamGia(coupons);
+              }
+
               // thêm hoá đơn
+              double totalPriceCoupons = tableController.totalPrice.value;
               await FirestoreHelper.createHoadon(
-                  products,
-                  formattedDate,
-                  authController.userName.value,
-                  double.parse(tableController.totalPrice.value.toString()),
-                  tableController.tableName.value);
+                Invoice(
+                  persentCoupons:
+                      coupons.id != '' && controllerData.text.isNotEmpty
+                          ? coupons.persent
+                          : null,
+                  totalAmountCoupons:
+                      coupons.id != "" && controllerData.text.isNotEmpty
+                          ? totalPriceCoupons -
+                              (totalPriceCoupons * coupons.persent / 100)
+                          : null,
+                  products: products,
+                  tableName: tableController.tableName.value,
+                  date: formattedDate,
+                  nhanvien: authController.userName.value,
+                  totalAmount:
+                      double.parse(tableController.totalPrice.value.toString()),
+                ),
+              );
+              controllerData.clear();
               // xoá giỏ hàng
               await FirestoreHelper.deleteAllgiohang(
                   tableController.tableName.value);
