@@ -67,6 +67,9 @@ dependencies:
   momo_vn: 
     path: ./momo.vn
   ticket_widget: ^0.0.1
+  syncfusion_flutter_pdfviewer: ^23.1.43
+  pdf: ^3.10.4
+  printing: ^5.11.0
   
       
 

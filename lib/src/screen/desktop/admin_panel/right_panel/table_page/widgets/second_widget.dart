@@ -1,16 +1,27 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
+import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
+import 'package:managerfoodandcoffee/src/common_widget/input_field.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
+import 'package:managerfoodandcoffee/src/common_widget/my_dialog.dart';
+import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoadon/PDF/pdf_view.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoadon/PDF/print_pdf.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/show_product.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../../../../model/card_model.dart';
 import '../../../../../../model/giohanghd.dart';
@@ -31,14 +42,15 @@ class _SecondWidgetState extends State<SecondWidget> {
   bool thanhtoan = false;
   final tableController = Get.put(TableController());
   final authController = Get.put(AuthController());
-  List<GioHang1> products = [];
+  final controllerData = TextEditingController();
+  List<GioHang> products = [];
 
   @override
   Widget build(BuildContext context) {
     ColorScheme color = colorScheme(context);
-    var now = DateTime.now();
-    String formattedDate =
-        "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
+    Permission.storage.isGranted.then((value) {
+      log(value.toString());
+    });
     return Obx(
       () => Scaffold(
         backgroundColor: colorScheme(context).onPrimary,
@@ -92,7 +104,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                 giohangindex.soluong * giohangindex.giasp;
 
                             products.add(
-                              GioHang1(
+                              GioHang(
                                   tensp: giohangindex.tensp,
                                   giasp: giohangindex.giasp,
                                   soluong: giohangindex.soluong,
@@ -201,10 +213,8 @@ class _SecondWidgetState extends State<SecondWidget> {
                                           vertical: 8),
                                       child: Text(
                                         "Ghi chú: ${giohangindex.ghichu}",
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.bold),
                                       ),
-                                    )
+                                    ),
                                   ],
                                 ),
                               );
@@ -231,10 +241,42 @@ class _SecondWidgetState extends State<SecondWidget> {
                   decoration: BoxDecoration(
                       color:
                           colorScheme(context).onBackground.withOpacity(0.1)),
-                  child: Text(
-                    'TỔNG: ${formatPrice(tableController.totalPrice.value)} VNĐ',
-                    overflow: TextOverflow.ellipsis,
-                    style: text(context).titleMedium,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        flex: 2,
+                        child: InputField(
+                          controller: controllerData,
+                          inputType: TextInputType.text,
+                          labelText: 'Mã giảm giá',
+                          contentPadding:
+                              const EdgeInsets.symmetric(horizontal: 0),
+                          prefixIcon: Icon(
+                            Icons.code_rounded,
+                            color: colorScheme(context).onBackground,
+                          ),
+                          // validator: (value) {
+                          //   if (value!.isEmpty) {
+                          //     return "Vui lòng nhập mã";
+                          //   }
+                          //   return null;
+                          // },
+                          textInputFormatters: [
+                            FilteringTextInputFormatter.deny(
+                                RegExp(r'[\[\]!@#\$%^&*(){}/:";|_=+]')),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        flex: 3,
+                        child: Text(
+                          'TỔNG: ${formatPrice(tableController.totalPrice.value)} VNĐ',
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.end,
+                          style: text(context).titleMedium,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Row(
@@ -307,55 +349,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                                   .toString()) {
                                         return MyButton(
                                           onTap: () async {
-                                            showDialog(
-                                              context: context,
-                                              builder: (BuildContext context) {
-                                                return AlertDialog(
-                                                  title:
-                                                      const Text('Thông báo'),
-                                                  content: const Text(
-                                                      'Thanh toán hoá đơn thành công '),
-                                                  actions: <Widget>[
-                                                    TextButton(
-                                                      onPressed: () {
-                                                        // 2. Đóng hộp thoại khi nút được nhấn.
-                                                        Navigator.of(context)
-                                                            .pop();
-                                                      },
-                                                      child: const Text('OK'),
-                                                    ),
-                                                  ],
-                                                );
-                                              },
-                                            );
-
-                                            // xử lý thanh toán hoá đơn
-                                            //thêm hoá đơn
-                                            await FirestoreHelper.createHoadon(
-                                                products,
-                                                formattedDate,
-                                                authController.userName.value,
-                                                double.parse(tableController
-                                                    .totalPrice.value
-                                                    .toString()));
-                                            // xoá giỏ hàng
-                                            await FirestoreHelper
-                                                .deleteAllgiohang(
-                                                    tableController
-                                                        .tableName.value);
-                                            //cập nhập lại trạng thái bàn
-                                            await FirestoreHelper.updatetable(
-                                                TableModel(
-                                                    tenban: tableController
-                                                        .tableName.value,
-                                                    isSelected: false,
-                                                    maban: tableController
-                                                        .tableName.value));
-                                            //xoá tình trạng thanhtoan
-                                            await FirestoreHelper
-                                                .deletetinhtrang(tableController
-                                                    .tableName.value);
-                                            //end
+                                            submitPayment(context);
                                           },
                                           backgroundColor: Colors.blue,
                                           height: 46,
@@ -370,52 +364,45 @@ class _SecondWidgetState extends State<SecondWidget> {
                                     }
                                   }
                                   return MyButton(
-                                    onTap: () async {
-                                      showDialog(
-                                        context: context,
-                                        builder: (BuildContext context) {
-                                          return AlertDialog(
-                                            title: const Text('Thông báo'),
-                                            content: const Text(
-                                                'đã thanh toán thành công'),
-                                            actions: <Widget>[
-                                              TextButton(
-                                                onPressed: () {
-                                                  // 2. Đóng hộp thoại khi nút được nhấn.
-                                                  Navigator.of(context).pop();
-                                                },
-                                                child: const Text('OK'),
-                                              ),
-                                            ],
-                                          );
-                                        },
-                                      );
-
-                                      // xử lý thanh toán hoá đơn
-                                      // thêm hoá đơn
-                                      await FirestoreHelper.createHoadon(
-                                          products,
-                                          formattedDate,
-                                          authController.userName.value,
-                                          double.parse(tableController
-                                              .totalPrice.value
-                                              .toString()));
-                                      // xoá giỏ hàng
-                                      await FirestoreHelper.deleteAllgiohang(
-                                          tableController.tableName.value);
-                                      //cập nhập lại trạng thái bàn
-                                      await FirestoreHelper.updatetable(
-                                          TableModel(
-                                              tenban: tableController
-                                                  .tableName.value,
-                                              isSelected: false,
-                                              maban: tableController
-                                                  .tableName.value));
-                                      //xoá tình trạng thanhtoan
-                                      await FirestoreHelper.deletetinhtrang(
-                                          tableController.tableName.value);
-                                      //end
-                                    },
+                                    onTap: () => showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return MyDialog(
+                                          title: "Phương thức thanh toán",
+                                          content: const Text(
+                                              'Mã QR hoặc Tiền mặt'),
+                                          labelLeadingButton: 'Tiền mặt',
+                                          labelTraillingButton: 'Mã QR',
+                                          onTapLeading: () async {
+                                            // submitPayment(context);
+                                            var now = DateTime.now();
+                                            String formattedDate =
+                                                "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
+                                            final a = await createPdf(Invoice(
+                                                products: products,
+                                                date: formattedDate,
+                                                nhanvien: authController
+                                                    .userName.value,
+                                                totalAmount: double.parse(
+                                                  tableController
+                                                      .totalPrice.value
+                                                      .toString(),
+                                                ),
+                                                tableName: tableController
+                                                    .tableName.value));
+                                            Get.dialog(
+                                                PdfViewerWidget(pdfData: a));
+                                          },
+                                          onTapTrailling: () =>
+                                              showDialogQRcode(
+                                                  context: context,
+                                                  tableName: tableController
+                                                      .tableName.value,
+                                                  totalPrice: tableController
+                                                      .totalPrice.value),
+                                        );
+                                      },
+                                    ),
                                     backgroundColor: Colors.blue,
                                     height: 46,
                                     text: Text(
@@ -441,6 +428,99 @@ class _SecondWidgetState extends State<SecondWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  void showDialogQRcode(
+      {required BuildContext context,
+      required String tableName,
+      required int totalPrice}) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Quét mã và thanh toán'),
+          content: SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.5,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: cacheNetWorkImage(
+                  'https://api.vietqr.io/image/970407-1969333333-QaEw1T2.jpg?amount=$totalPrice&addInfo=Thanh toán hóa đơn bàn số $tableName&accountName=HA%20THE%20CHI'),
+            ),
+          ),
+          actions: [
+            MyButton(
+                width: MediaQuery.sizeOf(context).width * 0.1,
+                onTap: () => Navigator.pop(context),
+                backgroundColor: Colors.grey.withOpacity(0.4),
+                height: 50,
+                text: Text(
+                  "Hủy".toUpperCase(),
+                  style: text(context)
+                      .titleSmall
+                      ?.copyWith(color: colorScheme(context).tertiary),
+                )),
+            const SizedBox(width: 20),
+            MyButton(
+                width: MediaQuery.sizeOf(context).width * 0.1,
+                onTap: () => submitPayment(context),
+                backgroundColor: colorScheme(context).onSurfaceVariant,
+                height: 50,
+                text: Text(
+                  "Hoàn thành".toUpperCase(),
+                  style: text(context)
+                      .titleSmall
+                      ?.copyWith(color: colorScheme(context).tertiary),
+                )),
+          ],
+        );
+      },
+    );
+  }
+
+  void submitPayment(BuildContext context) async {
+    var now = DateTime.now();
+    String formattedDate =
+        "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MyDialog(
+            title: "Xác nhận",
+            content: const Text(
+                'Bạn có chắc chắn muốn hoàn thành đơn hàng?'),
+            labelLeadingButton: 'Xác nhận',
+            labelTraillingButton: 'Hủy',
+            onTapLeading: () async {
+              showCustomSnackBar(
+                  title: "Thành công",
+                  message: "Đã hoàn thành đơn hàng",
+                  type: Type.success);
+              // xử lý thanh toán hoá đơn
+              // thêm hoá đơn
+              await FirestoreHelper.createHoadon(
+                  products,
+                  formattedDate,
+                  authController.userName.value,
+                  double.parse(tableController.totalPrice.value.toString()),
+                  tableController.tableName.value);
+              // xoá giỏ hàng
+              await FirestoreHelper.deleteAllgiohang(
+                  tableController.tableName.value);
+              //cập nhập lại trạng thái bàn
+              await FirestoreHelper.updatetable(TableModel(
+                  tenban: tableController.tableName.value,
+                  isSelected: false,
+                  maban: tableController.tableName.value));
+              //xoá tình trạng thanhtoan
+              await FirestoreHelper.deletetinhtrang(
+                  tableController.tableName.value);
+              //end
+              Navigator.pop(context);
+              Navigator.pop(context);
+            },
+            onTapTrailling: () => Navigator.pop(context));
+      },
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -8,7 +10,9 @@ import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.da
 import 'package:managerfoodandcoffee/src/screen/mobile/intro_page/widgets/table_selection.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/scan_qr_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
+import 'package:managerfoodandcoffee/src/utils/permision.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class IntroScreen extends StatefulWidget {
   const IntroScreen({super.key});
@@ -122,7 +126,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                     ),
                                   ),
                                   InkWell(
-                                    onTap: () {
+                                    onTap: () async {
                                       Get.to(() => QRViewExample(
                                             kinhdo: kinhdo ?? 0,
                                             vido: vido ?? 0,
