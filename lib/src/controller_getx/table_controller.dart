@@ -11,9 +11,9 @@ class TableController extends GetxController {
 
   var isExpanded = false.obs; //biến để đóng mở tab bên phải table page
 
-  var totalPrice = 0.obs;
+  var totalPrice = 0.0.obs;
 
-  void updateTotalPrice(int price) {
+  void updateTotalPrice(double price) {
     totalPrice.value = price;
   }
 

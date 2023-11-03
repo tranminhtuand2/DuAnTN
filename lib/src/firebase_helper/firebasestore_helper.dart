@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
 import 'package:managerfoodandcoffee/src/model/payment_status_model.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
@@ -413,7 +413,7 @@ class FirestoreHelper {
     }
   }
 
-  static Future<void> dateleMagiamGia(Coupons coupon) async {
+  static Future<void> deleteMagiamGia(Coupons coupon) async {
     final couponsColection = FirebaseFirestore.instance.collection("coupons");
 
     final docRef = couponsColection.doc(coupon.id);
@@ -425,6 +425,28 @@ class FirestoreHelper {
     }
   }
 
+  static Stream<Coupons> filterCoupons(String data) {
+    final couponsCollection = FirebaseFirestore.instance.collection("coupons");
+    Query query =
+        couponsCollection.where("data", isEqualTo: data.toUpperCase());
+    return query.snapshots().map((querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        return Coupons.fromsnapshot(querySnapshot.docs[0]);
+      } else {
+        // Trả về một đối tượng Coupons trống nếu không có kết quả
+        return Coupons(
+          id: '',
+          beginDay: '',
+          endDay: '',
+          data: '',
+          persent: 0,
+          isEnable: false,
+          soluotdung: 0,
+        );
+      }
+    });
+  }
+
   static Stream<List<Coupons>> getDataCoupons() {
     final couponsColection = FirebaseFirestore.instance.collection("coupons");
 
@@ -434,20 +456,21 @@ class FirestoreHelper {
 
   //hoá đơn
   //create
-  static Future<void> createHoadon(List<GioHang1> giohang, String date,
-      String nhanvien, double tongtien, String tableName) async {
+  static Future<void> createHoadon(Invoice invoice) async {
     final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
     final uid = hoadonCl.doc().id;
     final docRef = hoadonCl.doc(uid);
 
     final newhoadon = Invoice(
-            id: uid,
-            products: giohang,
-            date: date,
-            nhanvien: nhanvien,
-            totalAmount: tongtien,
-            tableName: tableName)
-        .toJson();
+      id: uid,
+      products: invoice.products,
+      date: invoice.date,
+      nhanvien: invoice.nhanvien,
+      totalAmount: invoice.totalAmount,
+      tableName: invoice.tableName,
+      totalAmountCoupons: invoice.totalAmountCoupons,
+      persentCoupons: invoice.persentCoupons,
+    ).toJson();
     try {
       await docRef.set(newhoadon);
     } catch (e) {

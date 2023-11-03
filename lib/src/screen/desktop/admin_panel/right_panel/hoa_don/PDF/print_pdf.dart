@@ -1,6 +1,8 @@
+import 'dart:convert';
+import 'dart:html';
 import 'dart:typed_data';
 
-import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -31,12 +33,21 @@ Future<Uint8List> createPdf(Invoice invoice) async {
         );
 
         // Calculate the total price
-        final totalPrice = invoice.products.fold(
+        double totalPrice = invoice.products.fold(
             0, (total, product) => total + (product.giasp * product.soluong));
-
+        double totalPriceCoupons = totalPrice;
         // Create a text widget for the total price
+        invoice.persentCoupons != 0
+            ? totalPriceCoupons = totalPrice -
+                ((totalPrice * int.parse(invoice.persentCoupons.toString())) /
+                    100)
+            : totalPrice;
         final totalText = pw.Text(
-          'Tổng: ${formatPrice(totalPrice)} VNĐ',
+          'Tổng: ${formatPrice(totalPrice.toInt())} VNĐ',
+          style: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold),
+        );
+        final totalTextCoupons = pw.Text(
+          'Thành tiền: ${formatPrice(int.parse(totalPriceCoupons.toString()))} VNĐ',
           style: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold),
         );
 
@@ -51,7 +62,7 @@ Future<Uint8List> createPdf(Invoice invoice) async {
               style: pw.TextStyle(font: font, fontSize: 16),
             ),
             pw.Text(
-              'Người mua: Ban 20',
+              'Người mua: Bàn ${invoice.tableName}',
               style: pw.TextStyle(font: font, fontSize: 14),
             ),
             pw.Text(
@@ -60,8 +71,15 @@ Future<Uint8List> createPdf(Invoice invoice) async {
             ),
             pw.SizedBox(height: 20),
             table,
-            pw.SizedBox(height: 20),
+            pw.SizedBox(height: 10),
             totalText,
+            pw.SizedBox(height: 4),
+            invoice.persentCoupons != 0
+                ? pw.Text("-${invoice.persentCoupons}%",
+                    style: pw.TextStyle(font: font))
+                : pw.SizedBox(),
+            pw.SizedBox(height: 4),
+            invoice.persentCoupons != 0 ? totalTextCoupons : pw.SizedBox(),
           ],
         );
       },
@@ -70,10 +88,12 @@ Future<Uint8List> createPdf(Invoice invoice) async {
 
   final Uint8List pdfData = await pdf.save();
   return pdfData;
+}
 
-  // AnchorElement(
-  //     href:
-  //         "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfData)}")
-  //   ..setAttribute("download", "report.pdf")
-  //   ..click();
+downloadPDF(Uint8List pdfData, String date) {
+  AnchorElement(
+      href:
+          "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfData)}")
+    ..setAttribute("download", "$date.pdf")
+    ..click();
 }

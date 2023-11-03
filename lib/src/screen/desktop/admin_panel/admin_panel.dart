@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoadon/hoadonscreen.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/hoadonscreen.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manage_table/manager_table.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/navigate_panel_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/left_panel/left_panel.dart';

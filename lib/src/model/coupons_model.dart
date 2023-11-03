@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 // To parse this JSON data, do
 //
 //     final coupons = couponsFromJson(jsonString);
@@ -59,5 +60,61 @@ class Coupons {
       isEnable: snapshot['isEnable'],
       soluotdung: snapshot['soluotdung'],
     );
+  }
+
+  Coupons copyWith({
+    String? id,
+    String? beginDay,
+    String? endDay,
+    String? data,
+    int? persent,
+    bool? isEnable,
+    int? soluotdung,
+  }) {
+    return Coupons(
+      id: id ?? this.id,
+      beginDay: beginDay ?? this.beginDay,
+      endDay: endDay ?? this.endDay,
+      data: data ?? this.data,
+      persent: persent ?? this.persent,
+      isEnable: isEnable ?? this.isEnable,
+      soluotdung: soluotdung ?? this.soluotdung,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return <String, dynamic>{
+      'id': id,
+      'beginDay': beginDay,
+      'endDay': endDay,
+      'data': data,
+      'persent': persent,
+      'isEnable': isEnable,
+      'soluotdung': soluotdung,
+    };
+  }
+
+  @override
+  bool operator ==(covariant Coupons other) {
+    if (identical(this, other)) return true;
+
+    return other.id == id &&
+        other.beginDay == beginDay &&
+        other.endDay == endDay &&
+        other.data == data &&
+        other.persent == persent &&
+        other.isEnable == isEnable &&
+        other.soluotdung == soluotdung;
+  }
+
+  @override
+  int get hashCode {
+    return id.hashCode ^
+        beginDay.hashCode ^
+        endDay.hashCode ^
+        data.hashCode ^
+        persent.hashCode ^
+        isEnable.hashCode ^
+        soluotdung.hashCode;
   }
 }
