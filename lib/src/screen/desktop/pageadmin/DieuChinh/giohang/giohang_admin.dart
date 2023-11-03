@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
-import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';

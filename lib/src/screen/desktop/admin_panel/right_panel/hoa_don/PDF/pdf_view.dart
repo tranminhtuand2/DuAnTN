@@ -13,13 +13,7 @@ class PdfViewerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      content: Container(
-        color: Colors.amber,
-        width: 500,
-        child: Center(
-          child: SfPdfViewer.memory(pdfData),
-        ),
-      ),
+      content: SfPdfViewer.memory(pdfData),
       actions: [
         MyButton(
             width: MediaQuery.sizeOf(context).width * 0.1,

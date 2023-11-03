@@ -12,16 +12,20 @@ import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_dialog.dart';
 import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/coupons_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
-import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoadon/PDF/pdf_view.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoadon/PDF/print_pdf.dart';
+import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
+import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/PDF/pdf_view.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/PDF/print_pdf.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/show_product.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
+import 'package:managerfoodandcoffee/src/utils/format_date.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../../../../model/card_model.dart';
 import '../../../../../../model/giohanghd.dart';
@@ -42,15 +46,18 @@ class _SecondWidgetState extends State<SecondWidget> {
   bool thanhtoan = false;
   final tableController = Get.put(TableController());
   final authController = Get.put(AuthController());
+  final couponsController = Get.put(CouponsController());
   final controllerData = TextEditingController();
   List<GioHang> products = [];
+  late final Uint8List filePDF;
 
   @override
   Widget build(BuildContext context) {
     ColorScheme color = colorScheme(context);
-    Permission.storage.isGranted.then((value) {
-      log(value.toString());
-    });
+    var now = DateTime.now();
+    String formattedDate =
+        "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
+
     return Obx(
       () => Scaffold(
         backgroundColor: colorScheme(context).onPrimary,
@@ -364,51 +371,20 @@ class _SecondWidgetState extends State<SecondWidget> {
                                     }
                                   }
                                   return MyButton(
-                                    onTap: () => showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return MyDialog(
-                                          title: "Phương thức thanh toán",
-                                          content: const Text(
-                                              'Mã QR hoặc Tiền mặt'),
-                                          labelLeadingButton: 'Tiền mặt',
-                                          labelTraillingButton: 'Mã QR',
-                                          onTapLeading: () async {
-                                            // submitPayment(context);
-                                            var now = DateTime.now();
-                                            String formattedDate =
-                                                "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
-                                            final a = await createPdf(Invoice(
-                                                products: products,
-                                                date: formattedDate,
-                                                nhanvien: authController
-                                                    .userName.value,
-                                                totalAmount: double.parse(
-                                                  tableController
-                                                      .totalPrice.value
-                                                      .toString(),
-                                                ),
-                                                tableName: tableController
-                                                    .tableName.value));
-                                            Get.dialog(
-                                                PdfViewerWidget(pdfData: a));
-                                          },
-                                          onTapTrailling: () =>
-                                              showDialogQRcode(
-                                                  context: context,
-                                                  tableName: tableController
-                                                      .tableName.value,
-                                                  totalPrice: tableController
-                                                      .totalPrice.value),
-                                        );
-                                      },
-                                    ),
+                                    onTap: () async {
+                                      final persent =
+                                          await applyCouponAndGetPercent();
+                                      filePDF = await generateInvoicePDF(
+                                          persent, formattedDate);
+                                      showPaymentDialog(context);
+                                    },
                                     backgroundColor: Colors.blue,
                                     height: 46,
                                     text: Text(
                                       'Thanh toán',
                                       style: TextStyle(
-                                          color: colorScheme(context).tertiary),
+                                        color: colorScheme(context).tertiary,
+                                      ),
                                     ),
                                   );
                                 },
@@ -428,6 +404,73 @@ class _SecondWidgetState extends State<SecondWidget> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<int> applyCouponAndGetPercent() async {
+    int percent = 0;
+    if (controllerData.text.isNotEmpty) {
+      await couponsController.filterCoupons(controllerData.text.toUpperCase());
+      List<Coupons> list = couponsController.listCoupons;
+      if (list.isNotEmpty) {
+        if (!FormatDate().compareDate(list[0].endDay) &&
+            list[0].soluotdung > 0) {
+          percent = list[0].persent;
+          showCustomSnackBar(
+            title: "OK",
+            message: 'Áp dụng mã giảm giá thành công',
+            type: Type.success,
+          );
+        } else {
+          percent = 0;
+          showCustomSnackBar(
+            title: "Thất bại",
+            message: 'Mã đã hết hiệu lực hoặc số lượt sử dụng',
+            type: Type.error,
+          );
+        }
+      }
+    }
+    return percent;
+  }
+
+  Future<Uint8List> generateInvoicePDF(
+      int persent, String formattedDate) async {
+    return createPdf(Invoice(
+      persentCoupons: persent,
+      products: products,
+      date: formattedDate,
+      nhanvien: authController.userName.value,
+      totalAmount: double.parse(tableController.totalPrice.value.toString()),
+      tableName: tableController.tableName.value,
+    ));
+  }
+
+  void showPaymentDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return MyDialog(
+          title: "Phương thức thanh toán",
+          content: SizedBox(
+            width: MediaQuery.sizeOf(context).width * 0.3,
+            height: MediaQuery.sizeOf(context).height * 0.7,
+            child: SfPdfViewer.memory(filePDF),
+          ),
+          labelLeadingButton: 'Tiền mặt',
+          labelTraillingButton: 'Mã QR',
+          onTapLeading: () {
+            submitPayment(context);
+          },
+          onTapTrailling: () {
+            showDialogQRcode(
+              context: context,
+              tableName: tableController.tableName.value,
+              totalPrice: tableController.totalPrice.value,
+            );
+          },
+        );
+      },
     );
   }
 

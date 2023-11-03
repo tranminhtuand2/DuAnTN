@@ -273,7 +273,7 @@ class _ManagerCouponsState extends State<ManagerCoupons> {
       MyDialog(
         onTapLeading: () async {
           Navigator.of(context).pop();
-          await FirestoreHelper.dateleMagiamGia(coupon);
+          await FirestoreHelper.deleteMagiamGia(coupon);
         },
         onTapTrailling: () {
           Navigator.of(context).pop();

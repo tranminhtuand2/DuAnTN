@@ -2,7 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
 import 'package:managerfoodandcoffee/src/model/payment_status_model.dart';
 import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
@@ -413,7 +413,7 @@ class FirestoreHelper {
     }
   }
 
-  static Future<void> dateleMagiamGia(Coupons coupon) async {
+  static Future<void> deleteMagiamGia(Coupons coupon) async {
     final couponsColection = FirebaseFirestore.instance.collection("coupons");
 
     final docRef = couponsColection.doc(coupon.id);
@@ -423,6 +423,13 @@ class FirestoreHelper {
     } catch (e) {
       print(e);
     }
+  }
+
+  static Stream<List<Coupons>> filterCoupons(String data) {
+    final couponsColection = FirebaseFirestore.instance.collection("coupons");
+    Query query = couponsColection.where("data", isEqualTo: data);
+    return query.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => Coupons.fromsnapshot(e)).toList());
   }
 
   static Stream<List<Coupons>> getDataCoupons() {

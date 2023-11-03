@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import 'package:managerfoodandcoffee/src/model/Invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
