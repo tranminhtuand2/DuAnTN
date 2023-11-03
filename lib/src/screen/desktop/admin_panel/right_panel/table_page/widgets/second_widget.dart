@@ -48,7 +48,7 @@ class _SecondWidgetState extends State<SecondWidget> {
   final authController = Get.put(AuthController());
   final couponsController = Get.put(CouponsController());
   final controllerData = TextEditingController();
-  List<GioHang> products = [];
+  List<GioHang1> products = [];
   late final Uint8List filePDF;
 
   @override
@@ -111,7 +111,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                 giohangindex.soluong * giohangindex.giasp;
 
                             products.add(
-                              GioHang(
+                              GioHang1(
                                   tensp: giohangindex.tensp,
                                   giasp: giohangindex.giasp,
                                   soluong: giohangindex.soluong,

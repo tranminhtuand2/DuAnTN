@@ -4,7 +4,7 @@ import 'package:managerfoodandcoffee/src/model/giohanghd.dart';
 
 class Invoice {
   String? id; // Mã hoá đơn (nếu cần)
-  List<GioHang> products; // Danh sách các sản phẩm trong hoá đơn
+  List<GioHang1> products; // Danh sách các sản phẩm trong hoá đơn
   // Email khách hàng
   String tableName;
   int? persentCoupons;
@@ -28,7 +28,7 @@ class Invoice {
         .toList();
     return Invoice(
       id: data["id"],
-      products: List.from(data['products']),
+      products: productList,
       persentCoupons: data['persentCoupons'],
       tableName: data['tableName'],
       date: data['date'],
