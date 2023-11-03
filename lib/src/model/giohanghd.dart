@@ -1,6 +1,7 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//model này dùng để đọc sản phẩm trong hoá đơn
 class GioHang1 {
   String? idsp;
   String tensp;
