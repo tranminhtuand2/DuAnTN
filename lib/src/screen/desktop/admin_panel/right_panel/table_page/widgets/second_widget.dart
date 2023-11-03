@@ -43,7 +43,7 @@ class _SecondWidgetState extends State<SecondWidget> {
   final tableController = Get.put(TableController());
   final authController = Get.put(AuthController());
   final controllerData = TextEditingController();
-  List<GioHang> products = [];
+  List<GioHang1> products = [];
 
   @override
   Widget build(BuildContext context) {
@@ -104,7 +104,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                 giohangindex.soluong * giohangindex.giasp;
 
                             products.add(
-                              GioHang(
+                              GioHang1(
                                   tensp: giohangindex.tensp,
                                   giasp: giohangindex.giasp,
                                   soluong: giohangindex.soluong,
