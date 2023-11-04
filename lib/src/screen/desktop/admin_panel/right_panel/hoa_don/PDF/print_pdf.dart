@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:html';
 import 'dart:typed_data';
 
 import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
@@ -91,9 +90,9 @@ Future<Uint8List> createPdf(Invoice invoice) async {
 }
 
 downloadPDF(Uint8List pdfData, String date) {
-  AnchorElement(
-      href:
-          "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfData)}")
-    ..setAttribute("download", "$date.pdf")
-    ..click();
+  // AnchorElement(
+  //     href:
+  //         "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfData)}")
+  //   ..setAttribute("download", "$date.pdf")
+  //   ..click();
 }
