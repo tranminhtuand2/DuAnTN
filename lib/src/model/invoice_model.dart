@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/model/giohanghd.dart';
 
 class Invoice {
@@ -34,8 +33,8 @@ class Invoice {
       tableName: data['tableName'],
       date: data['date'],
       nhanvien: data['nhanvien'],
-      totalAmount: data['totalAmount'].toDouble(),
-      totalAmountCoupons: data['totalAmountCoupons'].toDouble(),
+      totalAmount: data['totalAmount'],
+      totalAmountCoupons: data['totalAmountCoupons'],
     );
   }
   Map<String, dynamic> toJson() => {

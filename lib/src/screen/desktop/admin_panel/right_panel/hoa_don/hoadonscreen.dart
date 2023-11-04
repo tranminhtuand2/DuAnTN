@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
-import 'package:managerfoodandcoffee/src/model/card_model.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 
 import '../../../../../model/invoice_model.dart';
