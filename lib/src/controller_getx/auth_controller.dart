@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
@@ -21,10 +23,12 @@ class AuthController extends GetxController {
       'https://www.googleapis.com/auth/contacts.readonly',
     ],
   );
+  Completer<void>? completer; // Declare a Completer as nullable
 
   Future loginGoogleInWeb() async {
     if (kIsWeb) {
       GoogleAuthProvider authProvider = GoogleAuthProvider();
+      completer ??= Completer<void>();
 
       try {
         final UserCredential userCredential =
@@ -40,6 +44,8 @@ class AuthController extends GetxController {
       } on FirebaseAuthException catch (e) {
         showCustomSnackBar(
             title: "Lỗi", message: e.toString(), type: Type.error);
+      } finally {
+        completer!.complete(); // Complete the Future
       }
     }
   }
