@@ -333,7 +333,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                                           i < tinhtrang!.length;
                                           i++) {
                                         if (tinhtrang[i].trangthai ==
-                                                "ordered" &&
+                                                "success" &&
                                             tinhtrang[i].idtinhtrang ==
                                                 tableController.tableName
                                                     .toString()) {
@@ -341,10 +341,10 @@ class _SecondWidgetState extends State<SecondWidget> {
                                             onTap: () async {
                                               submitPayment(context);
                                             },
-                                            backgroundColor: Colors.blue,
+                                            backgroundColor: Colors.grey,
                                             height: 46,
                                             text: Text(
-                                              'Xác nhận đơn hàng',
+                                              'Hoàn thành đơn',
                                               style: TextStyle(
                                                   color: colorScheme(context)
                                                       .tertiary),
@@ -620,7 +620,7 @@ class _SecondWidgetState extends State<SecondWidget> {
               await FirestoreHelper.deletetinhtrang(
                   tableController.tableName.value);
               //end
-              Navigator.pop(context);
+              // Navigator.pop(context);
               Navigator.pop(context);
             },
             onTapTrailling: () => Navigator.pop(context));

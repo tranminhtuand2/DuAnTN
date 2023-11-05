@@ -70,6 +70,7 @@ dependencies:
   syncfusion_flutter_pdfviewer: ^23.1.43
   pdf: ^3.10.4
   printing: ^5.11.0
+  universal_html: ^2.2.4
   
       
 
