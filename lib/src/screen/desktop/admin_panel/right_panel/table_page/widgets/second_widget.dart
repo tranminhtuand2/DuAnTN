@@ -561,8 +561,9 @@ class _SecondWidgetState extends State<SecondWidget> {
 
   void submitPayment(BuildContext context) async {
     var now = DateTime.now();
-    String formattedDate =
-        "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
+    // String formattedDate =
+    //     "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
+    String formattedDate = "${now.day}-${now.month}-${now.year}";
     showDialog(
       context: context,
       builder: (BuildContext context) {

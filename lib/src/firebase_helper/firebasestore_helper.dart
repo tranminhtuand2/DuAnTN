@@ -496,4 +496,40 @@ class FirestoreHelper {
     final hoadonCollection = FirebaseFirestore.instance.collection("hoadon");
     final docRef = hoadonCollection.doc(hoadon.id).delete();
   }
+
+  //thông kê dữ liệu
+  //THEO TÊN
+
+  static Stream<List<Invoice>> readThongkenhanvien(String tennhanvien) {
+    final thongkecolection = FirebaseFirestore.instance.collection("hoadon");
+    return thongkecolection
+        .where("nhanvien", isEqualTo: tennhanvien)
+        .snapshots()
+        .map(
+            (event) => event.docs.map((e) => Invoice.fromSnapshot(e)).toList());
+  }
+
+  //THEO NGÀY +TÊN NHÂN VIÊN
+  static Stream<List<Invoice>> readTkDateAndEmployer(
+      String tennhanvien, String dateF, String dateE) {
+    final thongkecolection = FirebaseFirestore.instance.collection("hoadon");
+    return thongkecolection
+        .where("nhanvien", isEqualTo: tennhanvien)
+        .where('date', isGreaterThanOrEqualTo: dateF)
+        .where('date', isLessThanOrEqualTo: dateE)
+        .snapshots()
+        .map(
+            (event) => event.docs.map((e) => Invoice.fromSnapshot(e)).toList());
+  }
+
+  //THEO NGÀY
+  static Stream<List<Invoice>> readTkDate(String dateF, String dateE) {
+    final thongkecolection = FirebaseFirestore.instance.collection("hoadon");
+    return thongkecolection
+        .where('date', isGreaterThanOrEqualTo: dateF)
+        .where('date', isLessThanOrEqualTo: dateE)
+        .snapshots()
+        .map(
+            (event) => event.docs.map((e) => Invoice.fromSnapshot(e)).toList());
+  }
 }
