@@ -369,7 +369,7 @@ class _FirstWidgetState extends State<FirstWidget> {
   Future<void> showSnackbar(String tenban) async {
     await Future.delayed(
         const Duration(seconds: 0)); // This ensures the build has completed
-    Get.snackbar("Đã xác nhận ban số $tenban", "Vui lòng chuẩn bị  VNĐ",
+    Get.snackbar("Đã xác nhận ban số $tenban", '',
         duration: const Duration(seconds: 2));
   }
 }
