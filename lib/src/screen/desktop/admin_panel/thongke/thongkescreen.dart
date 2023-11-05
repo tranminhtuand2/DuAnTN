@@ -57,6 +57,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
             width: double.infinity,
             // color: Colors.amber,
             child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 IconButton(
                   onPressed: _showdatefirt,
@@ -87,19 +88,29 @@ class _thongkeScreenState extends State<thongkeScreen> {
                     if (snapshot.hasData) {
                       final employer = snapshot.data;
                       if (employer != null) {
-                        for (var tennv in employer) {
-                          tennhanvien.add(DropdownMenuItem(
-                            value: tennv.nhanvien,
-                            child: Text(tennv.nhanvien),
-                          ));
+                        tennhanvien.add(DropdownMenuItem(
+                          value: "ALL",
+                          child: Text("ALL"),
+                        ));
+                        for (var i = 0; i < employer.length; i++) {
+                          var nhanvien = employer[i].nhanvien;
+                          if (!tennhanvien
+                              .any((item) => item.value == nhanvien)) {
+                            tennhanvien.add(
+                              DropdownMenuItem(
+                                value: nhanvien,
+                                child: Text(nhanvien),
+                              ),
+                            );
+                          }
                         }
                       }
                       return Padding(
-                        padding: const EdgeInsets.all(1),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Container(
                           height: 50,
-                          width: 100,
-                          padding: const EdgeInsets.all(1),
+                          width: 200,
+                          padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
                               color: Colors.blue,
                               border: Border.all(color: Colors.black, width: 1),
@@ -124,7 +135,22 @@ class _thongkeScreenState extends State<thongkeScreen> {
                     );
                   },
                 ),
+                //end dropdown
                 Text(nameEmployer),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text("Tính toán"),
+                ),
+                SizedBox(
+                  width: 10,
+                ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text("Tất Cả "),
+                ),
 
                 //dropdown end ten nhan vien
               ],
