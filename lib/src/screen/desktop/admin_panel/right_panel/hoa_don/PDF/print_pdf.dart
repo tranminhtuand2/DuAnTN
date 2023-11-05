@@ -6,6 +6,7 @@ import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:universal_html/html.dart' as html;
 
 Future<Uint8List> createPdf(Invoice invoice) async {
   final pdf = pw.Document();
@@ -17,8 +18,8 @@ Future<Uint8List> createPdf(Invoice invoice) async {
       build: (pw.Context context) {
         final tableHeaders = ['Tên món', 'Giá'];
         final tableData = invoice.products
-            .map((product) =>
-                [product.tensp, "${formatPrice(product.giasp)} VNĐ"])
+            .map(
+                (product) => [product.tensp, "${formatPrice(product.giasp)} đ"])
             .toList();
 
         // Create a table
@@ -46,7 +47,7 @@ Future<Uint8List> createPdf(Invoice invoice) async {
           style: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold),
         );
         final totalTextCoupons = pw.Text(
-          'Thành tiền: ${formatPrice(int.parse(totalPriceCoupons.toString()))} VNĐ',
+          'Thành tiền: ${formatPrice(int.parse(totalPriceCoupons.toString()))} đ',
           style: pw.TextStyle(font: font, fontWeight: pw.FontWeight.bold),
         );
 
@@ -89,10 +90,19 @@ Future<Uint8List> createPdf(Invoice invoice) async {
   return pdfData;
 }
 
-downloadPDF(Uint8List pdfData, String date) {
+void downloadPDF(Uint8List pdfData, String date) {
+  final blob = html.Blob([pdfData]);
+  final url = html.Url.createObjectUrlFromBlob(blob);
+  final anchor = html.AnchorElement(href: url)
+    ..setAttribute("download", "$date.pdf")
+    ..click();
+  html.Url.revokeObjectUrl(url);
+}
+
+// downloadPDF(Uint8List pdfData, String date) {
   // AnchorElement(
   //     href:
   //         "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfData)}")
   //   ..setAttribute("download", "$date.pdf")
   //   ..click();
-}
+// }
