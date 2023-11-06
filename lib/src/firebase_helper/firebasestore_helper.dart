@@ -12,6 +12,7 @@ import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/utils/enum_status_payment.dart';
 import '../model/header_model.dart';
+import '../model/thongke_model.dart';
 
 class FirestoreHelper {
   // CRUD HEADER
@@ -532,4 +533,29 @@ class FirestoreHelper {
         .map(
             (event) => event.docs.map((e) => Invoice.fromSnapshot(e)).toList());
   }
+  //thongke 2
+  //TẠO DỰ LIỆU THÔNG KÊ
+  //CREATE THONGKE
+  //  static Future<void> createHoadon(Invoice invoice) async {
+  //   final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
+  //   final uid = hoadonCl.doc().id;
+  //   final docRef = hoadonCl.doc(uid);
+
+  //   final newhoadon = Invoice(
+  //     id: uid,
+  //     products: invoice.products,
+  //     date: invoice.date,
+  //     nhanvien: invoice.nhanvien,
+  //     totalAmount: invoice.totalAmount,
+  //     tableName: invoice.tableName,
+  //     totalAmountCoupons: invoice.totalAmountCoupons,
+  //     persentCoupons: invoice.persentCoupons,
+  //   ).toJson();
+  //   try {
+  //     await docRef.set(newhoadon);
+  //   } catch (e) {
+  //     Get.snackbar("lỗi", e.toString());
+  //   }
+  // }
+  static Future<void> addThongKe(ThongKe thongKe) async {}
 }
