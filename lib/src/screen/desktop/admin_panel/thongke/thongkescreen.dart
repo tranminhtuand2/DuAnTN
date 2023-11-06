@@ -55,7 +55,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
       body: Column(
         children: [
           Container(
-            height: 50,
+            height: 60,
             width: double.infinity,
             // color: Colors.amber,
             child: Row(
@@ -106,7 +106,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Container(
-                          height: 50,
+                          height: 60,
                           width: 200,
                           padding: const EdgeInsets.all(5),
                           decoration: BoxDecoration(
@@ -160,8 +160,8 @@ class _thongkeScreenState extends State<thongkeScreen> {
           Row(
             children: [
               Container(
-                height: 50,
-                width: 200,
+                height: 60,
+                width: 300,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   color: Colors.blue,
@@ -169,7 +169,8 @@ class _thongkeScreenState extends State<thongkeScreen> {
                 child: StreamBuilder(
                   stream: nameEmployer == "ALL"
                       ? FirestoreHelper.readThongke()
-                      : FirestoreHelper.readThongkenhanvien(nameEmployer),
+                      : FirestoreHelper.readThongkenhanvien(
+                          nameEmployer.toString()),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -240,10 +241,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                     borderRadius: BorderRadius.circular(12),
                     color: Colors.purple),
                 child: StreamBuilder(
-                  stream: nameEmployer == "ALL"
-                      ? FirestoreHelper.readThongkeByDate(datefirt, dateEnd)
-                      : FirestoreHelper.readThongkeByDateandName(
-                          datefirt, dateEnd, nameEmployer),
+                  stream: FirestoreHelper.readThongkeByDate(datefirt, dateEnd),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return Center(child: CircularProgressIndicator());
@@ -260,7 +258,9 @@ class _thongkeScreenState extends State<thongkeScreen> {
                       final thongkeBydate = snapshot.data;
                       double tongtien = 0;
                       for (var i = 0; i < thongkeBydate!.length; i++) {
-                        tongtien += thongkeBydate[i].total!;
+                        if (thongkeBydate[i].nhanvien == nameEmployer) {
+                          tongtien += thongkeBydate[i].total!;
+                        }
                       }
                       return Center(
                         child: Text(

@@ -583,17 +583,17 @@ class FirestoreHelper {
             (event) => event.docs.map((e) => ThongKe.fromSnapshot(e)).toList());
   }
 
-  static Stream<List<ThongKe>> readThongkeByDateandName(
-      DateTime starDate, DateTime endDate, String nhanvien) {
-    final thongkeCollection = FirebaseFirestore.instance.collection("thongke");
-    return thongkeCollection
-        .where('date', isGreaterThanOrEqualTo: starDate)
-        .where('date', isLessThanOrEqualTo: endDate)
-        .where('nhanvien', isEqualTo: nhanvien)
-        .snapshots()
-        .map(
-            (event) => event.docs.map((e) => ThongKe.fromSnapshot(e)).toList());
-  }
+  // static Stream<List<ThongKe>> readThongkeByDateandName(
+  //     DateTime starDate, DateTime endDate, String nhanvien) {
+  //   final thongkeCollection = FirebaseFirestore.instance.collection("thongke");
+  //   return thongkeCollection
+  //       .where('nhanvien', isEqualTo: nhanvien)
+  //       .where('date', isGreaterThanOrEqualTo: starDate)
+  //       .where('date', isLessThanOrEqualTo: endDate)
+  //       .snapshots()
+  //       .map(
+  //           (event) => event.docs.map((e) => ThongKe.fromSnapshot(e)).toList());
+  // }
 
   //delete
   static Future deletethongke(ThongKe thongke) async {
