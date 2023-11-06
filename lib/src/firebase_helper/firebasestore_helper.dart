@@ -501,14 +501,14 @@ class FirestoreHelper {
   //thông kê dữ liệu
   //THEO TÊN
 
-  static Stream<List<Invoice>> readThongkenhanvien(String tennhanvien) {
-    final thongkecolection = FirebaseFirestore.instance.collection("hoadon");
-    return thongkecolection
-        .where("nhanvien", isEqualTo: tennhanvien)
-        .snapshots()
-        .map(
-            (event) => event.docs.map((e) => Invoice.fromSnapshot(e)).toList());
-  }
+  // static Stream<List<Invoice>> readThongkenhanvien(String tennhanvien) {
+  //   final thongkecolection = FirebaseFirestore.instance.collection("hoadon");
+  //   return thongkecolection
+  //       .where("nhanvien", isEqualTo: tennhanvien)
+  //       .snapshots()
+  //       .map(
+  //           (event) => event.docs.map((e) => Invoice.fromSnapshot(e)).toList());
+  // }
 
   //THEO NGÀY +TÊN NHÂN VIÊN
   static Stream<List<Invoice>> readTkDateAndEmployer(
@@ -569,6 +569,15 @@ class FirestoreHelper {
     return thongkeCollection
         .where('date', isGreaterThanOrEqualTo: starDate)
         .where('date', isLessThanOrEqualTo: endDate)
+        .snapshots()
+        .map(
+            (event) => event.docs.map((e) => ThongKe.fromSnapshot(e)).toList());
+  }
+
+  static Stream<List<ThongKe>> readThongkenhanvien(String tennhanvien) {
+    final thongkecolection = FirebaseFirestore.instance.collection("thongke");
+    return thongkecolection
+        .where("nhanvien", isEqualTo: tennhanvien)
         .snapshots()
         .map(
             (event) => event.docs.map((e) => ThongKe.fromSnapshot(e)).toList());

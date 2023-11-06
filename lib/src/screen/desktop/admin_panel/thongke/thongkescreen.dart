@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 
 class thongkeScreen extends StatefulWidget {
@@ -161,10 +162,13 @@ class _thongkeScreenState extends State<thongkeScreen> {
               Container(
                 height: 50,
                 width: 200,
-                color: Colors.blue,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.blue,
+                ),
                 child: StreamBuilder(
                   stream: nameEmployer == "ALL"
-                      ? FirestoreHelper.readInvoices()
+                      ? FirestoreHelper.readThongke()
                       : FirestoreHelper.readThongkenhanvien(nameEmployer),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
@@ -181,9 +185,87 @@ class _thongkeScreenState extends State<thongkeScreen> {
                       final thongkenhanvien = snapshot.data;
                       double tongtien = 0;
                       for (var i = 0; i < thongkenhanvien!.length; i++) {
-                        tongtien += thongkenhanvien[i].totalAmount;
+                        tongtien += thongkenhanvien[i].total!;
                       }
-                      return Text("${nameEmployer}:${tongtien} VNĐ");
+                      return Center(
+                          child: Text("${nameEmployer}:${tongtien} VNĐ"));
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+              Container(
+                height: 50,
+                width: 200,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.green),
+                child: StreamBuilder(
+                  stream: FirestoreHelper.readThongkeByDate(datefirt, dateEnd),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text(
+                          'Không dữ liệu : từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month}');
+                    }
+                    if (snapshot.hasError) {
+                      return Text("lỗi kết nối dữ liệu");
+                    }
+                    if (snapshot.hasData) {
+                      final thongkeBydate = snapshot.data;
+                      double tongtien = 0;
+                      for (var i = 0; i < thongkeBydate!.length; i++) {
+                        tongtien += thongkeBydate[i].total!;
+                      }
+                      return Center(
+                        child: Text(
+                            " ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : ${tongtien} VNĐ"),
+                      );
+                    }
+                    return Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  },
+                ),
+              ),
+              Container(
+                height: 50,
+                width: 200,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    color: Colors.purple),
+                child: StreamBuilder(
+                  stream: nameEmployer == "ALL"
+                      ? FirestoreHelper.readThongkeByDate(datefirt, dateEnd)
+                      : FirestoreHelper.readThongkeByDateandName(
+                          datefirt, dateEnd, nameEmployer),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return Text(
+                          '$nameEmployer: từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} 0 VNĐ');
+                    }
+                    if (snapshot.hasError) {
+                      return Text("lỗi kết nối dữ liệu");
+                    }
+                    if (snapshot.hasData) {
+                      final thongkeBydate = snapshot.data;
+                      double tongtien = 0;
+                      for (var i = 0; i < thongkeBydate!.length; i++) {
+                        tongtien += thongkeBydate[i].total!;
+                      }
+                      return Center(
+                        child: Text(
+                            "$nameEmployer: từ ngày  ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : ${tongtien} VND"),
+                      );
                     }
                     return Center(
                       child: CircularProgressIndicator(),
