@@ -533,29 +533,62 @@ class FirestoreHelper {
         .map(
             (event) => event.docs.map((e) => Invoice.fromSnapshot(e)).toList());
   }
+
   //thongke 2
   //TẠO DỰ LIỆU THÔNG KÊ
   //CREATE THONGKE
-  //  static Future<void> createHoadon(Invoice invoice) async {
-  //   final hoadonCl = FirebaseFirestore.instance.collection("hoadon");
-  //   final uid = hoadonCl.doc().id;
-  //   final docRef = hoadonCl.doc(uid);
+  static Future<void> addThongKe(ThongKe thongKe) async {
+    final thongkeCollection = FirebaseFirestore.instance.collection("thongke");
+    final uid = thongkeCollection.doc().id;
+    final docRef = thongkeCollection.doc(uid);
+    final newthongke = ThongKe(
+            idtk: uid,
+            nhanvien: thongKe.nhanvien,
+            date: thongKe.date,
+            products: thongKe.products,
+            total: thongKe.total)
+        .toJson();
+    try {
+      await docRef.set(newthongke);
+    } catch (e) {
+      Get.snackbar("lỗi", e.toString());
+    }
+  }
 
-  //   final newhoadon = Invoice(
-  //     id: uid,
-  //     products: invoice.products,
-  //     date: invoice.date,
-  //     nhanvien: invoice.nhanvien,
-  //     totalAmount: invoice.totalAmount,
-  //     tableName: invoice.tableName,
-  //     totalAmountCoupons: invoice.totalAmountCoupons,
-  //     persentCoupons: invoice.persentCoupons,
-  //   ).toJson();
-  //   try {
-  //     await docRef.set(newhoadon);
-  //   } catch (e) {
-  //     Get.snackbar("lỗi", e.toString());
-  //   }
-  // }
-  static Future<void> addThongKe(ThongKe thongKe) async {}
+  //read
+  static Stream<List<ThongKe>> readThongke() {
+    final thongkeCollection = FirebaseFirestore.instance.collection("thongke");
+    return thongkeCollection.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((doc) => ThongKe.fromSnapshot(doc)).toList());
+  }
+
+  //read theo ngày và theo tên nhân viên
+  static Stream<List<ThongKe>> readThongkeByDate(
+      DateTime starDate, DateTime endDate) {
+    final thongkeCollection = FirebaseFirestore.instance.collection("thongke");
+    return thongkeCollection
+        .where('date', isGreaterThanOrEqualTo: starDate)
+        .where('date', isLessThanOrEqualTo: endDate)
+        .snapshots()
+        .map(
+            (event) => event.docs.map((e) => ThongKe.fromSnapshot(e)).toList());
+  }
+
+  static Stream<List<ThongKe>> readThongkeByDateandName(
+      DateTime starDate, DateTime endDate, String nhanvien) {
+    final thongkeCollection = FirebaseFirestore.instance.collection("thongke");
+    return thongkeCollection
+        .where('date', isGreaterThanOrEqualTo: starDate)
+        .where('date', isLessThanOrEqualTo: endDate)
+        .where('nhanvien', isEqualTo: nhanvien)
+        .snapshots()
+        .map(
+            (event) => event.docs.map((e) => ThongKe.fromSnapshot(e)).toList());
+  }
+
+  //delete
+  static Future deletethongke(ThongKe thongke) async {
+    final hoadonCollection = FirebaseFirestore.instance.collection("thongke");
+    final docRef = hoadonCollection.doc(thongke.idtk).delete();
+  }
 }
