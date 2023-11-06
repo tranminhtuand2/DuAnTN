@@ -56,16 +56,10 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
   }
 
   List listPage = [
-    const HoaDonPage(),
     const TablePage(),
     const ManagerProductPage(),
     const ManagerCoupons(),
+    const HoaDonPage(),
     const thongkeScreen(),
   ];
 }
-  // const TablePage(),
-  //   const Center(child: Text('Quản lý bàn')),
-  //   const ManagerProductPage(),
-  //   const Center(child: Text('Quản lý khuyến mãi')),
-  //   const Center(child: Text('Hóa Đơn')),
-  //   const Center(child: Text('Thống kê')),
