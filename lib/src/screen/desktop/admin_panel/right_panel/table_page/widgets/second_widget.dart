@@ -1,4 +1,5 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first, unused_local_variable
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,6 +16,7 @@ import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
 import 'package:managerfoodandcoffee/src/model/invoice_model.dart';
+import 'package:managerfoodandcoffee/src/model/thongke_model.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/PDF/print_pdf.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/widgets/show_product.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -608,6 +610,15 @@ class _SecondWidgetState extends State<SecondWidget> {
                       double.parse(tableController.totalPrice.value.toString()),
                 ),
               );
+              //them thong ke
+              await FirestoreHelper.addThongKe(ThongKe(
+                nhanvien: authController.userName.value,
+                date: FieldValue.serverTimestamp(),
+                products: products,
+                total:
+                    double.parse(tableController.totalPrice.value.toString()),
+              ));
+              //end thongke
               controllerData.clear();
               // xoá giỏ hàng
               await FirestoreHelper.deleteAllgiohang(

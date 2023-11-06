@@ -12,8 +12,6 @@ class _thongkeScreenState extends State<thongkeScreen> {
   var datefirt = DateTime.now();
   var dateEnd = DateTime.now();
   String nameEmployer = "ALL";
-  String DateF = "";
-  String DateE = "";
 
   void _showdatefirt() {
     showDatePicker(
@@ -25,7 +23,6 @@ class _thongkeScreenState extends State<thongkeScreen> {
       (value) {
         setState(() {
           datefirt = value!;
-          DateF = "${datefirt.day}-${datefirt.month}-${datefirt.year}";
         });
       },
     );
@@ -41,7 +38,6 @@ class _thongkeScreenState extends State<thongkeScreen> {
       (value) {
         setState(() {
           dateEnd = value!;
-          DateE = "${dateEnd.day}-${dateEnd.month}-${dateEnd.year}";
         });
       },
     );
@@ -68,7 +64,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                   onPressed: _showdatefirt,
                   icon: Icon(Icons.date_range),
                 ),
-                Text(DateF),
+                Text(datefirt.toString()),
                 SizedBox(
                   width: 50,
                 ),
@@ -76,7 +72,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                   onPressed: _showdateEnd,
                   icon: Icon(Icons.date_range),
                 ),
-                Text(DateE),
+                Text(dateEnd.toString()),
                 SizedBox(width: 20),
                 //dropdown ten nhan vien
                 StreamBuilder(
@@ -177,37 +173,6 @@ class _thongkeScreenState extends State<thongkeScreen> {
 
                     if (!snapshot.hasData || snapshot.data!.isEmpty) {
                       return Text('Không dữ liệu : "$nameEmployer"');
-                    }
-                    if (snapshot.hasError) {
-                      return Text("lỗi kết nối dữ liệu");
-                    }
-                    if (snapshot.hasData) {
-                      final thongkenhanvien = snapshot.data;
-                      double tongtien = 0;
-                      for (var i = 0; i < thongkenhanvien!.length; i++) {
-                        tongtien += thongkenhanvien[i].totalAmount;
-                      }
-                      return Text("${nameEmployer}:${tongtien} VNĐ");
-                    }
-                    return Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  },
-                ),
-              ),
-              Container(
-                height: 50,
-                width: 200,
-                color: Colors.blue,
-                child: StreamBuilder(
-                  stream: FirestoreHelper.readTkDate(DateF, DateE),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-
-                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                      return Text('Không dữ liệu : "$DateF" & "$DateE"');
                     }
                     if (snapshot.hasError) {
                       return Text("lỗi kết nối dữ liệu");
