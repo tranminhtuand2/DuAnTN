@@ -37,9 +37,12 @@ Future<Uint8List> createPdf(Invoice invoice) async {
             0, (total, product) => total + (product.giasp * product.soluong));
         double totalPriceCoupons = totalPrice;
         // Create a text widget for the total price
-        invoice.persentCoupons != 0
+        invoice.persentCoupons != 0 && invoice.persentCoupons != null
             ? totalPriceCoupons = totalPrice -
-                ((totalPrice * int.parse(invoice.persentCoupons.toString())) /
+                ((totalPrice *
+                        int.parse(
+                          invoice.persentCoupons.toString(),
+                        )) /
                     100)
             : totalPrice;
         final totalText = pw.Text(
@@ -74,12 +77,14 @@ Future<Uint8List> createPdf(Invoice invoice) async {
             pw.SizedBox(height: 10),
             totalText,
             pw.SizedBox(height: 4),
-            invoice.persentCoupons != 0
+            invoice.persentCoupons != 0 && invoice.persentCoupons != null
                 ? pw.Text("-${invoice.persentCoupons}%",
                     style: pw.TextStyle(font: font))
                 : pw.SizedBox(),
             pw.SizedBox(height: 4),
-            invoice.persentCoupons != 0 ? totalTextCoupons : pw.SizedBox(),
+            invoice.persentCoupons != 0 && invoice.persentCoupons != null
+                ? totalTextCoupons
+                : pw.SizedBox(),
           ],
         );
       },
@@ -99,10 +104,7 @@ void downloadPDF(Uint8List pdfData, String date) {
   html.Url.revokeObjectUrl(url);
 }
 
-// downloadPDF(Uint8List pdfData, String date) {
-  // AnchorElement(
-  //     href:
-  //         "data:application/octet-stream;charset=utf-16le;base64,${base64.encode(pdfData)}")
-  //   ..setAttribute("download", "$date.pdf")
-  //   ..click();
-// }
+void createPDFAndDownload(Invoice invoice) async {
+  Uint8List filePDF = await createPdf(invoice);
+  downloadPDF(filePDF, invoice.date);
+}
