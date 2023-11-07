@@ -329,14 +329,15 @@ class FirestoreHelper {
   //creater
 
   static Future<void> createtinhtrang(
-      PaymentStatus status, TableModel table) async {
+      PaymentStatus status, TableModel table, String? couponsCode) async {
     final tinhtrangCl = FirebaseFirestore.instance.collection("tinhtrang");
 
     final docRef = tinhtrangCl.doc(table.tenban);
 
     final newtinhtrang = TinhTrangThanhToan(
             trangthai: status == PaymentStatus.ordered ? "ordered" : 'success',
-            idtinhtrang: table.tenban)
+            idtinhtrang: table.tenban,
+            couponsCode: couponsCode)
         .toJson();
     try {
       await docRef.set(newtinhtrang);
@@ -463,7 +464,7 @@ class FirestoreHelper {
     final newhoadon = Invoice(
       id: uid,
       products: invoice.products,
-      date: invoice.date,
+      timeStamp: invoice.timeStamp,
       nhanvien: invoice.nhanvien,
       totalAmount: invoice.totalAmount,
       tableName: invoice.tableName,

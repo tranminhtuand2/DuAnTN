@@ -13,6 +13,8 @@ class TableController extends GetxController {
 
   var totalPrice = 0.0.obs;
 
+  var isAddCoupons = false.obs;
+
   void updateTotalPrice(double price) {
     totalPrice.value = price;
   }

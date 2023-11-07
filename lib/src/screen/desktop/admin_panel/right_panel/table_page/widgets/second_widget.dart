@@ -35,7 +35,6 @@ class SecondWidget extends StatefulWidget {
 }
 
 class _SecondWidgetState extends State<SecondWidget> {
-  bool thanhtoan = false;
   final tableController = Get.put(TableController());
   final authController = Get.put(AuthController());
   final couponsController = Get.put(CouponsController());
@@ -46,9 +45,8 @@ class _SecondWidgetState extends State<SecondWidget> {
   Widget build(BuildContext context) {
     ColorScheme color = colorScheme(context);
     var now = DateTime.now();
-    String formattedDate =
-        "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
 
+    Timestamp timeStamp = Timestamp.fromDate(now);
     return Obx(
       () => Scaffold(
         backgroundColor: colorScheme(context).onPrimary,
@@ -246,26 +244,29 @@ class _SecondWidgetState extends State<SecondWidget> {
                     children: [
                       Expanded(
                         flex: 2,
-                        child: InputField(
-                          controller: controllerData,
-                          inputType: TextInputType.text,
-                          labelText: 'Mã giảm giá',
-                          contentPadding:
-                              const EdgeInsets.symmetric(horizontal: 0),
-                          prefixIcon: Icon(
-                            Icons.code_rounded,
-                            color: colorScheme(context).onBackground,
+                        child: Obx(
+                          () => InputField(
+                            enable: !tableController.isAddCoupons.value,
+                            controller: controllerData,
+                            inputType: TextInputType.text,
+                            labelText: 'Mã giảm giá',
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 0),
+                            prefixIcon: Icon(
+                              Icons.code_rounded,
+                              color: colorScheme(context).onBackground,
+                            ),
+                            // validator: (value) {
+                            //   if (value!.isEmpty) {
+                            //     return "Vui lòng nhập mã";
+                            //   }
+                            //   return null;
+                            // },
+                            textInputFormatters: [
+                              FilteringTextInputFormatter.deny(
+                                  RegExp(r'[\[\]!@#\$%^&*(){}/:";|_=+]')),
+                            ],
                           ),
-                          // validator: (value) {
-                          //   if (value!.isEmpty) {
-                          //     return "Vui lòng nhập mã";
-                          //   }
-                          //   return null;
-                          // },
-                          textInputFormatters: [
-                            FilteringTextInputFormatter.deny(
-                                RegExp(r'[\[\]!@#\$%^&*(){}/:";|_=+]')),
-                          ],
                         ),
                       ),
                       Expanded(
@@ -304,108 +305,135 @@ class _SecondWidgetState extends State<SecondWidget> {
                       ),
                     ),
                     Expanded(
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8),
-                        child: StreamBuilder(
-                          stream: FirestoreHelper.readgiohang(
-                              tableController.tableName.toString()),
-                          builder: (BuildContext context,
-                              AsyncSnapshot<dynamic> snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            if (snapshot.hasData) {
-                              if (snapshot.data.length > 0) {
-                                return StreamBuilder(
-                                  stream: FirestoreHelper.readtinhtrang(
-                                      tableController.tableName.toString()),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return const Center(
-                                        child: CircularProgressIndicator(),
-                                      );
-                                    }
-                                    if (snapshot.hasData) {
-                                      final tinhtrang = snapshot.data;
-                                      for (var i = 0;
-                                          i < tinhtrang!.length;
-                                          i++) {
-                                        if (tinhtrang[i].trangthai ==
-                                                "success" &&
-                                            tinhtrang[i].idtinhtrang ==
-                                                tableController.tableName
-                                                    .toString()) {
-                                          return MyButton(
-                                            onTap: () async {
-                                              submitPayment(context);
-                                            },
-                                            backgroundColor: Colors.grey,
-                                            height: 46,
-                                            text: Text(
-                                              'Hoàn thành đơn',
-                                              style: TextStyle(
-                                                  color: colorScheme(context)
-                                                      .tertiary),
-                                            ),
-                                          );
+                      child: Builder(builder: (context) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8),
+                          child: StreamBuilder(
+                            stream: FirestoreHelper.readgiohang(
+                                tableController.tableName.toString()),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              if (snapshot.hasData) {
+                                WidgetsBinding.instance
+                                    .addPostFrameCallback((timeStamp) {
+                                  controllerData.clear();
+                                  tableController.isAddCoupons.value = false;
+                                });
+                                if (snapshot.data.length > 0) {
+                                  return StreamBuilder(
+                                    stream: FirestoreHelper.readtinhtrang(
+                                        tableController.tableName.toString()),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return const Center(
+                                          child: CircularProgressIndicator(),
+                                        );
+                                      }
+                                      if (snapshot.hasData) {
+                                        final tinhtrang = snapshot.data;
+                                        for (var i = 0;
+                                            i < tinhtrang!.length;
+                                            i++) {
+                                          if (tinhtrang[i].couponsCode != '' &&
+                                              tinhtrang[i].idtinhtrang ==
+                                                  tableController.tableName
+                                                      .toString()) {
+                                            WidgetsBinding.instance
+                                                .addPostFrameCallback(
+                                                    (timeStamp) {
+                                              controllerData.text =
+                                                  tinhtrang[i].couponsCode!;
+                                              tableController
+                                                  .isAddCoupons.value = true;
+                                            });
+                                          }
+                                          if (tinhtrang[i].trangthai ==
+                                                  "success" &&
+                                              tinhtrang[i].idtinhtrang ==
+                                                  tableController.tableName
+                                                      .toString()) {
+                                            return MyButton(
+                                              onTap: () async {
+                                                final persent =
+                                                    await applyCouponAndGetPercent(
+                                                        controllerData.text);
+                                                // ignore: use_build_context_synchronously
+                                                submitPayment(
+                                                    context, timeStamp);
+                                              },
+                                              backgroundColor: Colors.grey,
+                                              height: 46,
+                                              text: Text(
+                                                'Hoàn thành đơn',
+                                                style: TextStyle(
+                                                    color: colorScheme(context)
+                                                        .tertiary),
+                                              ),
+                                            );
+                                          }
                                         }
                                       }
-                                    }
-                                    return MyButton(
-                                      onTap: () async {
-                                        final persent =
-                                            await applyCouponAndGetPercent(
-                                                controllerData.text);
-                                        final Uint8List filePDF =
-                                            await generateInvoicePDF(
-                                                persent, formattedDate);
-                                        // ignore: use_build_context_synchronously
-                                        showPaymentDialog(
-                                            context,
-                                            filePDF,
-                                            persent > 0
-                                                ? tableController
-                                                        .totalPrice.value -
-                                                    (tableController
-                                                            .totalPrice.value *
-                                                        (persent) /
-                                                        100)
-                                                : tableController
-                                                    .totalPrice.value,
-                                            formattedDate);
-                                      },
-                                      backgroundColor: Colors.blue,
-                                      height: 46,
-                                      text: Obx(
-                                        () => couponsController.isLoading.value
-                                            ? const SizedBox(
-                                                width: 20,
-                                                height: 20,
-                                                child:
-                                                    CircularProgressIndicator())
-                                            : Text(
-                                                'Thanh toán',
-                                                style: TextStyle(
-                                                  color: colorScheme(context)
-                                                      .tertiary,
+                                      return MyButton(
+                                        onTap: () async {
+                                          final persent =
+                                              await applyCouponAndGetPercent(
+                                                  controllerData.text);
+                                          final Uint8List filePDF =
+                                              await generateInvoicePDF(
+                                                  persent, timeStamp);
+                                          // ignore: use_build_context_synchronously
+                                          showPaymentDialog(
+                                              context,
+                                              filePDF,
+                                              persent > 0
+                                                  ? tableController
+                                                          .totalPrice.value -
+                                                      (tableController
+                                                              .totalPrice
+                                                              .value *
+                                                          (persent) /
+                                                          100)
+                                                  : tableController
+                                                      .totalPrice.value,
+                                              timeStamp);
+                                        },
+                                        backgroundColor: Colors.blue,
+                                        height: 46,
+                                        text: Obx(
+                                          () => couponsController
+                                                  .isLoading.value
+                                              ? const SizedBox(
+                                                  width: 20,
+                                                  height: 20,
+                                                  child:
+                                                      CircularProgressIndicator())
+                                              : Text(
+                                                  'Thanh toán',
+                                                  style: TextStyle(
+                                                    color: colorScheme(context)
+                                                        .tertiary,
+                                                  ),
                                                 ),
-                                              ),
-                                      ),
-                                    );
-                                  },
-                                );
-                              } else {
-                                return const SizedBox();
+                                        ),
+                                      );
+                                    },
+                                  );
+                                } else {
+                                  return const SizedBox();
+                                }
                               }
-                            }
-                            return const SizedBox();
-                          },
-                        ),
-                      ),
+                              return const SizedBox();
+                            },
+                          ),
+                        );
+                      }),
                     ),
                   ],
                 ),
@@ -452,12 +480,11 @@ class _SecondWidgetState extends State<SecondWidget> {
     return percent;
   }
 
-  Future<Uint8List> generateInvoicePDF(
-      int persent, String formattedDate) async {
+  Future<Uint8List> generateInvoicePDF(int persent, Timestamp timeStamp) async {
     return createPdf(Invoice(
       persentCoupons: persent,
       products: products,
-      date: formattedDate,
+      timeStamp: timeStamp,
       nhanvien: authController.userName.value,
       totalAmount: double.parse(tableController.totalPrice.value.toString()),
       tableName: tableController.tableName.value,
@@ -465,7 +492,7 @@ class _SecondWidgetState extends State<SecondWidget> {
   }
 
   void showPaymentDialog(BuildContext context, Uint8List filePDF,
-      double totalPrice, String formattedDate) {
+      double totalPrice, Timestamp timestamp) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -488,7 +515,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                     right: 40,
                     child: IconButton(
                         onPressed: () {
-                          downloadPDF(filePDF, formattedDate);
+                          downloadPDF(filePDF, timestamp.toDate().toString());
                         },
                         icon: const Icon(Icons.download, size: 30))),
               ],
@@ -497,13 +524,15 @@ class _SecondWidgetState extends State<SecondWidget> {
           labelLeadingButton: 'Tiền mặt',
           labelTraillingButton: 'Mã QR',
           onTapLeading: () {
-            submitPayment(context);
+            submitPayment(context, timestamp);
           },
           onTapTrailling: () {
             showDialogQRcode(
               context: context,
               tableName: tableController.tableName.value,
               totalPrice: totalPrice,
+              formattedDate: timestamp.toDate().toString(),
+              timestamp: timestamp,
             );
           },
         );
@@ -514,7 +543,9 @@ class _SecondWidgetState extends State<SecondWidget> {
   void showDialogQRcode(
       {required BuildContext context,
       required String tableName,
-      required double totalPrice}) {
+      required double totalPrice,
+      required String formattedDate,
+      required Timestamp timestamp}) {
     showDialog(
       context: context,
       builder: (context) {
@@ -545,7 +576,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                 width: MediaQuery.sizeOf(context).width * 0.1,
                 onTap: () {
                   Navigator.pop(context);
-                  submitPayment(context);
+                  submitPayment(context, timestamp);
                 },
                 backgroundColor: colorScheme(context).onSurfaceVariant,
                 height: 50,
@@ -561,11 +592,7 @@ class _SecondWidgetState extends State<SecondWidget> {
     );
   }
 
-  void submitPayment(BuildContext context) async {
-    var now = DateTime.now();
-    // String formattedDate =
-    //     "${now.day}-${now.month}-${now.year} / ${now.hour}:${now.minute}:${now.second}";
-    String formattedDate = "${now.day}-${now.month}-${now.year}";
+  void submitPayment(BuildContext context, Timestamp timestamp) async {
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -604,7 +631,7 @@ class _SecondWidgetState extends State<SecondWidget> {
                           : null,
                   products: products,
                   tableName: tableController.tableName.value,
-                  date: formattedDate,
+                  timeStamp: timestamp,
                   nhanvien: authController.userName.value,
                   totalAmount:
                       double.parse(tableController.totalPrice.value.toString()),

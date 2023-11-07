@@ -41,8 +41,12 @@ class _HoaDonPageState extends State<HoaDonPage> {
           }
           if (snapshot.hasData) {
             List<Invoice>? hoadon = snapshot.data;
+            hoadon!.sort(
+              (a, b) => b.timeStamp.millisecondsSinceEpoch
+                  .compareTo(a.timeStamp.millisecondsSinceEpoch),
+            );
             double tongtien = 0;
-            for (var i = 0; i < hoadon!.length; i++) {
+            for (var i = 0; i < hoadon.length; i++) {
               tongtien += hoadon[i].totalAmount;
             }
             return Column(
@@ -75,6 +79,13 @@ class _HoaDonPageState extends State<HoaDonPage> {
                       flex: 3,
                       child: Center(
                         child: Text('ID:'.toUpperCase(),
+                            overflow: TextOverflow.ellipsis),
+                      ),
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Center(
+                        child: Text('Bàn:'.toUpperCase(),
                             overflow: TextOverflow.ellipsis),
                       ),
                     ),
@@ -127,146 +138,148 @@ class _HoaDonPageState extends State<HoaDonPage> {
                                   selectedIndex = index;
                                 });
                               },
-                              child: Column(
-                                children: [
-                                  rowTable(hoaDonIndex),
-                                  value && selectedIndex == index
-                                      ? Container(
-                                          margin: const EdgeInsets.only(
-                                              top: 20, bottom: 10),
-                                          decoration: BoxDecoration(
-                                            borderRadius:
-                                                BorderRadius.circular(6),
-                                            color:
-                                                colorScheme(context).onPrimary,
-                                          ),
-                                          child: Stack(
-                                            children: [
-                                              // Positioned(
-                                              //     top: 6,
-                                              //     right: 44,
-                                              //     child: IconButton(
-                                              //         onPressed: () {},
-                                              //         icon: const Icon(
-                                              //             Icons.print,
-                                              //             size: 22))),
-                                              Positioned(
-                                                  top: 6,
-                                                  right: 6,
-                                                  child: IconButton(
-                                                      onPressed: () async {
-                                                        createPDFAndDownload(
-                                                            hoaDonIndex);
-                                                      },
-                                                      icon: const Icon(
-                                                          Icons.download,
-                                                          size: 24))),
-                                              Column(
-                                                children: [
-                                                  const SizedBox(height: 10),
-                                                  Text(
-                                                    'Chi Tiết Hoá Đơn:'
-                                                        .toUpperCase(),
-                                                  ),
-                                                  const SizedBox(height: 10),
-                                                  SizedBox(
-                                                    width: 700,
-                                                    height: 200,
-                                                    child:
-                                                        SingleChildScrollView(
-                                                      child: DataTable(
-                                                        columns: [
-                                                          const DataColumn(
+                              child: Builder(builder: (context) {
+                                return Column(
+                                  children: [
+                                    rowTable(hoaDonIndex),
+                                    value && selectedIndex == index
+                                        ? Container(
+                                            margin: const EdgeInsets.only(
+                                                top: 20, bottom: 10),
+                                            decoration: BoxDecoration(
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                              color: colorScheme(context)
+                                                  .onPrimary,
+                                            ),
+                                            child: Stack(
+                                              children: [
+                                                // Positioned(
+                                                //     top: 6,
+                                                //     right: 44,
+                                                //     child: IconButton(
+                                                //         onPressed: () {},
+                                                //         icon: const Icon(
+                                                //             Icons.print,
+                                                //             size: 22))),
+                                                Positioned(
+                                                    top: 6,
+                                                    right: 6,
+                                                    child: IconButton(
+                                                        onPressed: () async {
+                                                          createPDFAndDownload(
+                                                              hoaDonIndex);
+                                                        },
+                                                        icon: const Icon(
+                                                            Icons.download,
+                                                            size: 24))),
+                                                Column(
+                                                  children: [
+                                                    const SizedBox(height: 10),
+                                                    Text(
+                                                      'Chi Tiết Hoá Đơn:'
+                                                          .toUpperCase(),
+                                                    ),
+                                                    const SizedBox(height: 10),
+                                                    SizedBox(
+                                                      width: 700,
+                                                      height: 200,
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        child: DataTable(
+                                                          columns: [
+                                                            const DataColumn(
+                                                                label: Text(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    'Tên sản phẩm:')),
+                                                            const DataColumn(
+                                                                label: Text(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    'Số lượng:')),
+                                                            const DataColumn(
+                                                                label: Text(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    'Đơn giá:')),
+                                                            const DataColumn(
+                                                                label: Text(
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    'Tổng tiền:')),
+                                                            DataColumn(
                                                               label: Text(
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
-                                                                  'Tên sản phẩm:')),
-                                                          const DataColumn(
+                                                                  hoaDonIndex.persentCoupons !=
+                                                                          null
+                                                                      ? '-${hoaDonIndex.persentCoupons ?? ''}%'
+                                                                      : ""),
+                                                            ),
+                                                            DataColumn(
                                                               label: Text(
                                                                   overflow:
                                                                       TextOverflow
                                                                           .ellipsis,
-                                                                  'Số lượng:')),
-                                                          const DataColumn(
-                                                              label: Text(
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  'Đơn giá:')),
-                                                          const DataColumn(
-                                                              label: Text(
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  'Tổng tiền:')),
-                                                          DataColumn(
-                                                            label: Text(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                hoaDonIndex.persentCoupons !=
-                                                                        null
-                                                                    ? '-${hoaDonIndex.persentCoupons ?? ''}%'
-                                                                    : ""),
-                                                          ),
-                                                          DataColumn(
-                                                            label: Text(
-                                                                overflow:
-                                                                    TextOverflow
-                                                                        .ellipsis,
-                                                                hoaDonIndex.persentCoupons !=
-                                                                        null
-                                                                    ? "${formatPrice(int.parse(hoaDonIndex.totalAmountCoupons.toString()))} đ"
-                                                                    : ""),
-                                                          ),
-                                                        ],
-                                                        rows: hoaDonIndex
-                                                            .products
-                                                            .map(
-                                                                (chitiethdindex) {
-                                                          return DataRow(
-                                                              cells: [
-                                                                DataCell(Text(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    chitiethdindex
-                                                                        .tensp)),
-                                                                DataCell(Text(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    chitiethdindex
-                                                                        .soluong
-                                                                        .toString())),
-                                                                DataCell(Text(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    "${formatPrice(int.parse(chitiethdindex.giasp.toString()))} đ")),
-                                                                DataCell(Text(
-                                                                    overflow:
-                                                                        TextOverflow
-                                                                            .ellipsis,
-                                                                    "${formatPrice(chitiethdindex.soluong * chitiethdindex.giasp)} đ")),
-                                                                const DataCell(
-                                                                    Text("")),
-                                                                const DataCell(
-                                                                    Text("")),
-                                                              ]);
-                                                        }).toList(),
+                                                                  hoaDonIndex.persentCoupons !=
+                                                                          null
+                                                                      ? "${formatPrice(int.parse(hoaDonIndex.totalAmountCoupons.toString()))} đ"
+                                                                      : ""),
+                                                            ),
+                                                          ],
+                                                          rows: hoaDonIndex
+                                                              .products
+                                                              .map(
+                                                                  (chitiethdindex) {
+                                                            return DataRow(
+                                                                cells: [
+                                                                  DataCell(Text(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      chitiethdindex
+                                                                          .tensp)),
+                                                                  DataCell(Text(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      chitiethdindex
+                                                                          .soluong
+                                                                          .toString())),
+                                                                  DataCell(Text(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      "${formatPrice(int.parse(chitiethdindex.giasp.toString()))} đ")),
+                                                                  DataCell(Text(
+                                                                      overflow:
+                                                                          TextOverflow
+                                                                              .ellipsis,
+                                                                      "${formatPrice(chitiethdindex.soluong * chitiethdindex.giasp)} đ")),
+                                                                  const DataCell(
+                                                                      Text("")),
+                                                                  const DataCell(
+                                                                      Text("")),
+                                                                ]);
+                                                          }).toList(),
+                                                        ),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        )
-                                      : const SizedBox()
-                                ],
-                              ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : const SizedBox()
+                                  ],
+                                );
+                              }),
                             );
                           },
                         ),
@@ -298,7 +311,15 @@ class _HoaDonPageState extends State<HoaDonPage> {
         Expanded(
           flex: 3,
           child: Center(
-            child: Text(hoaDonIndex.date, overflow: TextOverflow.ellipsis),
+            child: Text("Bàn ${hoaDonIndex.tableName}",
+                overflow: TextOverflow.ellipsis),
+          ),
+        ),
+        Expanded(
+          flex: 3,
+          child: Center(
+            child: Text(hoaDonIndex.timeStamp.toDate().toString(),
+                overflow: TextOverflow.ellipsis),
           ),
         ),
         Expanded(
