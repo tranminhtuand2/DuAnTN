@@ -6,7 +6,7 @@ import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_coupons/manager_coupons.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_product/manager_product.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/table_page.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/thongke/thongkescreen.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/thongke/thongkescreen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 
 class AdminPanelScreen extends StatefulWidget {
