@@ -61,7 +61,7 @@ Future<Uint8List> createPdf(Invoice invoice) async {
                 style: pw.TextStyle(
                     font: font, fontSize: 20, fontWeight: pw.FontWeight.bold)),
             pw.Text(
-              'Hóa đơn mua hàng: (${invoice.date})',
+              'Hóa đơn mua hàng: (${invoice.timeStamp.toDate()})',
               style: pw.TextStyle(font: font, fontSize: 16),
             ),
             pw.Text(
@@ -106,5 +106,5 @@ void downloadPDF(Uint8List pdfData, String date) {
 
 void createPDFAndDownload(Invoice invoice) async {
   Uint8List filePDF = await createPdf(invoice);
-  downloadPDF(filePDF, invoice.date);
+  downloadPDF(filePDF, invoice.timeStamp.toDate().toString());
 }

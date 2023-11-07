@@ -6,7 +6,7 @@ class Invoice {
   List<GioHang1> products; // Danh sách các sản phẩm trong hoá đơn
   String tableName;
   int? persentCoupons; // Phần trăm giảm giá khi áp khuyến mãi;
-  String date; // Ngày tạo hoá đơn
+  Timestamp timeStamp;
   String nhanvien;
   double totalAmount; // Tổng tiền hoá đơn
   double? totalAmountCoupons; // Tổng tiền hoá đơn đã giảm giá
@@ -15,7 +15,7 @@ class Invoice {
     required this.products,
     required this.tableName,
     this.persentCoupons,
-    required this.date,
+    required this.timeStamp,
     required this.nhanvien,
     required this.totalAmount,
     this.totalAmountCoupons,
@@ -31,7 +31,7 @@ class Invoice {
       products: productList,
       persentCoupons: data['persentCoupons'],
       tableName: data['tableName'],
-      date: data['date'],
+      timeStamp: data['timeStamp'],
       nhanvien: data['nhanvien'],
       totalAmount: data['totalAmount'],
       totalAmountCoupons: data['totalAmountCoupons'],
@@ -40,7 +40,7 @@ class Invoice {
   Map<String, dynamic> toJson() => {
         'id': id,
         'products': products.map((product) => product.toJson()).toList(),
-        'date': date,
+        "timeStamp": timeStamp,
         'persentCoupons': persentCoupons,
         'tableName': tableName,
         'nhanvien': nhanvien,

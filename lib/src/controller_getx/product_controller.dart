@@ -1,3 +1,4 @@
+import 'package:convert_vietnamese/convert_vietnamese.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/model/sanpham_model.dart';
 
@@ -5,6 +6,7 @@ import '../firebase_helper/firebasestore_helper.dart';
 
 class ProductController extends GetxController {
   var products = <SanPham>[].obs;
+  var productsFilter = <SanPham>[].obs;
   var isLoading = false.obs;
 
   Future<void> fetchProduct(String categories) async {
@@ -38,6 +40,20 @@ class ProductController extends GetxController {
       });
     } catch (e) {
       print('Error fetching products: $e');
+    }
+  }
+
+  void filterData(String keyword) {
+    try {
+      if (products.isNotEmpty) {
+        productsFilter.value = products
+            .where((value) => removeDiacritics(value.tensp.toLowerCase())
+                .contains(removeDiacritics(keyword.toLowerCase())))
+            .toList();
+        products.value = productsFilter;
+      }
+    } catch (e) {
+      print('Error filter products: $e');
     }
   }
 }

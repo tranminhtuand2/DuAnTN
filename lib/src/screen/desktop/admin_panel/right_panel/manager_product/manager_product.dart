@@ -34,6 +34,18 @@ class _ManagerProductPageState extends State<ManagerProductPage> {
   final controllerDataEdit = Get.put(DataEditProductController());
 
   @override
+  void initState() {
+    super.initState();
+    _controllerSearch.addListener(() {
+      if (_controllerSearch.text.isNotEmpty) {
+        controller.filterData(_controllerSearch.text);
+      } else {
+        controller.fetchAllProduct();
+      }
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable
     ColorScheme color = colorScheme(context);
