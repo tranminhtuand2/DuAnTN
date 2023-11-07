@@ -24,8 +24,8 @@ class CouponsController extends GetxController {
       // Lắng nghe stream và cập nhật sản phẩm khi có dữ liệu mới
       FirestoreHelper.filterCoupons(data).listen((Coupons dataCoupons) {
         coupons.value = dataCoupons;
-        completer.complete(dataCoupons); // Đánh dấu hoàn thành khi có dữ liệu
         isLoading.value = false;
+        completer.complete(dataCoupons); // Đánh dấu hoàn thành khi có dữ liệu
       });
 
       await completer.future; // Chờ cho hoàn thành của dữ liệu từ Firestore

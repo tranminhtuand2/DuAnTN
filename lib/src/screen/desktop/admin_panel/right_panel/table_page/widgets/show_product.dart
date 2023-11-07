@@ -27,6 +27,19 @@ class _ShowProductState extends State<ShowProduct> {
   final controllerCategory = Get.put(CategoryController());
   int selectedindex = 0;
   final _controllerSearch = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _controllerSearch.addListener(() {
+      if (_controllerSearch.text.isNotEmpty) {
+        controller.filterData(_controllerSearch.text);
+      } else {
+        controller.fetchAllProduct();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     // ignore: unused_local_variable

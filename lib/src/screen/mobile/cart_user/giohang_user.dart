@@ -9,6 +9,9 @@ import 'package:managerfoodandcoffee/src/common_widget/bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_dialog.dart';
+import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/coupons_controller.dart';
+import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
 import 'package:managerfoodandcoffee/src/utils/enum_status_payment.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
@@ -40,6 +43,8 @@ class _CartProductState extends State<CartProduct> {
   int tongtienthanhtoan = 0;
   final discountController = TextEditingController();
   int isSelectedPayment = 0;
+  final couponsController = Get.put(CouponsController());
+  String couponsCode = '';
 
   late MomoVn _momoPay;
   // ignore: unused_field
@@ -265,16 +270,38 @@ class _CartProductState extends State<CartProduct> {
                       const SizedBox(height: 24),
                       // luu hoá đơn
                       MyButton(
-                        onTap: () {
-                          log(isSelectedPayment.toString());
+                        onTap: () async {
                           switch (isSelectedPayment) {
                             case 0:
                               log('Cash');
-                              createPaymentStatus(PaymentStatus.ordered);
+                              final percentCoupons =
+                                  await applyCouponAndGetPercent(
+                                      discountController.text);
+                              if (percentCoupons != 0) {
+                                tongtienthanhtoan = tongtienthanhtoan -
+                                    int.parse((tongtienthanhtoan *
+                                            percentCoupons /
+                                            100)
+                                        .toString()
+                                        .split('.')[0]);
+                              }
+                              createPaymentStatus(
+                                  PaymentStatus.ordered, couponsCode);
                               break;
                             case 1:
                               log('MoMo');
-                              Get.back();
+                              final percentCoupons =
+                                  await applyCouponAndGetPercent(
+                                      discountController.text.toUpperCase());
+                              if (percentCoupons != 0) {
+                                tongtienthanhtoan = tongtienthanhtoan -
+                                    int.parse((tongtienthanhtoan *
+                                            percentCoupons /
+                                            100)
+                                        .toString()
+                                        .split('.')[0]);
+                              }
+
                               openMoMoApp(
                                   amount: tongtienthanhtoan,
                                   orderId: widget.table.tenban +
@@ -282,6 +309,7 @@ class _CartProductState extends State<CartProduct> {
                                   description: 'Thanh toán hóa đơn',
                                   username:
                                       'Khách bàn số ${widget.table.tenban}');
+                              Get.back();
                               break;
                             case 2:
                               log('VnPay');
@@ -354,7 +382,7 @@ class _CartProductState extends State<CartProduct> {
         title: 'Thanh toán ${formatPrice(tongtienthanhtoan)} thành công',
         body: 'Vui lòng chờ đồ uống trong vài phút <3');
     //gọi hàm xác nhận thanh toán lên firebase
-    createPaymentStatus(PaymentStatus.success);
+    createPaymentStatus(PaymentStatus.success, couponsCode);
   }
 
   void _handlePaymentError(PaymentResponse response) async {
@@ -392,8 +420,44 @@ class _CartProductState extends State<CartProduct> {
     }
   }
 
-  void createPaymentStatus(PaymentStatus status) async {
-    await FirestoreHelper.createtinhtrang(status, widget.table);
+  Future<int> applyCouponAndGetPercent(String data) async {
+    int percent = 0;
+    if (discountController.text.isNotEmpty) {
+      await couponsController.filterCoupons(discountController.text);
+      final Coupons coupons = couponsController.coupons.value;
+      if (coupons.data == data.toUpperCase() && coupons.isEnable) {
+        percent = coupons.persent;
+        showCustomSnackBar(
+          title: "OK",
+          message: 'Áp dụng mã giảm giá thành công',
+          type: Type.success,
+        );
+        couponsCode = coupons.data;
+        return percent;
+      } else {
+        percent = 0;
+        showCustomSnackBar(
+          title: "Thất bại",
+          message: 'Mã đã hết hiệu lực hoặc số lượt sử dụng',
+          type: Type.error,
+        );
+        return percent;
+      }
+    } else {
+      couponsController.coupons.value = Coupons(
+          id: '',
+          beginDay: '',
+          endDay: '',
+          data: '',
+          persent: 0,
+          isEnable: false,
+          soluotdung: 0);
+    }
+    return percent;
+  }
+
+  void createPaymentStatus(PaymentStatus status, String? couponsCode) async {
+    await FirestoreHelper.createtinhtrang(status, widget.table, couponsCode);
     // xoá giỏ hàng
     // await FirestoreHelper.deleteAllgiohang(widget.table.tenban);
 
