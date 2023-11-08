@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
+import 'package:managerfoodandcoffee/src/model/chart_Model.dart';
 import 'package:managerfoodandcoffee/src/model/thongke_model.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/thongke/widget/BarChar.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/thongke/widget/barcharonday.dart';
 import 'package:managerfoodandcoffee/src/utils/size.dart';
+
+import '../../../../model/giohanghd.dart';
 
 class thongkeScreen extends StatefulWidget {
   const thongkeScreen({super.key});
@@ -301,46 +304,60 @@ class _thongkeScreenState extends State<thongkeScreen> {
           ),
           Expanded(
             child: Container(
-              child: Column(
-                children: [
-                  Row(
-                    children: [
-                      Container(
-                        height: 400,
-                        width: 500,
-                        color: Colors.amber,
-                        child: StreamBuilder(
-                          stream: nameEmployer == "ALL"
-                              ? FirestoreHelper.readThongke()
-                              : FirestoreHelper.readThongkenhanvien(
-                                  nameEmployer.toString()),
-                          builder: (context, snapshot) {
-                            if (snapshot.connectionState ==
-                                ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
-                            }
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Container(
+                          height: 400,
+                          width: 500,
+                          color: Colors.amber,
+                          child: StreamBuilder(
+                            stream: nameEmployer == "ALL"
+                                ? FirestoreHelper.readThongke()
+                                : FirestoreHelper.readThongkenhanvien(
+                                    nameEmployer.toString()),
+                            builder: (context, snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: CircularProgressIndicator());
+                              }
 
-                            if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return Text('Không dữ liệu : "$nameEmployer"');
-                            }
-                            if (snapshot.hasError) {
-                              return Text("lỗi kết nối dữ liệu");
-                            }
-                            if (snapshot.hasData) {
-                              List<ThongKe>? thongkenhanvien = snapshot.data;
-                              return BarChartWidget(
-                                  thongKeData: thongkenhanvien!);
-                            }
-                            return Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
+                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                                return Text('Không dữ liệu : "$nameEmployer"');
+                              }
+                              if (snapshot.hasError) {
+                                return Text("lỗi kết nối dữ liệu");
+                              }
+                              if (snapshot.hasData) {
+                                List<ThongKe>? thongkenhanvien = snapshot.data;
+                                return BarChartWidget(
+                                    thongKeData: thongkenhanvien!);
+                              }
+                              return Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            },
+                          ),
                         ),
-                      ),
-                      Container(
-                        height: 400,
-                        width: 500,
-                        color: Color.fromARGB(255, 68, 204, 75),
+                        Container(
+                          height: 400,
+                          width: 500,
+                          color: Color.fromARGB(255, 68, 204, 75),
+                        ),
+                      ],
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          color: Colors.blueGrey,
+                        ),
+                        height: 500,
+                        width: double.infinity,
                         child: StreamBuilder(
                           stream: FirestoreHelper.readThongkeByDate(
                               datefirt, dateEnd),
@@ -351,14 +368,33 @@ class _thongkeScreenState extends State<thongkeScreen> {
                             }
 
                             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return Text('Không dữ liệu : "$nameEmployer"');
+                              return Text('vui lòng chọn ngày muốn xem');
                             }
                             if (snapshot.hasError) {
                               return Text("lỗi kết nối dữ liệu");
                             }
                             if (snapshot.hasData) {
-                              List<ThongKe>? thongkenhanvien = snapshot.data;
-                              return DailyStatisticsChart(thongkenhanvien!);
+                              List<ProductSalesData> productSalesDataList = [];
+                              List<ThongKe>? thongKeData = snapshot.data;
+                              for (ThongKe thongKe in thongKeData!) {
+                                for (GioHang1 product in thongKe.products) {
+                                  int existingProductIndex =
+                                      productSalesDataList.indexWhere((data) =>
+                                          data.productName == product.tensp);
+
+                                  if (existingProductIndex != -1) {
+                                    productSalesDataList[existingProductIndex]
+                                        .totalSales += product.soluong;
+                                  } else {
+                                    productSalesDataList.add(ProductSalesData(
+                                      productName: product.tensp,
+                                      totalSales: product.soluong,
+                                    ));
+                                  }
+                                }
+                              }
+                              return SalesChart(
+                                  productSalesDataList: productSalesDataList);
                             }
                             return Center(
                               child: CircularProgressIndicator(),
@@ -366,10 +402,9 @@ class _thongkeScreenState extends State<thongkeScreen> {
                           },
                         ),
                       ),
-                    ],
-                  ),
-                  Container()
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           )

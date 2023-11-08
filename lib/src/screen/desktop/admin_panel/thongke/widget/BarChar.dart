@@ -41,7 +41,7 @@ class BarChartWidget extends StatelessWidget {
                   (index, thongke) => MapEntry(
                     index,
                     BarChartGroupData(
-                      x: index.toDouble().toInt(),
+                      x: index,
                       barRods: [
                         BarChartRodData(
                           toY: thongke.total ?? 0.0,
