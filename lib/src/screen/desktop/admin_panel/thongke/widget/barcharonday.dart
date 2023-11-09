@@ -32,7 +32,7 @@ class SalesChart extends StatelessWidget {
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
                         style: TextStyle(
-                          color: Color.fromARGB(255, 89, 136, 194),
+                          color: Colors.red,
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -46,15 +46,16 @@ class SalesChart extends StatelessWidget {
             ),
           ),
           rightTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false, reservedSize: 60),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 60),
           ),
           topTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: false, reservedSize: 60),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 60),
           ),
         ),
         borderData: FlBorderData(
           show: true,
-          border: Border.all(color: const Color(0xff37434d), width: 1),
+          border:
+              Border.all(color: Color.fromARGB(255, 185, 205, 221), width: 1),
         ),
         gridData: FlGridData(show: true),
         barGroups: productSalesDataList.asMap().entries.map((entry) {
