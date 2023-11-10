@@ -326,7 +326,23 @@ class FirestoreHelper {
         .map((e) => TinhTrangThanhToan.fromSnapshot(e))
         .toList());
   }
-  //creater
+  //Query
+
+  //filter sp
+  static Stream<TinhTrangThanhToan> filterTinhTrangHoaDon(String tableName) {
+    final tinhtrangCollection =
+        FirebaseFirestore.instance.collection("tinhtrang");
+    Query query =
+        tinhtrangCollection.where("idtinhtrang", isEqualTo: tableName);
+    return query.snapshots().map((querySnapshot) {
+      if (querySnapshot.docs.isNotEmpty) {
+        return TinhTrangThanhToan.fromSnapshot(querySnapshot.docs[0]);
+      } else {
+        //return  TinhTrangThanhToan rỗng nếu không tìm thấy
+        return TinhTrangThanhToan(trangthai: '');
+      }
+    });
+  } //creater
 
   static Future<void> createtinhtrang(
       PaymentStatus status, TableModel table, String? couponsCode) async {

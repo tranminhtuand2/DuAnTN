@@ -208,18 +208,49 @@ class _CartProductState extends State<CartProduct> {
                 }
                 if (snapshot.hasData) {
                   if (snapshot.data!.isNotEmpty) {
-                    return MyButton(
-                      onTap: () {
-                        bottomSheetPayment(context);
+                    return StreamBuilder(
+                      stream: FirestoreHelper.filterTinhTrangHoaDon(
+                          widget.table.tenban),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        }
+                        if (snapshot.hasData) {
+                          final tinhtrang = snapshot.data;
+                          if (tinhtrang!.idtinhtrang == widget.table.tenban) {
+                            return MyButton(
+                              onTap: () {
+                                Navigator.pop(context);
+                              },
+                              backgroundColor:
+                                  colorScheme(context).onSurfaceVariant,
+                              height: 60,
+                              text: Text(
+                                'Vui lòng chờ nhân viên hoàn thành đơn hàng trước đó  ^^',
+                                overflow: TextOverflow.fade,
+                                style: text(context).titleSmall?.copyWith(
+                                    color: colorScheme(context).tertiary),
+                              ),
+                            );
+                          }
+                        }
+                        return MyButton(
+                          onTap: () {
+                            bottomSheetPayment(context);
+                          },
+                          backgroundColor:
+                              colorScheme(context).onSurfaceVariant,
+                          height: 60,
+                          text: Text(
+                            'Thanh toán',
+                            style: text(context).titleMedium?.copyWith(
+                                color: colorScheme(context).tertiary),
+                          ),
+                        );
                       },
-                      backgroundColor: colorScheme(context).onSurfaceVariant,
-                      height: 60,
-                      text: Text(
-                        'Thanh toán',
-                        style: text(context)
-                            .titleMedium
-                            ?.copyWith(color: colorScheme(context).tertiary),
-                      ),
                     );
                   } else {
                     return const SizedBox();
@@ -317,7 +348,7 @@ class _CartProductState extends State<CartProduct> {
                               break;
                           }
                         },
-                        backgroundColor: colorScheme(context).primary,
+                        backgroundColor: colorScheme(context).onSurfaceVariant,
                         height: 60,
                         text: Text(
                           'Xác nhận ',
@@ -360,14 +391,6 @@ class _CartProductState extends State<CartProduct> {
                   ?.copyWith(fontWeight: FontWeight.w600)),
         ],
       ),
-    );
-  }
-
-  Future<void> showSnackbar(int totalAmount) async {
-    await Future.delayed(Duration.zero); // This ensures the build has completed
-    Get.snackbar(
-      "Đã xác nhận",
-      "Vui lòng chuẩn bị $totalAmount VNĐ",
     );
   }
 

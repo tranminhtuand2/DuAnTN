@@ -61,7 +61,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
             ),
           ),
           StreamBuilder(
-            stream: FirestoreHelper.readtinhtrang(widget.tableModel.tenban),
+            stream:
+                FirestoreHelper.filterTinhTrangHoaDon(widget.tableModel.tenban),
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const Center(
@@ -69,7 +70,8 @@ class _ProductDetailPageState extends State<ProductDetailPage> {
                 );
               }
               if (snapshot.hasData) {
-                if (snapshot.data!.isNotEmpty) {
+                final tinhtrang = snapshot.data;
+                if (tinhtrang!.idtinhtrang == widget.tableModel.tenban) {
                   return MyButton(
                     onTap: () {
                       Navigator.pop(context);
