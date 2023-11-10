@@ -54,9 +54,9 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
     double distance = Geolocator.distanceBetween(targetLat, targetLon,
         currentPosition.latitude, currentPosition.longitude);
     if (distance <= 1000008800.0) {
-      //Thay đổi trạng thái đã chọn bàn
-      final controllerTable = Get.put(TableController());
-      controllerTable.updateSelectedTable(widget.table);
+      // //Thay đổi trạng thái đã chọn bàn
+      // final controllerTable = Get.put(TableController());
+      // controllerTable.updateSelectedTable(widget.table);
       Get.back();
       // Điều kiện đáp ứng, chuyển hướng tới trang đăng nhập.
       Get.offAll(() => HomeScreen(tableModel: widget.table));
@@ -67,6 +67,7 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
           message:
               'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán',
           type: Type.warning);
+      return;
       // setState(() {
       //   titleError =
       //       'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán.';

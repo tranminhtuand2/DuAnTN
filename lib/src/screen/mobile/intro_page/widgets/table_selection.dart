@@ -42,6 +42,7 @@ class _TableSelectionDialogState extends State<TableSelectionDialog> {
 
             snapshot.data!.sort(compareByTenBan);
 
+            tableController.addTable(snapshot.data!);
             return Container(
               width: double.maxFinite, // Match parent width
 
