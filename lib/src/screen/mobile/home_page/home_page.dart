@@ -40,12 +40,6 @@ class _HomePageState extends State<HomePage> {
   final pageViewController = PageController();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return WillPopScope(
@@ -157,7 +151,7 @@ class _HomePageState extends State<HomePage> {
                     controller: pageViewController,
                     itemCount: controllerCategory.categories.length,
                     itemBuilder: (context, index) {
-                      return MyBodyProduct(tenBan: widget.table.tenban);
+                      return MyBodyProduct(tableModel: widget.table);
                     },
                   ),
                 );

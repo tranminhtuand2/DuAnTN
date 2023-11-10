@@ -6,6 +6,7 @@ import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/brightness_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/product_controller.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/home_page/widgets/shimmer_loading.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/product_detail/detail_product_screen.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -16,9 +17,9 @@ import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 class MyBodyProduct extends StatefulWidget {
   const MyBodyProduct({
     super.key,
-    required this.tenBan,
+    required this.tableModel,
   });
-  final String tenBan;
+  final TableModel tableModel;
 
   @override
   State<MyBodyProduct> createState() => _MyBodyProductState();
@@ -61,7 +62,7 @@ class _MyBodyProductState extends State<MyBodyProduct>
                             Get.to(
                               () => ProductDetailPage(
                                 product: sanphamnew,
-                                soBan: widget.tenBan,
+                                tableModel: widget.tableModel,
                               ),
                             );
                           },

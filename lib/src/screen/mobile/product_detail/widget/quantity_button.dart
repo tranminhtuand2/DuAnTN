@@ -75,12 +75,11 @@ class _QuanityButtonProductState extends State<QuanityButtonProduct> {
                     ),
                     IconButton(
                       onPressed: () {
-                        setState(() {
-                          count++;
-                          if (count >= 9) {
-                            count = 9;
-                          }
-                        });
+                        if (count <= 20) {
+                          setState(() {
+                            count++;
+                          });
+                        }
                       },
                       icon: Container(
                         padding: const EdgeInsets.all(5),

@@ -6,8 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
+import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/check_location_page.dart';
+import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QRViewExample extends StatefulWidget {
@@ -21,14 +23,14 @@ class QRViewExample extends StatefulWidget {
 }
 
 class _QRViewExampleState extends State<QRViewExample> {
-  final controllerTable = Get.put(TableController());
-  TableModel? tableModel;
   Barcode? result;
   QRViewController? controller;
   final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  List<TableModel> listTable = [];
 
   // In order to get hot reload to work we need to pause the camera if the platform
   // is android, or resume the camera if the platform is iOS.
+
   @override
   void reassemble() {
     super.reassemble();
@@ -53,7 +55,7 @@ class _QRViewExampleState extends State<QRViewExample> {
                 children: <Widget>[
                   if (result != null)
                     Text(
-                        'Barcode Type: ${describeEnum(result!.format)}   Data: ${result!.code}'),
+                        'Type: ${describeEnum(result!.format)}   Bàn: ${result!.code}'),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -68,7 +70,11 @@ class _QRViewExampleState extends State<QRViewExample> {
                             child: FutureBuilder(
                               future: controller?.getFlashStatus(),
                               builder: (context, snapshot) {
-                                return Text('Đèn: ${snapshot.data}');
+                                return Text(
+                                  'Đèn: ${snapshot.data}',
+                                  style: TextStyle(
+                                      color: colorScheme(context).tertiary),
+                                );
                               },
                             )),
                       ),
@@ -84,7 +90,10 @@ class _QRViewExampleState extends State<QRViewExample> {
                               builder: (context, snapshot) {
                                 if (snapshot.data != null) {
                                   return Text(
-                                      'Máy ảnh trước: ${describeEnum(snapshot.data!)}');
+                                    'Máy ảnh trước: ${describeEnum(snapshot.data!)}',
+                                    style: TextStyle(
+                                        color: colorScheme(context).tertiary),
+                                  );
                                 } else {
                                   return const Text('loading');
                                 }
@@ -92,6 +101,31 @@ class _QRViewExampleState extends State<QRViewExample> {
                             )),
                       )
                     ],
+                  ),
+                  StreamBuilder(
+                    stream: FirestoreHelper.readtable(),
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      }
+                      if (snapshot.hasData) {
+                        final controllerTable = Get.put(TableController());
+                        //Sắp xếp tên bàn theo thứ tự nhỏ đén lớn theo tên bàn
+                        int compareByTenBan(TableModel a, TableModel b) {
+                          return int.parse(a.tenban)
+                              .compareTo(int.parse(b.tenban));
+                        }
+
+                        snapshot.data!.sort(compareByTenBan);
+                        controllerTable.addTable(snapshot.data!);
+
+                        listTable = snapshot.data!;
+                        return const SizedBox();
+                      }
+                      return const SizedBox();
+                    },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -103,8 +137,10 @@ class _QRViewExampleState extends State<QRViewExample> {
                           onPressed: () {
                             Navigator.of(context).pop();
                           },
-                          child: const Text(
+                          child: Text(
                             'Quay lại',
+                            style:
+                                TextStyle(color: colorScheme(context).tertiary),
                           ),
                         ),
                       ),
@@ -114,8 +150,10 @@ class _QRViewExampleState extends State<QRViewExample> {
                           onPressed: () async {
                             await controller?.pauseCamera();
                           },
-                          child: const Text(
+                          child: Text(
                             'Dừng',
+                            style:
+                                TextStyle(color: colorScheme(context).tertiary),
                           ),
                         ),
                       ),
@@ -125,8 +163,10 @@ class _QRViewExampleState extends State<QRViewExample> {
                           onPressed: () async {
                             await controller?.resumeCamera();
                           },
-                          child: const Text(
+                          child: Text(
                             'Tiếp tục',
+                            style:
+                                TextStyle(color: colorScheme(context).tertiary),
                           ),
                         ),
                       )
@@ -166,31 +206,51 @@ class _QRViewExampleState extends State<QRViewExample> {
     setState(() {
       this.controller = controller;
     });
+
     controller.scannedDataStream.listen((scanData) {
-      setState(() {
-        result = scanData;
-      });
-      for (var element in controllerTable.tables) {
-        if (element.tenban == result!.code) {
-          tableModel = element;
+      bool isTableFound = false;
+      TableModel? tableModel;
+
+      if (listTable.isNotEmpty) {
+        for (var element in listTable) {
+          if (element.tenban == scanData.code) {
+            tableModel = element;
+            isTableFound = true;
+            break;
+          }
         }
       }
 
-      if (tableModel != null) {
-        Get.dialog(
-          LocationCheckPage(
-            vido: widget.vido,
-            kinhdo: widget.kinhdo,
-            table: tableModel!,
-          ),
-        );
+      setState(() {
+        result = scanData;
+      });
+
+      if (isTableFound) {
+        _showLocationCheckDialog(tableModel!);
       } else {
-        showCustomSnackBar(
-            title: "Lỗi",
-            message: "Hãy quét lại mã bàn",
-            type: Type.error);
+        _showErrorSnackBar("Lỗi", "Hãy quét lại mã bàn");
+        return;
       }
     });
+  }
+
+  void _showLocationCheckDialog(TableModel tableModel) async {
+    Get.dialog(
+      LocationCheckPage(
+        vido: widget.vido,
+        kinhdo: widget.kinhdo,
+        table: tableModel,
+      ),
+    );
+    await controller?.pauseCamera();
+  }
+
+  void _showErrorSnackBar(String title, String message) {
+    showCustomSnackBar(
+      title: title,
+      message: message,
+      type: Type.error,
+    );
   }
 
   void _onPermissionSet(BuildContext context, QRViewController ctrl, bool p) {

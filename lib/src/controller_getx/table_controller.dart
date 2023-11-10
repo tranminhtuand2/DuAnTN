@@ -1,6 +1,3 @@
-import 'dart:math';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
@@ -35,7 +32,8 @@ class TableController extends GetxController {
   Future<void> updateSelectedTable(TableModel table) async {
     table.isSelected = !table.isSelected!;
 
-    print("bool check: ${table.isSelected}");
+    print("bool check: ${table.isSelected}, tabel: ${table.tenban}");
+
     await FirestoreHelper.updatetable(table);
   }
 }
