@@ -148,19 +148,6 @@ class _thongkeScreenState extends State<thongkeScreen> {
                   SizedBox(
                     width: 10,
                   ),
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     setState(() {});
-                  //   },
-                  //   child: Text("Tính toán theo ngày"),
-                  // ),
-                  // SizedBox(
-                  //   width: 10,
-                  // ),
-                  // ElevatedButton(
-                  //   onPressed: () {},
-                  //   child: Text("Tất Cả"),
-                  // ),
 
                   //dropdown end ten nhan vien
                 ],
@@ -314,48 +301,43 @@ class _thongkeScreenState extends State<thongkeScreen> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 400,
-                          width: 500,
-                          color: Colors.amber,
-                          child: StreamBuilder(
-                            stream: nameEmployer == "ALL"
-                                ? FirestoreHelper.readThongke()
-                                : FirestoreHelper.readThongkenhanvien(
-                                    nameEmployer.toString()),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return Center(
-                                    child: CircularProgressIndicator());
-                              }
+                    // Row(
+                    //   children: [
+                    //     Container(
+                    //       height: 400,
+                    //       width: double.infinity,
+                    //       color: Colors.amber,
+                    //       child: StreamBuilder(
+                    //         stream: nameEmployer == "ALL"
+                    //             ? FirestoreHelper.readThongke()
+                    //             : FirestoreHelper.readThongkenhanvien(
+                    //                 nameEmployer.toString()),
+                    //         builder: (context, snapshot) {
+                    //           if (snapshot.connectionState ==
+                    //               ConnectionState.waiting) {
+                    //             return Center(
+                    //                 child: CircularProgressIndicator());
+                    //           }
 
-                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                return Text('Không dữ liệu : "$nameEmployer"');
-                              }
-                              if (snapshot.hasError) {
-                                return Text("lỗi kết nối dữ liệu");
-                              }
-                              if (snapshot.hasData) {
-                                List<ThongKe>? thongkenhanvien = snapshot.data;
-                                return BarChartWidget(
-                                    thongKeData: thongkenhanvien!);
-                              }
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                          ),
-                        ),
-                        Container(
-                          height: 400,
-                          width: 500,
-                          color: Color.fromARGB(255, 68, 204, 75),
-                        ),
-                      ],
-                    ),
+                    //           if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    //             return Text('Không dữ liệu : "$nameEmployer"');
+                    //           }
+                    //           if (snapshot.hasError) {
+                    //             return Text("lỗi kết nối dữ liệu");
+                    //           }
+                    //           if (snapshot.hasData) {
+                    //             List<ThongKe>? thongkenhanvien = snapshot.data;
+                    //             return BarChartWidget(
+                    //                 thongKeData: thongkenhanvien!);
+                    //           }
+                    //           return Center(
+                    //             child: CircularProgressIndicator(),
+                    //           );
+                    //         },
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Container(
