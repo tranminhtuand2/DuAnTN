@@ -174,7 +174,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  height: 60,
+                  height: 100,
                   width: 300,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -212,8 +212,8 @@ class _thongkeScreenState extends State<thongkeScreen> {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 200,
+                  height: 100,
+                  width: 300,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.green),
@@ -227,10 +227,10 @@ class _thongkeScreenState extends State<thongkeScreen> {
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return Text(
-                            'Không dữ liệu : từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month}');
+                            'Không có dữ liệu : "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month}');
                       }
                       if (snapshot.hasError) {
-                        return Text("lỗi kết nối dữ liệu");
+                        return Text("Lỗi kết nối dữ liệu");
                       }
                       if (snapshot.hasData) {
                         final thongkeBydate = snapshot.data;
@@ -241,9 +241,9 @@ class _thongkeScreenState extends State<thongkeScreen> {
                         return Center(
                           child: Column(
                             children: [
-                              Text("thống kê ALL"),
+                              Text("Thống kê ALL"),
                               Text(
-                                  " ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : ${tongtien} VNĐ"),
+                                  " ${datefirt.day}/${datefirt.month}-${dateEnd.day}/${dateEnd.month} : ${tongtien} VNĐ"),
                             ],
                           ),
                         );
@@ -255,8 +255,8 @@ class _thongkeScreenState extends State<thongkeScreen> {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 200,
+                  height: 100,
+                  width: 300,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.purple),
@@ -269,11 +269,18 @@ class _thongkeScreenState extends State<thongkeScreen> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Text(
-                            '$nameEmployer: từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} 0 VNĐ');
+                        return Column(
+                          children: [
+                            Text("Thống kê theo tên"),
+                            Text(
+                              '$nameEmployer: "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month} 0 VNĐ',
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        );
                       }
                       if (snapshot.hasError) {
-                        return Text("lỗi kết nối dữ liệu");
+                        return Text("Lỗi kết nối dữ liệu");
                       }
                       if (snapshot.hasData) {
                         final thongkeBydate = snapshot.data;
@@ -286,9 +293,9 @@ class _thongkeScreenState extends State<thongkeScreen> {
                         return Center(
                           child: Column(
                             children: [
-                              Text("thống kê theo tên"),
+                              Text("Thống kê theo tên"),
                               Text(
-                                  "$nameEmployer: từ ngày  ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : ${tongtien} VND"),
+                                  "$nameEmployer: ${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month} : ${tongtien} VND"),
                             ],
                           ),
                         );
@@ -368,10 +375,10 @@ class _thongkeScreenState extends State<thongkeScreen> {
                             }
 
                             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return Text('vui lòng chọn ngày muốn xem');
+                              return Text('Vui lòng chọn ngày');
                             }
                             if (snapshot.hasError) {
-                              return Text("lỗi kết nối dữ liệu");
+                              return Text("Lỗi kết nối dữ liệu");
                             }
                             if (snapshot.hasData) {
                               List<ProductSalesData> productSalesDataList = [];
