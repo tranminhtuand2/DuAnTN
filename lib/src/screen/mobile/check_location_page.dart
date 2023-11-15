@@ -30,7 +30,7 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
   void initState() {
     super.initState();
     checkLocation(widget.vido, widget.kinhdo);
-    print("${widget.kinhdo},${widget.vido}");
+    // print("${widget.kinhdo},${widget.vido}");
   }
 
   Future<void> checkLocation(double vido, double kinhdo) async {
@@ -53,7 +53,9 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
 
     double distance = Geolocator.distanceBetween(targetLat, targetLon,
         currentPosition.latitude, currentPosition.longitude);
-    if (distance <= 1000008800.0) {
+    print("Bạn cách quán: ${distance.ceil()}m");
+
+    if (distance.ceil() <= 100000) {
       // //Thay đổi trạng thái đã chọn bàn
       // final controllerTable = Get.put(TableController());
       // controllerTable.updateSelectedTable(widget.table);
@@ -67,7 +69,9 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
           message:
               'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán',
           type: Type.warning);
-      return;
+      // ignore: use_build_context_synchronously
+      Navigator.pop(context);
+      Navigator.pop(context);
       // setState(() {
       //   titleError =
       //       'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán.';

@@ -74,7 +74,6 @@ class _IntroScreenState extends State<IntroScreen> {
                         StreamBuilder(
                           stream: FirestoreHelper.readmap(),
                           builder: (context, snapshot) {
-                            final maplocation = snapshot.data;
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
                               return const Center(
@@ -88,6 +87,7 @@ class _IntroScreenState extends State<IntroScreen> {
                                   type: Type.error);
                             }
                             if (snapshot.hasData) {
+                              final maplocation = snapshot.data;
                               if (maplocation != null) {
                                 vido = maplocation[0].vido;
                                 kinhdo = maplocation[0].kinhdo;

@@ -176,6 +176,19 @@ class FirestoreHelper {
     //     (event) => event.docs.map((e) => diachimap.fromsnapshot(e)).toList());
   }
 
+  static Future<void> updateMaps(
+      {required double longitude, required double latitude}) async {
+    final diachimapColection = FirebaseFirestore.instance.collection("map");
+
+    final docref = diachimapColection.doc('toado');
+    final maps = diachimap(vido: latitude, kinhdo: longitude).toJson();
+    try {
+      await docref.update(maps);
+    } catch (e) {
+      Get.snackbar("lỗi", e.toString());
+    }
+  }
+
   ///table
   //create a table
   static Future<void> createdtable(TableModel table) async {

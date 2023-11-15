@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/chart_Model.dart';
 import 'package:managerfoodandcoffee/src/model/thongke_model.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/thongke/widget/BarChar.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/thongke/widget/barcharonday.dart';
-import 'package:managerfoodandcoffee/src/utils/size.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/thong_ke/widget/BarChar.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/thong_ke/widget/barcharonday.dart';
 
-import '../../../../model/giohanghd.dart';
+import '../../../../../model/giohanghd.dart';
 
-class thongkeScreen extends StatefulWidget {
-  const thongkeScreen({super.key});
+class ThongKePage extends StatefulWidget {
+  const ThongKePage({super.key});
 
   @override
-  State<thongkeScreen> createState() => _thongkeScreenState();
+  State<ThongKePage> createState() => _ThongKePageState();
 }
 
-class _thongkeScreenState extends State<thongkeScreen> {
+class _ThongKePageState extends State<ThongKePage> {
   var datefirt = DateTime.now();
   var dateEnd = DateTime.now();
   String nameEmployer = "ALL";
@@ -49,14 +47,13 @@ class _thongkeScreenState extends State<thongkeScreen> {
         });
       },
     );
-    ;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Thống Kê Dữ Liệu"),
+        title: const Text("Thống Kê Dữ Liệu"),
         centerTitle: true,
       ),
       body: Column(
@@ -72,30 +69,30 @@ class _thongkeScreenState extends State<thongkeScreen> {
                 children: [
                   IconButton(
                     onPressed: _showdatefirt,
-                    icon: Icon(Icons.date_range),
+                    icon: const Icon(Icons.date_range),
                   ),
                   Text(datefirt.toString()),
-                  SizedBox(
+                  const SizedBox(
                     width: 50,
                   ),
                   IconButton(
                     onPressed: _showdateEnd,
-                    icon: Icon(Icons.date_range),
+                    icon: const Icon(Icons.date_range),
                   ),
                   Text(dateEnd.toString()),
-                  SizedBox(width: 20),
+                  const SizedBox(width: 20),
                   //dropdown ten nhan vien
                   StreamBuilder(
                     stream: FirestoreHelper.readInvoices(),
                     builder: (context, snapshot) {
                       List<DropdownMenuItem> tennhanvien = [];
                       if (snapshot.hasError) {
-                        return Text("error");
+                        return const Text("error");
                       }
                       if (snapshot.hasData) {
                         final employer = snapshot.data;
                         if (employer != null) {
-                          tennhanvien.add(DropdownMenuItem(
+                          tennhanvien.add(const DropdownMenuItem(
                             value: "ALL",
                             child: Text("ALL"),
                           ));
@@ -138,14 +135,14 @@ class _thongkeScreenState extends State<thongkeScreen> {
                           ),
                         );
                       }
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     },
                   ),
                   //end dropdown
                   Text(nameEmployer),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   // ElevatedButton(
@@ -187,14 +184,14 @@ class _thongkeScreenState extends State<thongkeScreen> {
                             nameEmployer.toString()),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return Text('Không dữ liệu : "$nameEmployer"');
                       }
                       if (snapshot.hasError) {
-                        return Text("lỗi kết nối dữ liệu");
+                        return const Text("lỗi kết nối dữ liệu");
                       }
                       if (snapshot.hasData) {
                         final thongkenhanvien = snapshot.data;
@@ -203,9 +200,9 @@ class _thongkeScreenState extends State<thongkeScreen> {
                           tongtien += thongkenhanvien[i].total!;
                         }
                         return Center(
-                            child: Text("${nameEmployer}:${tongtien} VNĐ"));
+                            child: Text("$nameEmployer:$tongtien VNĐ"));
                       }
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     },
@@ -222,7 +219,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                         FirestoreHelper.readThongkeByDate(datefirt, dateEnd),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -230,7 +227,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                             'Không dữ liệu : từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month}');
                       }
                       if (snapshot.hasError) {
-                        return Text("lỗi kết nối dữ liệu");
+                        return const Text("lỗi kết nối dữ liệu");
                       }
                       if (snapshot.hasData) {
                         final thongkeBydate = snapshot.data;
@@ -241,14 +238,14 @@ class _thongkeScreenState extends State<thongkeScreen> {
                         return Center(
                           child: Column(
                             children: [
-                              Text("thống kê ALL"),
+                              const Text("thống kê ALL"),
                               Text(
-                                  " ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : ${tongtien} VNĐ"),
+                                  " ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : $tongtien VNĐ"),
                             ],
                           ),
                         );
                       }
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     },
@@ -265,7 +262,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                         FirestoreHelper.readThongkeByDate(datefirt, dateEnd),
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.waiting) {
-                        return Center(child: CircularProgressIndicator());
+                        return const Center(child: CircularProgressIndicator());
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
@@ -273,7 +270,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                             '$nameEmployer: từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} 0 VNĐ');
                       }
                       if (snapshot.hasError) {
-                        return Text("lỗi kết nối dữ liệu");
+                        return const Text("lỗi kết nối dữ liệu");
                       }
                       if (snapshot.hasData) {
                         final thongkeBydate = snapshot.data;
@@ -286,14 +283,14 @@ class _thongkeScreenState extends State<thongkeScreen> {
                         return Center(
                           child: Column(
                             children: [
-                              Text("thống kê theo tên"),
+                              const Text("thống kê theo tên"),
                               Text(
-                                  "$nameEmployer: từ ngày  ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : ${tongtien} VND"),
+                                  "$nameEmployer: từ ngày  ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : $tongtien VND"),
                             ],
                           ),
                         );
                       }
-                      return Center(
+                      return const Center(
                         child: CircularProgressIndicator(),
                       );
                     },
@@ -321,7 +318,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                             builder: (context, snapshot) {
                               if (snapshot.connectionState ==
                                   ConnectionState.waiting) {
-                                return Center(
+                                return const Center(
                                     child: CircularProgressIndicator());
                               }
 
@@ -329,14 +326,14 @@ class _thongkeScreenState extends State<thongkeScreen> {
                                 return Text('Không dữ liệu : "$nameEmployer"');
                               }
                               if (snapshot.hasError) {
-                                return Text("lỗi kết nối dữ liệu");
+                                return const Text("lỗi kết nối dữ liệu");
                               }
                               if (snapshot.hasData) {
                                 List<ThongKe>? thongkenhanvien = snapshot.data;
                                 return BarChartWidget(
                                     thongKeData: thongkenhanvien!);
                               }
-                              return Center(
+                              return const Center(
                                 child: CircularProgressIndicator(),
                               );
                             },
@@ -345,7 +342,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                         Container(
                           height: 400,
                           width: 500,
-                          color: Color.fromARGB(255, 68, 204, 75),
+                          color: const Color.fromARGB(255, 68, 204, 75),
                         ),
                       ],
                     ),
@@ -364,14 +361,15 @@ class _thongkeScreenState extends State<thongkeScreen> {
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.waiting) {
-                              return Center(child: CircularProgressIndicator());
+                              return const Center(
+                                  child: CircularProgressIndicator());
                             }
 
                             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return Text('vui lòng chọn ngày muốn xem');
+                              return const Text('vui lòng chọn ngày muốn xem');
                             }
                             if (snapshot.hasError) {
-                              return Text("lỗi kết nối dữ liệu");
+                              return const Text("lỗi kết nối dữ liệu");
                             }
                             if (snapshot.hasData) {
                               List<ProductSalesData> productSalesDataList = [];
@@ -396,7 +394,7 @@ class _thongkeScreenState extends State<thongkeScreen> {
                               return SalesChart(
                                   productSalesDataList: productSalesDataList);
                             }
-                            return Center(
+                            return const Center(
                               child: CircularProgressIndicator(),
                             );
                           },

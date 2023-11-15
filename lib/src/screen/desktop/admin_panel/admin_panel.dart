@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/navigate_panel_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/left_panel/left_panel.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/choice_place/choice_place_page.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/hoadon_page.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_coupons/manager_coupons.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/manager_product/manager_product.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/table_page/table_page.dart';
-import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/thongke/thongkescreen.dart';
+import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/thong_ke/thong_ke_page.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 
 class AdminPanelScreen extends StatefulWidget {
@@ -59,6 +60,7 @@ class _AdminPanelScreenState extends State<AdminPanelScreen> {
     const ManagerProductPage(),
     const ManagerCoupons(),
     const HoaDonPage(),
-    const thongkeScreen(),
+    const ThongKePage(),
+    const ChoicePlacePage(),
   ];
 }

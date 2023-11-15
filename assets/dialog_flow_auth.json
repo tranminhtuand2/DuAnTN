@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "chat-bot-coffee-wind",
+  "private_key_id": "9e5207e603ab1983dc0e7d83a60afc5402e9d3c8",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDRCE32SrVY60So\nrHuLgc2/m3czNfq5RsIEz9xbTcAJ4CeQLVd6OjihSQEpBFfVS/yQC+35Rp/75n5r\nf6nftrxxnS0lbth0sfGDP9pZ98hLisjbsCeBBLgHmEeThiAKK5PZPRtqQRHGFwU4\nuhzuSRXxz1ltFwjtinS5aQ4vsSGSfW5+1v6WVwFX634xpKS1RKNWqp2UvjCIQbsX\nVwrJTNghMmV+HAUZHCpyM8DzQ9+Vm31AeCMU+hGEE2j9hpChEkR/xTPgEt0HDa7P\nNsPmWnZSgGBxKAy76b8S6DrGcz7VHxFl+37Xfpr7aniGp6fVz1uURBY3xH9G2t/A\nIdBJWsMVAgMBAAECggEABylK7HluQZPb2BCCsgqaJyqXGJrMkmzlaD9LzBf7kIsM\np/CZut8EQihLYSGcNbtC9ZdnCX99KybgJWQsCHVM+vJ40bu8sDDJdqbpHuRxiP8B\n9x7Pl6i2+lGiACCb9+U6zTo99nOwvXHb9K/RnmtEFHL3XBiqLmMsMQ7zlLgzj35r\nQPclUEakX2Yf69h7nWYwPbvDdJFu644069QC0eMTbgaK9poezenDodJWXRJN3tzT\n7p0s/JFp+tEB9ZVy74D+uUKwi44ruFCfECr1XfqvSP0XrBOSnzmFBPr85L1BsgE9\n033BELV+vDXS8D9X4B/zAt35RXAufCNH64h0dNnu6QKBgQDp6y3dFFrTnnFGMJ7X\nSB+2FlIkm50N0Df5xh1isKvSg+O9rk5krxQ9pck9EQQW4wCRUHOPK3xPSj9krIgg\nLmMmhP7cY7RtCCc4XjSAYCLqGkQNnTwyZpOLfKkugfxZcwwmx2+oxJtxV8IV3LG6\nL2xEAPYFuiQRDzDFVjnS0oOtOQKBgQDkw7sdLxlDz5jpBWURw+9LJ4vJsF6triHu\nAjCL+UkpvyyCHLL8R9/mO48fW77HVsTnYiqmA2KAuXkrcVtrS0UjtVjvRgO0Uqo3\nwVxkMptl1SrjjhXnLvtbosmYQZjLpGIB8CVTwT5FENoqgG0BsT0jDiIQ5luoW+Rc\nKqPkzSLgvQKBgHMrWoJuAiYM7YJ8b8hY91wEc18YyuPBL74nf9JWX9KfIyMBzhEe\nbl3H4WPSm+vUyjPBo5PK+kJjsQCVPdRyYljVxFGoOW4xRHYpU7odGzOdyQHW94tt\nG5niv71pPGCiF0qEiQJUAqB0b9epuEuOC8UToA3DzvwjOYT/ZirZgQFpAoGAcxUI\nJ3lPI27nBKqjGpnP4qXlS7Q/HO5RwVM2quPga3Dx6g6X+BQMTd0+dc8InW1IJwKa\nY+OmBQ3JKBKho8s83+bV86DsMiW33c6XNQzEYiknp0wONrvK1WGCOucc/60VZNYz\nYPwA4GvG5MSwkb5g/Caa+pd4Gq0Hp1oIEw0jc50CgYEAncmmY9JgdjI3T9pVpCQl\ndP9AtCLO8YbYZl55ov3JSMeaUHuf8WvhQU3fTXwZFG8L8reTy7xt43DFLRwllEDF\nEhy4Wmudqx4KRfrnzoiHmiwM7Pb42rvVinIEn8Geqhku+0M7NpnrAvlNFeaw34k/\n6wWZeva1PNP7/psbMA+Rjeo=\n-----END PRIVATE KEY-----\n",
+  "client_email": "hathechi@chat-bot-coffee-wind.iam.gserviceaccount.com",
+  "client_id": "111253331800221564146",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/hathechi%40chat-bot-coffee-wind.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
