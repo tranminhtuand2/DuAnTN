@@ -159,6 +159,13 @@ class _HomePageState extends State<HomePage> {
             ),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: colorScheme(context).onSurfaceVariant,
+          onPressed: () {
+            Get.to(() => const AlertScreen(isFirstSendMessage: true));
+          },
+          child: const Icon(CupertinoIcons.chat_bubble_text),
+        ),
       ),
     );
   }

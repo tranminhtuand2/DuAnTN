@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 
-import '../../../../../model/thongke_model.dart';
+import '../../../../../../model/thongke_model.dart';
 
 class BarChartWidget extends StatelessWidget {
   final List<ThongKe> thongKeData;

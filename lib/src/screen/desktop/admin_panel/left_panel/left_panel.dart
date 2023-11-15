@@ -144,6 +144,11 @@ class _LeftPanelState extends State<LeftPanel> {
       title: 'Thống kê',
       index: 5,
     ),
+    MainListTile(
+      icon: CupertinoIcons.placemark,
+      title: 'Địa điểm',
+      index: 6,
+    ),
   ];
 }
 

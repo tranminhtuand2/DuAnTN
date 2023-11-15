@@ -6,14 +6,14 @@ import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 class ChatMessage extends StatelessWidget {
   final bool isSentByMe;
   final String content;
-  final int idMessage;
+  // final int idMessage;
   final int index;
 
   const ChatMessage(
       {super.key,
       required this.isSentByMe,
       required this.content,
-      required this.idMessage,
+      // required this.idMessage,
       required this.index});
 
   @override

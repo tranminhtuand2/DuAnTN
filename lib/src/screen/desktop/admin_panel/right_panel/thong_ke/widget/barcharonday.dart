@@ -4,7 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../../../../../model/chart_Model.dart';
+import '../../../../../../model/chart_Model.dart';
 
 class SalesChart extends StatelessWidget {
   final List<ProductSalesData> productSalesDataList;

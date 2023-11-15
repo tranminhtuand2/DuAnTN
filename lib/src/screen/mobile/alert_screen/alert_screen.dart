@@ -9,7 +9,8 @@ import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class AlertScreen extends StatefulWidget {
-  const AlertScreen({super.key});
+  const AlertScreen({super.key, this.isFirstSendMessage = false});
+  final bool isFirstSendMessage;
 
   @override
   State<AlertScreen> createState() => _AlertScreenState();
@@ -77,12 +78,13 @@ class _AlertScreenState extends State<AlertScreen> {
                 ],
               ),
             ),
-            const Expanded(
-              child: TabBarView(physics: BouncingScrollPhysics(), children: [
+            Expanded(
+              child:
+                  TabBarView(physics: const BouncingScrollPhysics(), children: [
                 Center(
-                  child: MessagePage(),
+                  child: MessagePage(isFirstSend: widget.isFirstSendMessage),
                 ),
-                Center(
+                const Center(
                   child: NotificationPage(),
                 ),
               ]),

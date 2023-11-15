@@ -1,12 +1,14 @@
+import 'package:dialog_flowtter/dialog_flowtter.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:managerfoodandcoffee/src/model/message_model.dart';
+import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/message_page/widgets/chat_message.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/message_page/widgets/input_send.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 
 class MessagePage extends StatefulWidget {
-  const MessagePage({super.key});
+  const MessagePage({super.key, this.isFirstSend = false});
+  final bool isFirstSend;
 
   @override
   State<MessagePage> createState() => _MessagePageState();
@@ -14,102 +16,131 @@ class MessagePage extends StatefulWidget {
 
 class _MessagePageState extends State<MessagePage> {
   final _controllerSend = TextEditingController();
+  late DialogFlowtter dialogFlowtter;
 
-  List<Message> listMessage = [
-    Message(
-      isSentByMe: true,
-      content: "Hello!",
-      idMessage: 1,
-      time: "09:00 AM",
-    ),
-    Message(
-      isSentByMe: false,
-      content: "Hi there!",
-      idMessage: 2,
-      time: "09:05 AM",
-    ),
-    Message(
-      isSentByMe: true,
-      content: "How are you?",
-      idMessage: 3,
-      time: "09:10 AM",
-    ),
-    Message(
-      isSentByMe: false,
-      content: "I'm good, thanks!",
-      idMessage: 4,
-      time: "09:15 AM",
-    )
-  ];
+  List<Map<String, dynamic>> messages = [];
+
+  @override
+  void initState() {
+    DialogFlowtter.fromFile().then((instance) {
+      dialogFlowtter = instance;
+      if (widget.isFirstSend) {
+        sendMessage('Quan Tâm');
+      }
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    dialogFlowtter.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Expanded(
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(
-                parent: AlwaysScrollableScrollPhysics()),
-            child: Padding(
-              padding: const EdgeInsets.only(top: 20.0),
-              child: ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: listMessage.length,
-                itemBuilder: (context, index) {
-                  final message = listMessage[index];
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12),
-                    child: ChatMessage(
-                      isSentByMe: message.isSentByMe,
-                      content: message.content,
-                      idMessage: message.idMessage,
-                      index: index,
-                    ),
-                  );
-                },
+    return InkWell(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20.0, bottom: 20),
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 12),
+                      child: ChatMessage(
+                        isSentByMe: messages[index]['isUserMessage'],
+                        content: messages[index]['message'].text.text[0],
+                        index: index,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ),
-        ),
-        SizedBox(
-          width: double.infinity,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      CupertinoIcons.photo,
-                      color: colorScheme(context).onBackground,
+          SizedBox(
+            width: double.infinity,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        CupertinoIcons.photo,
+                        color: colorScheme(context).onBackground,
+                      ),
                     ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(
-                      CupertinoIcons.mic,
-                      color: colorScheme(context).onBackground,
+                    IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        CupertinoIcons.mic,
+                        color: colorScheme(context).onBackground,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              Expanded(
-                child: Container(
-                  margin: const EdgeInsets.only(bottom: 12),
-                  child: InputSend(
-                    controllerSend: _controllerSend,
-                    onTap: () async {
-                      // _controllerSend.clear();
-                    },
+                  ],
+                ),
+                Expanded(
+                  child: Container(
+                    margin: const EdgeInsets.only(bottom: 12),
+                    child: InputSend(
+                      controllerSend: _controllerSend,
+                      onTap: () async {
+                        sendMessage(_controllerSend.text);
+                        _controllerSend.clear();
+                      },
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  void sendMessage(String text) async {
+    if (text.isEmpty) return;
+
+    setState(() {
+      addMessage(
+        Message(text: DialogText(text: [text])),
+        true,
+      );
+    });
+
+    DetectIntentResponse response = await dialogFlowtter.detectIntent(
+      queryInput: QueryInput(text: TextInput(text: text)),
+    );
+//Người dùng nhập ok thì trở về home
+    if (text == 'ok' || text == 'OK') {
+      Future.delayed(const Duration(milliseconds: 1500), () {
+        Get.back();
+      });
+    }
+
+    if (response.message != null && response.message!.text != null) {
+      setState(() {
+        addMessage(response.message!);
+      });
+    }
+  }
+
+  void addMessage(Message message, [bool isUserMessage = false]) {
+    messages.add({
+      'message': message,
+      'isUserMessage': isUserMessage,
+    });
   }
 }
