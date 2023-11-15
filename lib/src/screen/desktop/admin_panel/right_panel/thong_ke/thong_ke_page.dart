@@ -145,19 +145,6 @@ class _ThongKePageState extends State<ThongKePage> {
                   const SizedBox(
                     width: 10,
                   ),
-                  // ElevatedButton(
-                  //   onPressed: () {
-                  //     setState(() {});
-                  //   },
-                  //   child: Text("Tính toán theo ngày"),
-                  // ),
-                  // SizedBox(
-                  //   width: 10,
-                  // ),
-                  // ElevatedButton(
-                  //   onPressed: () {},
-                  //   child: Text("Tất Cả"),
-                  // ),
 
                   //dropdown end ten nhan vien
                 ],
@@ -171,7 +158,7 @@ class _ThongKePageState extends State<ThongKePage> {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Container(
-                  height: 60,
+                  height: 100,
                   width: 300,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
@@ -209,8 +196,8 @@ class _ThongKePageState extends State<ThongKePage> {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 200,
+                  height: 100,
+                  width: 300,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.green),
@@ -224,7 +211,7 @@ class _ThongKePageState extends State<ThongKePage> {
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return Text(
-                            'Không dữ liệu : từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month}');
+                            'Không có dữ liệu : "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month}');
                       }
                       if (snapshot.hasError) {
                         return const Text("lỗi kết nối dữ liệu");
@@ -252,8 +239,8 @@ class _ThongKePageState extends State<ThongKePage> {
                   ),
                 ),
                 Container(
-                  height: 50,
-                  width: 200,
+                  height: 100,
+                  width: 300,
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12),
                       color: Colors.purple),
@@ -266,8 +253,15 @@ class _ThongKePageState extends State<ThongKePage> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Text(
-                            '$nameEmployer: từ ngày "${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} 0 VNĐ');
+                        return Column(
+                          children: [
+                            Text("Thống kê theo tên"),
+                            Text(
+                              '$nameEmployer: "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month} 0 VNĐ',
+                              textAlign: TextAlign.left,
+                            ),
+                          ],
+                        );
                       }
                       if (snapshot.hasError) {
                         return const Text("lỗi kết nối dữ liệu");

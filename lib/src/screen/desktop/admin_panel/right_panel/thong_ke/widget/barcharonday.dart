@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
@@ -26,13 +28,13 @@ class SalesChart extends StatelessWidget {
                   return Padding(
                     padding: const EdgeInsets.all(10),
                     child: Transform.rotate(
-                      angle: 45 * (3.14159265359 / 180), // Xoay chữ 45 độ
+                      angle: 45 *
+                          (pi / 180), // Xoay chữ 90 độ ngược chiều kim đồng hồ
                       child: Text(
                         productSalesDataList[index].productName,
                         overflow: TextOverflow.ellipsis,
                         textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.red,
+                        style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
                         ),
@@ -41,21 +43,21 @@ class SalesChart extends StatelessWidget {
                   );
                   // Text(productSalesDataList[index].productName);
                 }
-                return Text('');
+                return const Text('');
               },
             ),
           ),
-          rightTitles: AxisTitles(
+          rightTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: true, reservedSize: 60),
           ),
-          topTitles: AxisTitles(
+          topTitles: const AxisTitles(
             sideTitles: SideTitles(showTitles: true, reservedSize: 60),
           ),
         ),
         borderData: FlBorderData(
           show: true,
           border:
-              Border.all(color: Color.fromARGB(255, 185, 205, 221), width: 1),
+              Border.all(color: Color.fromARGB(255, 123, 224, 182), width: 1),
         ),
         gridData: FlGridData(show: true),
         barGroups: productSalesDataList.asMap().entries.map((entry) {
