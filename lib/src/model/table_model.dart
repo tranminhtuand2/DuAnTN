@@ -6,6 +6,7 @@ class TableModel {
   String? maban;
   bool? isSelected;
   TableModel({required this.tenban, this.maban, this.isSelected});
+
   factory TableModel.fromsnapshot(DocumentSnapshot snap) {
     var snapshot = snap.data() as Map<String, dynamic>;
     return TableModel(

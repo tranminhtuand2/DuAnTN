@@ -12,8 +12,9 @@ import 'package:managerfoodandcoffee/src/shared_preferences/shared_preference.da
 
 class AuthController extends GetxController {
   var userName = "".obs;
-  var email = "".obs;
+  var emailUser = "".obs;
   var urlAvatar = "".obs;
+  var role = ''.obs;
 
   final auth = FirebaseAuth.instance;
 
@@ -36,10 +37,12 @@ class AuthController extends GetxController {
         User? user = userCredential.user;
         if (user != null) {
           userName.value = user.displayName!;
-          email.value = user.email!;
+          emailUser.value = user.email!;
           urlAvatar.value = user.photoURL!;
 
-          Get.offAll(() => const AdminPanelScreen());
+          //Thêm quyền vào email và lưu trữ trên fire store
+          await FireBaseAuth().createUserAndRole(email: user.email!);
+          getRoleUser(email: user.email!);
         }
       } on FirebaseAuthException catch (e) {
         showCustomSnackBar(
@@ -92,8 +95,13 @@ class AuthController extends GetxController {
       if (response != null) {
         userName.value = response.user?.displayName ?? '';
         urlAvatar.value = response.user?.photoURL ?? '';
-        Get.offAll(() => const AdminPanelScreen());
+        emailUser.value = response.user?.email ?? '';
+
+        //Thêm quyền vào email và lưu trữ trên fire store
+        await FireBaseAuth().createUserAndRole(email: email);
+        //Lưu email vào MySharedPreferences
         MySharedPreferences.saveEmail(email);
+        getRoleUser(email: response.user!.email!);
       }
     } on FirebaseAuthException catch (e) {
       showCustomSnackBar(
@@ -105,6 +113,30 @@ class AuthController extends GetxController {
     try {
       await FireBaseAuth().forgotPassword(email: email);
     } on FirebaseAuthException catch (e) {
+      showCustomSnackBar(
+          title: "Lỗi", message: e.toString(), type: Type.error);
+    }
+  }
+
+  void checkUserLogin() {
+    final currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      getRoleUser(email: currentUser.email!);
+    } else {
+      Get.offAll(() => const LoginScreen());
+    }
+  }
+
+  void getRoleUser({required String email}) async {
+    try {
+      FireBaseAuth.getRoleWithEmail(email: email).listen((user) {
+        role.value = user.role;
+        print(user.email);
+        print(user.role);
+        Get.offAll(() => const AdminPanelScreen());
+      });
+    } on FirebaseAuthException catch (e) {
+      Get.offAll(() => const LoginScreen());
       showCustomSnackBar(
           title: "Lỗi", message: e.toString(), type: Type.error);
     }
