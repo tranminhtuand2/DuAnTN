@@ -58,6 +58,11 @@ class FireBaseAuth {
     final roleUser = FirebaseFirestore.instance.collection("roleUser");
 
     final docref = roleUser.doc(email);
+
+    // Kiểm tra xem người dùng đã tồn tại trong Firestore hay không
+    final docSnapshot = await docref.get();
+    if (docSnapshot.exists) return;
+
     final userModel = UserModel(email: email, role: role).toJson();
     try {
       await docref.set(userModel);
@@ -85,7 +90,13 @@ class FireBaseAuth {
     await roleUser.doc(email).delete();
   }
 
-  //filter sp
+  static Stream<List<UserModel>> readUser() {
+    final user = FirebaseFirestore.instance.collection("roleUser");
+
+    return user.snapshots().map((querySnapshot) =>
+        querySnapshot.docs.map((e) => UserModel.fromSnapshot(e)).toList());
+  }
+
   static Stream<UserModel> getRoleWithEmail({required String email}) {
     final roleUser = FirebaseFirestore.instance.collection("roleUser");
     Query query = roleUser

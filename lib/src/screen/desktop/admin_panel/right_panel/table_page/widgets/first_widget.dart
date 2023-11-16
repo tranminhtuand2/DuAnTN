@@ -30,155 +30,175 @@ class _FirstWidgetState extends State<FirstWidget> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Row(
-              children: [
-                const SizedBox(width: 10),
-                authController.urlAvatar.value != ''
-                    ? CircleAvatar(
-                        radius: 14,
-                        backgroundImage:
-                            NetworkImage(authController.urlAvatar.value),
-                      )
-                    : const CircleAvatar(
-                        radius: 14,
-                        backgroundImage: AssetImage('assets/images/avatar.png'),
-                      ),
-                const SizedBox(width: 8),
-                Text(
-                  authController.userName.value ?? 'Guest',
-                  style: text(context).titleMedium?.copyWith(),
-                )
-              ],
+            Container(
+              margin: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  const SizedBox(width: 10),
+                  authController.urlAvatar.value != ''
+                      ? CircleAvatar(
+                          radius: 14,
+                          backgroundImage:
+                              NetworkImage(authController.urlAvatar.value),
+                        )
+                      : const CircleAvatar(
+                          radius: 14,
+                          backgroundImage:
+                              AssetImage('assets/images/avatar.png'),
+                        ),
+                  const SizedBox(width: 8),
+                  Text(
+                    authController.userName.value == ""
+                        ? 'Khách'
+                        : authController.userName.value,
+                    style: text(context).titleMedium?.copyWith(),
+                  )
+                ],
+              ),
             ),
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 16,
-                  backgroundColor: color.surfaceVariant,
-                  child: IconButton(
-                    onPressed: () => Get.dialog(const CreateTable()),
-                    icon: Icon(
-                      Icons.add,
-                      size: 16,
-                      color: color.primary,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                  child: StreamBuilder(
-                    stream: FirestoreHelper.readtinhtrangtt(),
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
-                        return const Center(
-                          child: CircularProgressIndicator(),
-                        );
-                      }
-                      if (snapshot.hasError) {
-                        return SingleChildScrollView(
-                          child: Text("Lỗi: ${snapshot.error.toString()}"),
-                        );
-                      }
-                      if (snapshot.hasData) {
-                        final tinhtrangtt = snapshot.data;
-                        for (var i = 0; i < tinhtrangtt!.length; i++) {
-                          if (tinhtrangtt[i].trangthai == "ordered") {
-                            showSnackbar(tinhtrangtt[i].idtinhtrang.toString());
-                          }
-                        }
-
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: badges.Badge(
-                            position: badges.BadgePosition.topStart(),
-                            badgeAnimation: const badges.BadgeAnimation.fade(),
-                            //lấy dự liệu order
-                            badgeContent: Padding(
-                              padding: const EdgeInsets.all(4.0),
-                              child: Text(
-                                "${tinhtrangtt.length}",
-                              ),
-                            ),
-                            child: IconButton(
-                              onPressed: () {
-                                showDialog(
-                                  context: context,
-                                  builder: (context) {
-                                    return AlertDialog(
-                                      title: const Text('Tình trạng đơn'),
-                                      content: SizedBox(
-                                        // height: 300,
-                                        width:
-                                            400, // Điều chỉnh kích thước tùy theo nhu cầu của bạn
-                                        child: ListView.builder(
-                                          itemCount: tinhtrangtt.length,
-                                          itemBuilder: (context, index) {
-                                            final tinhtranttindex =
-                                                tinhtrangtt[index];
-                                            return Padding(
-                                              padding: const EdgeInsets.all(20),
-                                              child: Container(
-                                                height: 50,
-                                                decoration: BoxDecoration(
-                                                  color: tinhtranttindex
-                                                              .trangthai ==
-                                                          "ordered"
-                                                      ? Colors.green
-                                                      : Colors.grey,
-                                                  borderRadius:
-                                                      BorderRadius.circular(22),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Padding(
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10),
-                                                      child: Text(
-                                                          "Bàn ${tinhtranttindex.idtinhtrang.toString()}:"),
-                                                    ),
-                                                    Text(tinhtranttindex
-                                                                .trangthai ==
-                                                            "ordered"
-                                                        ? "Đã xác nhận đơn hàng, hãy chuẩn bị món!"
-                                                        : "Đơn hàng đã được thanh toán, hãy chuẩn bị món!"),
-                                                  ],
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                      actions: <Widget>[
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context)
-                                                .pop(); // Đóng hộp thoại.
-                                          },
-                                          child: const Text('Đóng'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              icon: Icon(
-                                Icons.notifications,
-                                size: 32,
-                                color: color.surfaceVariant,
-                              ),
-                            ),
+            authController.role.value != 'guest'
+                ? Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 16,
+                        backgroundColor: color.surfaceVariant,
+                        child: IconButton(
+                          onPressed: () => Get.dialog(const CreateTable()),
+                          icon: Icon(
+                            Icons.add,
+                            size: 16,
+                            color: color.primary,
                           ),
-                        );
-                      }
-                      return const Icon(Icons.notifications);
-                    },
-                  ),
-                ),
-              ],
-            )
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
+                        child: StreamBuilder(
+                          stream: FirestoreHelper.readtinhtrangtt(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.waiting) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            }
+                            if (snapshot.hasError) {
+                              return SingleChildScrollView(
+                                child:
+                                    Text("Lỗi: ${snapshot.error.toString()}"),
+                              );
+                            }
+                            if (snapshot.hasData) {
+                              final tinhtrangtt = snapshot.data;
+                              for (var i = 0; i < tinhtrangtt!.length; i++) {
+                                if (tinhtrangtt[i].trangthai == "ordered" &&
+                                    authController.role.value != 'guest') {
+                                  showSnackbar(
+                                      tinhtrangtt[i].idtinhtrang.toString());
+                                }
+                              }
+
+                              return Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: badges.Badge(
+                                  position: badges.BadgePosition.topStart(),
+                                  badgeAnimation:
+                                      const badges.BadgeAnimation.fade(),
+                                  //lấy dự liệu order
+                                  badgeContent: Padding(
+                                    padding: const EdgeInsets.all(4.0),
+                                    child: Text(
+                                      "${tinhtrangtt.length}",
+                                    ),
+                                  ),
+                                  child: IconButton(
+                                    onPressed: () {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) {
+                                          return AlertDialog(
+                                            title:
+                                                const Text('Tình trạng đơn'),
+                                            content: SizedBox(
+                                              // height: 300,
+                                              width:
+                                                  400, // Điều chỉnh kích thước tùy theo nhu cầu của bạn
+                                              child: ListView.builder(
+                                                itemCount: tinhtrangtt.length,
+                                                itemBuilder: (context, index) {
+                                                  final tinhtranttindex =
+                                                      tinhtrangtt[index];
+                                                  return Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            20),
+                                                    child: Container(
+                                                      height: 50,
+                                                      decoration: BoxDecoration(
+                                                        color: tinhtranttindex
+                                                                    .trangthai ==
+                                                                "ordered"
+                                                            ? Colors.green
+                                                            : Colors.grey,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(22),
+                                                      ),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .symmetric(
+                                                                    horizontal:
+                                                                        10),
+                                                            child: Text(
+                                                                "Bàn ${tinhtranttindex.idtinhtrang.toString()}:"),
+                                                          ),
+                                                          Text(tinhtranttindex
+                                                                      .trangthai ==
+                                                                  "ordered"
+                                                              ? "Đã xác nhận đơn hàng, hãy chuẩn bị món!"
+                                                              : "Đơn hàng đã được thanh toán, hãy chuẩn bị món!"),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ),
+                                            ),
+                                            actions: <Widget>[
+                                              TextButton(
+                                                onPressed: () {
+                                                  Navigator.of(context)
+                                                      .pop(); // Đóng hộp thoại.
+                                                },
+                                                child: const Text('Đóng'),
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    },
+                                    icon: Icon(
+                                      Icons.notifications,
+                                      size: 32,
+                                      color: color.surfaceVariant,
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }
+                            return const Icon(Icons.notifications);
+                          },
+                        ),
+                      ),
+                    ],
+                  )
+                : const SizedBox()
           ],
         ),
         Expanded(
@@ -250,16 +270,17 @@ class _FirstWidgetState extends State<FirstWidget> {
                                                   tableindex.tenban;
                                             }
                                           : () {
-                                              tableController.tableName.value =
-                                                  tableindex.tenban;
-                                              tableController.isExpanded.value =
-                                                  true;
+                                              if (authController.role.value !=
+                                                  'guest') {
+                                                tableController.tableName
+                                                    .value = tableindex.tenban;
+                                                tableController
+                                                    .isExpanded.value = true;
+                                              }
                                             },
                                       child: Container(
                                         width: 180,
                                         height: 180,
-                                        // padding: const EdgeInsets.symmetric(
-                                        //     vertical: 40, horizontal: 50),
                                         decoration: BoxDecoration(
                                           border: Border.all(
                                             width: 0.3,

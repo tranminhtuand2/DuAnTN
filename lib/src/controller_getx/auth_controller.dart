@@ -14,7 +14,7 @@ class AuthController extends GetxController {
   var userName = "".obs;
   var emailUser = "".obs;
   var urlAvatar = "".obs;
-  var role = ''.obs;
+  var role = "".obs;
 
   final auth = FirebaseAuth.instance;
 
@@ -121,24 +121,36 @@ class AuthController extends GetxController {
   void checkUserLogin() {
     final currentUser = FirebaseAuth.instance.currentUser;
     if (currentUser != null) {
-      getRoleUser(email: currentUser.email!);
+      getRoleUser(email: currentUser.email!, currentUser: currentUser);
     } else {
       Get.offAll(() => const LoginScreen());
     }
   }
 
-  void getRoleUser({required String email}) async {
+  void getRoleUser({required String email, User? currentUser}) async {
     try {
       FireBaseAuth.getRoleWithEmail(email: email).listen((user) {
         role.value = user.role;
-        print(user.email);
-        print(user.role);
+        userName.value = currentUser?.displayName ?? "";
+        urlAvatar.value = currentUser?.photoURL ?? "";
+        emailUser.value = currentUser?.email ?? "";
         Get.offAll(() => const AdminPanelScreen());
       });
     } on FirebaseAuthException catch (e) {
       Get.offAll(() => const LoginScreen());
       showCustomSnackBar(
           title: "Lỗi", message: e.toString(), type: Type.error);
+    }
+  }
+
+  void updateRole({required String email, required String role}) async {
+    try {
+      await FireBaseAuth().updateUserAndRole(email: email, role: role);
+    } on FirebaseAuthException catch (e) {
+      showCustomSnackBar(
+          title: "Lỗi khi thay đổi quyền của nhân viên",
+          message: e.toString(),
+          type: Type.error);
     }
   }
 }
