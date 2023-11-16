@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/navigate_panel_controller.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/left_panel/widgets/bottom_panel_left.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -17,6 +18,88 @@ class LeftPanel extends StatefulWidget {
 class _LeftPanelState extends State<LeftPanel> {
   int _isSelectedIndex = 0;
   final navigateController = Get.put(NavigatePanelController());
+  final authController = Get.put(AuthController());
+  List<MainListTile> listMainListTite = [];
+
+  Future<void> checkRoleAndSetPermissions() async {
+    final role = authController.role.value;
+
+    switch (role) {
+      case 'admin':
+        listMainListTite = [
+          MainListTile(
+            icon: CupertinoIcons.table,
+            title: 'Bàn',
+            index: 0,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.flame,
+            title: 'Quản lý món',
+            index: 1,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.doc_chart,
+            title: 'Hóa đơn',
+            index: 3,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.creditcard,
+            title: 'Quản lý khuyến mãi',
+            index: 2,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.chart_bar,
+            title: 'Thống kê',
+            index: 4,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.placemark,
+            title: 'Chọn vị trí',
+            index: 5,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.person_2_fill,
+            title: 'Quyền truy cập',
+            index: 6,
+          ),
+        ];
+        break;
+      case 'user':
+        listMainListTite = [
+          MainListTile(
+            icon: CupertinoIcons.table,
+            title: 'Bàn',
+            index: 0,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.flame,
+            title: 'Quản lý món',
+            index: 1,
+          ),
+          MainListTile(
+            icon: CupertinoIcons.doc_chart,
+            title: 'Hóa đơn',
+            index: 3,
+          ),
+        ];
+        break;
+      default:
+        listMainListTite = [
+          MainListTile(
+            icon: CupertinoIcons.table,
+            title: 'Bàn',
+            index: 0,
+          ),
+        ];
+        break;
+    }
+  }
+
+  @override
+  void initState() {
+    checkRoleAndSetPermissions();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,44 +195,6 @@ class _LeftPanelState extends State<LeftPanel> {
       ),
     );
   }
-
-  List<MainListTile> listMainListTite = [
-    MainListTile(
-      icon: CupertinoIcons.table,
-      title: 'Bàn',
-      index: 0,
-    ),
-    // MainListTile(
-    //   icon: CupertinoIcons.layers,
-    //   title: 'Quản lý bàn',
-    //   index: 1,
-    // ),
-    MainListTile(
-      icon: CupertinoIcons.flame,
-      title: 'Quản lý món',
-      index: 2,
-    ),
-    MainListTile(
-      icon: CupertinoIcons.creditcard,
-      title: 'Quản lý khuyến mãi',
-      index: 3,
-    ),
-    MainListTile(
-      icon: CupertinoIcons.doc_chart,
-      title: 'Hóa đơn',
-      index: 4,
-    ),
-    MainListTile(
-      icon: CupertinoIcons.chart_bar,
-      title: 'Thống kê',
-      index: 5,
-    ),
-    MainListTile(
-      icon: CupertinoIcons.placemark,
-      title: 'Địa điểm',
-      index: 6,
-    ),
-  ];
 }
 
 class MainListTile {
