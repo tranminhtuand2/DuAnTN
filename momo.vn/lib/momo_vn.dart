@@ -5,9 +5,8 @@ import 'dart:convert' as convert;
 
 class MomoVn {
   // Response codes from platform
-  static const _CODE_PAYMENT_SUCCESS = 0; //User xác nhận thanh toán thành công
-  static const _CODE_PAYMENT_TIMEOUT =
-      5; // Hết thời gian thực hiện giao dịch (Timeout transaction)
+  static const _CODE_PAYMENT_SUCCESS = 0; // User xác nhận thanh toán thành công
+  static const _CODE_PAYMENT_TIMEOUT = 5; // Hết thời gian thực hiện giao dịch (Timeout transaction)
   static const _CODE_PAYMENT_CANCEL = 6; // Người dùng huỷ thanh toán
   static const _CODE_PAYMENT_ERROR = 7; // Lỗi Không xác định
 
