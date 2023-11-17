@@ -41,8 +41,6 @@ class MyApp extends StatelessWidget {
           moblie: MobileScreen(),
           tablet: DesktopScreen(),
           desktop: DesktopScreen(),
-
-//cặc
         ),
       ),
     );
