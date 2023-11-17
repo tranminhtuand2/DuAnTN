@@ -56,6 +56,8 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
     print("Bạn cách quán: ${distance.ceil()}m");
 // test lại
     //lkjhjdsfdj
+    // test lại
+    //lkjhjdsfdj
     if (distance.ceil() <= 100000) {
       // //Thay đổi trạng thái đã chọn bàn
       // final controllerTable = Get.put(TableController());
