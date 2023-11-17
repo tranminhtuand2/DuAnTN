@@ -28,6 +28,7 @@ import 'package:managerfoodandcoffee/src/utils/format_price.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 import 'package:momo_vn/momo_vn.dart';
 
+// Định nghĩa một StatefulWidget để hiển thị giỏ hàng và thanh toán
 class CartProduct extends StatefulWidget {
   final TableModel table;
   const CartProduct({
@@ -40,6 +41,7 @@ class CartProduct extends StatefulWidget {
 }
 
 class _CartProductState extends State<CartProduct> {
+  // Biến và controllers cần thiết
   int tongtienthanhtoan = 0;
   final discountController = TextEditingController();
   int isSelectedPayment = 0;
@@ -57,6 +59,7 @@ class _CartProductState extends State<CartProduct> {
     //Khởi tạo notification
     PushNotification.intialize();
 
+    // Khởi tạo MoMoVn và lắng nghe các sự kiện thanh toán
     _momoPay = MomoVn();
     _momoPay.on(MomoVn.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
     _momoPay.on(MomoVn.EVENT_PAYMENT_ERROR, _handlePaymentError);
@@ -65,6 +68,7 @@ class _CartProductState extends State<CartProduct> {
 
   @override
   Widget build(BuildContext context) {
+    // Xây dựng giao diện của trang hiển thị giỏ hàng và thanh toán
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -265,6 +269,7 @@ class _CartProductState extends State<CartProduct> {
     );
   }
 
+// Các hàm hỗ trợ và xử lý thanh toán
   Future<dynamic> bottomSheetPayment(BuildContext context) {
     return showModalBottomSheet(
       showDragHandle: true,
