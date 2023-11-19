@@ -298,48 +298,48 @@ class _ThongKePageState extends State<ThongKePage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 400,
-                          width: 500,
-                          color: Colors.amber,
-                          child: StreamBuilder(
-                            stream: nameEmployer == "ALL"
-                                ? FirestoreHelper.readThongke()
-                                : FirestoreHelper.readThongkenhanvien(
-                                    nameEmployer.toString()),
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              }
+                    // Row(
+                    //   children: [
+                    //     Container(
+                    //       height: 400,
+                    //       width: 500,
+                    //       color: Colors.amber,
+                    //       child: StreamBuilder(
+                    //         stream: nameEmployer == "ALL"
+                    //             ? FirestoreHelper.readThongke()
+                    //             : FirestoreHelper.readThongkenhanvien(
+                    //                 nameEmployer.toString()),
+                    //         builder: (context, snapshot) {
+                    //           if (snapshot.connectionState ==
+                    //               ConnectionState.waiting) {
+                    //             return const Center(
+                    //                 child: CircularProgressIndicator());
+                    //           }
 
-                              if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                                return Text('Không dữ liệu : "$nameEmployer"');
-                              }
-                              if (snapshot.hasError) {
-                                return const Text("lỗi kết nối dữ liệu");
-                              }
-                              if (snapshot.hasData) {
-                                List<ThongKe>? thongkenhanvien = snapshot.data;
-                                return BarChartWidget(
-                                    thongKeData: thongkenhanvien!);
-                              }
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                          ),
-                        ),
-                        Container(
-                          height: 400,
-                          width: 500,
-                          color: const Color.fromARGB(255, 68, 204, 75),
-                        ),
-                      ],
-                    ),
+                    //           if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                    //             return Text('Không dữ liệu : "$nameEmployer"');
+                    //           }
+                    //           if (snapshot.hasError) {
+                    //             return const Text("lỗi kết nối dữ liệu");
+                    //           }
+                    //           if (snapshot.hasData) {
+                    //             List<ThongKe>? thongkenhanvien = snapshot.data;
+                    //             return BarChartWidget(
+                    //                 thongKeData: thongkenhanvien!);
+                    //           }
+                    //           return const Center(
+                    //             child: CircularProgressIndicator(),
+                    //           );
+                    //         },
+                    //       ),
+                    //     ),
+                    //     Container(
+                    //       height: 400,
+                    //       width: 500,
+                    //       color: const Color.fromARGB(255, 68, 204, 75),
+                    //     ),
+                    //   ],
+                    // ),
                     Padding(
                       padding: const EdgeInsets.all(20),
                       child: Container(
