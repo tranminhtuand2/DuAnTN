@@ -640,7 +640,7 @@ class _SecondWidgetState extends State<SecondWidget> {
               //them thong ke
               await FirestoreHelper.addThongKe(ThongKe(
                 nhanvien: authController.userName.value,
-                date: FieldValue.serverTimestamp(),
+                date: timestamp,
                 products: products,
                 total:
                     double.parse(tableController.totalPrice.value.toString()),
