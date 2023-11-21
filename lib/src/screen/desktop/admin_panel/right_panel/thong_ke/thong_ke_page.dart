@@ -190,6 +190,7 @@ class _ThongKePageState extends State<ThongKePage> {
                         }
                         return Center(
                             child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("Tổng tiền đã bán được"),
                             Text("$nameEmployer:$tongtien VNĐ"),
@@ -217,8 +218,10 @@ class _ThongKePageState extends State<ThongKePage> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Text(
-                            'Không có dữ liệu : "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month}');
+                        return Center(
+                          child: Text(
+                              'Không có dữ liệu : "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month}'),
+                        );
                       }
                       if (snapshot.hasError) {
                         return const Text("lỗi kết nối dữ liệu");
@@ -231,6 +234,7 @@ class _ThongKePageState extends State<ThongKePage> {
                         }
                         return Center(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text("thống kê ALL"),
                               Text(
@@ -261,6 +265,7 @@ class _ThongKePageState extends State<ThongKePage> {
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
                         return Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text("Thống kê theo tên"),
                             Text(
@@ -283,6 +288,7 @@ class _ThongKePageState extends State<ThongKePage> {
                         }
                         return Center(
                           child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               const Text("thống kê theo tên"),
                               Text(
