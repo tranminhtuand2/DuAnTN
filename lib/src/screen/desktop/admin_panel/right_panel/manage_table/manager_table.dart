@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -12,7 +10,6 @@ import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.da
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
-import 'package:progress_dialog2/progress_dialog2.dart';
 
 class CreateTable extends StatefulWidget {
   const CreateTable({super.key});

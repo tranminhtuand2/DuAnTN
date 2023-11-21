@@ -36,13 +36,9 @@ class AuthController extends GetxController {
             await FirebaseAuth.instance.signInWithPopup(authProvider);
         User? user = userCredential.user;
         if (user != null) {
-          userName.value = user.displayName!;
-          emailUser.value = user.email!;
-          urlAvatar.value = user.photoURL!;
-
           //Thêm quyền vào email và lưu trữ trên fire store
           await FireBaseAuth().createUserAndRole(email: user.email!);
-          getRoleUser(email: user.email!);
+          getRoleUser(email: user.email!, currentUser: user);
         }
       } on FirebaseAuthException catch (e) {
         showCustomSnackBar(
@@ -93,15 +89,12 @@ class AuthController extends GetxController {
         password: password,
       );
       if (response != null) {
-        userName.value = response.user?.displayName ?? '';
-        urlAvatar.value = response.user?.photoURL ?? '';
-        emailUser.value = response.user?.email ?? '';
-
         //Thêm quyền vào email và lưu trữ trên fire store
         await FireBaseAuth().createUserAndRole(email: email);
         //Lưu email vào MySharedPreferences
         MySharedPreferences.saveEmail(email);
-        getRoleUser(email: response.user!.email!);
+        getRoleUser(
+            email: response.user?.email ?? "", currentUser: response.user);
       }
     } on FirebaseAuthException catch (e) {
       showCustomSnackBar(

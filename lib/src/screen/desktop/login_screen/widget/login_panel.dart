@@ -145,8 +145,7 @@ class _LoginPanelState extends State<LoginPanel> {
               color: Colors.transparent,
               title: "Đăng nhập với Google",
               colorTitle: colorScheme(context).tertiary,
-              urlImage:
-                  'https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/1200px-Google_%22G%22_Logo.svg.png',
+              urlImage: 'images/logo_g.png',
               onClick: () {
                 Get.put(AuthController()).loginGoogleInWeb();
               },

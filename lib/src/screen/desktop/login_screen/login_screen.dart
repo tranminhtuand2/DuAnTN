@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
-import 'package:managerfoodandcoffee/src/common_widget/cache_image.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/login_screen/widget/login_panel.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/login_screen/widget/register_panel.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
@@ -193,7 +192,7 @@ class BtnLogin extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.only(left: 16),
-            child: cacheNetWorkImage(
+            child: Image.asset(
               urlImage,
               width: 24,
               height: 24,
