@@ -2,21 +2,42 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/message_page/message_page.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/notification_page/notification_page.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class AlertScreen extends StatefulWidget {
-  const AlertScreen({super.key, this.isFirstSendMessage = false});
+  const AlertScreen({
+    super.key,
+    this.isFirstSendMessage = false,
+    this.isPushNotificationPage = false,
+  });
   final bool isFirstSendMessage;
+  final bool isPushNotificationPage;
 
   @override
   State<AlertScreen> createState() => _AlertScreenState();
 }
 
-class _AlertScreenState extends State<AlertScreen> {
+class _AlertScreenState extends State<AlertScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+//nếu như nhận thông báo và ấn vào thì sẽ chuyển qua trang thông báo
+    widget.isPushNotificationPage ? _tabController.animateTo(1) : null;
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,6 +65,7 @@ class _AlertScreenState extends State<AlertScreen> {
             Padding(
               padding: const EdgeInsets.only(left: 10.0, top: 10),
               child: ButtonsTabBar(
+                controller: _tabController,
                 contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(30),
@@ -79,15 +101,18 @@ class _AlertScreenState extends State<AlertScreen> {
               ),
             ),
             Expanded(
-              child:
-                  TabBarView(physics: const BouncingScrollPhysics(), children: [
-                Center(
-                  child: MessagePage(isFirstSend: widget.isFirstSendMessage),
-                ),
-                const Center(
-                  child: NotificationPage(),
-                ),
-              ]),
+              child: TabBarView(
+                  controller: _tabController,
+                  physics: const BouncingScrollPhysics(),
+                  children: [
+                    Center(
+                      child:
+                          MessagePage(isFirstSend: widget.isFirstSendMessage),
+                    ),
+                    const Center(
+                      child: NotificationPage(),
+                    ),
+                  ]),
             ),
           ],
         ),
