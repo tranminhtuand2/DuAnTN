@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/alert_screen.dart';
 
 class PushNotification {
   static final _notifications = FlutterLocalNotificationsPlugin();
@@ -21,13 +25,24 @@ class PushNotification {
         .resolvePlatformSpecificImplementation<
             AndroidFlutterLocalNotificationsPlugin>()!
         .requestNotificationsPermission();
-    //////
-    //////
+
     const AndroidInitializationSettings androidInitializationSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const InitializationSettings settings =
         InitializationSettings(android: androidInitializationSettings);
-    await _notifications.initialize(settings);
+    await _notifications.initialize(
+      settings,
+      onDidReceiveNotificationResponse: onSelectNotification,
+      onDidReceiveBackgroundNotificationResponse: onSelectNotification,
+    );
+  }
+
+//Xử lý khi ấn vào thông báo
+  static onSelectNotification(NotificationResponse notificationResponse) async {
+    var payloadData = jsonDecode(notificationResponse.payload!);
+    print("payload $payloadData");
+    print(notificationResponse.input);
+    Get.to(() => const AlertScreen(isPushNotificationPage: true));
   }
 
   static Future<void> showNotification({
