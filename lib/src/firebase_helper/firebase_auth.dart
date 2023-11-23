@@ -6,6 +6,7 @@ import 'package:managerfoodandcoffee/src/model/user_model.dart';
 
 class FireBaseAuth {
   static final auth = FirebaseAuth.instance;
+
   Future<UserCredential?> registerWithEmailAndPassword(
       {required String email,
       required String password,
@@ -17,8 +18,26 @@ class FireBaseAuth {
       await auth.currentUser?.updateDisplayName(fullname);
       return userCredential;
     } on FirebaseAuthException catch (e) {
-      showCustomSnackBar(
-          title: 'Lỗi', message: e.toString(), type: Type.error);
+      switch (e.code) {
+        case 'weak-password':
+          showCustomSnackBar(
+              title: 'Lỗi',
+              message: 'Mật khẩu yếu, vui lòng chọn mật khẩu khác.',
+              type: Type.error);
+          break;
+        case 'email-already-in-use':
+          showCustomSnackBar(
+              title: 'Lỗi',
+              message: 'Email đã được sử dụng. Vui lòng sử dụng email khác.',
+              type: Type.error);
+          break;
+        // Các trường hợp lỗi khác có thể xử lý tương tự
+        default:
+          showCustomSnackBar(
+              title: 'Lỗi',
+              message: 'Đăng ký không thành công: ${e.message}',
+              type: Type.error);
+      }
     }
     return null;
   }
@@ -38,8 +57,26 @@ class FireBaseAuth {
         return userCredential;
       }
     } on FirebaseAuthException catch (e) {
-      showCustomSnackBar(
-          title: 'Lỗi', message: e.toString(), type: Type.error);
+      switch (e.code) {
+        case "wrong-password":
+          // Xử lý khi mật khẩu không đúng
+          showCustomSnackBar(
+              title: 'Lỗi', message: 'Mật khẩu không đúng', type: Type.error);
+          break;
+        case "user-not-found":
+          // Xử lý khi người dùng không tồn tại
+          showCustomSnackBar(
+              title: 'Lỗi',
+              message: 'Người dùng không tồn tại',
+              type: Type.error);
+          break;
+        // Các trường hợp lỗi khác có thể xử lý tương tự
+        default:
+          showCustomSnackBar(
+              title: 'Lỗi',
+              message: 'Đăng nhập thất bại: ${e.message}',
+              type: Type.error);
+      }
     }
     return null;
   }

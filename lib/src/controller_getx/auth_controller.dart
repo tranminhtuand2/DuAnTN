@@ -96,9 +96,11 @@ class AuthController extends GetxController {
         getRoleUser(
             email: response.user?.email ?? "", currentUser: response.user);
       }
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException {
       showCustomSnackBar(
-          title: "Lỗi", message: e.toString(), type: Type.error);
+          title: "Đăng nhập thất bại!",
+          message: 'Tài khoản hoặc mật khẩu không đúng!!',
+          type: Type.error);
     }
   }
 

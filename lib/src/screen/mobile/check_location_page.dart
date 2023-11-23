@@ -14,11 +14,12 @@ class LocationCheckPage extends StatefulWidget {
   final double vido;
   final double kinhdo;
   final TableModel table;
-  const LocationCheckPage(
-      {super.key,
-      required this.vido,
-      required this.kinhdo,
-      required this.table});
+  const LocationCheckPage({
+    super.key,
+    required this.vido,
+    required this.kinhdo,
+    required this.table,
+  });
 
   @override
   State<LocationCheckPage> createState() => _LocationCheckPageState();
@@ -30,7 +31,6 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
   void initState() {
     super.initState();
     checkLocation(widget.vido, widget.kinhdo);
-    // print("${widget.kinhdo},${widget.vido}");
   }
 
   Future<void> checkLocation(double vido, double kinhdo) async {
@@ -45,8 +45,7 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
     Position currentPosition = await Geolocator.getCurrentPosition(
       desiredAccuracy: LocationAccuracy.best,
     );
-    //12.679977153272034, 108.02220482420341
-    //12.702650385123615, 108.07410104860656
+
     double targetLat = vido; //12.679977153272034 /* Vĩ độ của vị trí cụ thể */;
     double targetLon =
         kinhdo; //108.02220482420341 /* Kinh độ của vị trí cụ thể */;
@@ -54,27 +53,8 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
     double distance = Geolocator.distanceBetween(targetLat, targetLon,
         currentPosition.latitude, currentPosition.longitude);
     print("Bạn cách quán: ${distance.ceil()}m");
-// test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    // test lại
-    //lkjhjdsfdj
-    if (distance.ceil() <= 100000) {
+
+    if (distance.ceil() <= 150) {
       // //Thay đổi trạng thái đã chọn bàn
       // final controllerTable = Get.put(TableController());
       // controllerTable.updateSelectedTable(widget.table);
@@ -91,10 +71,6 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
       // ignore: use_build_context_synchronously
       Navigator.pop(context);
       Navigator.pop(context);
-      // setState(() {
-      //   titleError =
-      //       'Bạn cách quán : ${distance.ceil()}m không nằm trong phạm vi của quán.';
-      // });
     }
   }
 
@@ -121,7 +97,6 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
               "assets/images/location.json",
               animate: true,
             ),
-            // const Spacer(),
             titleError.isNotEmpty
                 ? Text(
                     titleError,
