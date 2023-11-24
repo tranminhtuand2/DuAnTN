@@ -16,19 +16,19 @@ class SalesChart extends StatelessWidget {
       BarChartData(
         titlesData: FlTitlesData(
           leftTitles: AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 60),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 40),
           ),
           bottomTitles: AxisTitles(
             sideTitles: SideTitles(
               showTitles: true,
-              reservedSize: 60,
+              reservedSize: 80,
               getTitlesWidget: (double value, TitleMeta meta) {
                 int index = value.toInt();
                 if (index >= 0 && index < productSalesDataList.length) {
                   return Padding(
                     padding: const EdgeInsets.all(10),
                     child: Transform.rotate(
-                      angle: 45 *
+                      angle: 315 *
                           (pi / 180), // Xoay chữ 90 độ ngược chiều kim đồng hồ
                       child: Text(
                         productSalesDataList[index].productName,
@@ -36,7 +36,7 @@ class SalesChart extends StatelessWidget {
                         textAlign: TextAlign.center,
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
-                          fontSize: 14,
+                          fontSize: 12,
                         ),
                       ),
                     ),
@@ -48,10 +48,10 @@ class SalesChart extends StatelessWidget {
             ),
           ),
           rightTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 60),
+            sideTitles: SideTitles(showTitles: false, reservedSize: 40),
           ),
           topTitles: const AxisTitles(
-            sideTitles: SideTitles(showTitles: true, reservedSize: 60),
+            sideTitles: SideTitles(showTitles: true, reservedSize: 40),
           ),
         ),
         borderData: FlBorderData(
@@ -68,7 +68,7 @@ class SalesChart extends StatelessWidget {
             barRods: [
               BarChartRodData(
                 toY: productSalesData.totalSales.toDouble(),
-                width: 16,
+                width: 14,
                 color: Colors.blue,
                 borderRadius: const BorderRadius.vertical(
                   top: Radius.circular(6),

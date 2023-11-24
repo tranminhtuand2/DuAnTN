@@ -188,14 +188,17 @@ class _ThongKePageState extends State<ThongKePage> {
                         for (var i = 0; i < thongkenhanvien!.length; i++) {
                           tongtien += thongkenhanvien[i].total!;
                         }
-                        return Center(
-                            child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Tổng tiền đã bán được"),
-                            Text("$nameEmployer:$tongtien VNĐ"),
-                          ],
-                        ));
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                              child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Tổng tiền đã bán được"),
+                              Text("$nameEmployer:$tongtien VNĐ"),
+                            ],
+                          )),
+                        );
                       }
                       return const Center(
                         child: CircularProgressIndicator(),
@@ -232,14 +235,17 @@ class _ThongKePageState extends State<ThongKePage> {
                         for (var i = 0; i < thongkeBydate!.length; i++) {
                           tongtien += thongkeBydate[i].total!;
                         }
-                        return Center(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              const Text("thống kê ALL"),
-                              Text(
-                                  " ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : $tongtien VNĐ"),
-                            ],
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Text("thống kê ALL"),
+                                Text(
+                                    " ${datefirt.day}/${datefirt.month} đến ngày ${dateEnd.day}/${dateEnd.month} : $tongtien VNĐ"),
+                              ],
+                            ),
                           ),
                         );
                       }
@@ -264,15 +270,18 @@ class _ThongKePageState extends State<ThongKePage> {
                       }
 
                       if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                        return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Thống kê theo tên"),
-                            Text(
-                              '$nameEmployer: "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month} 0 VNĐ',
-                              textAlign: TextAlign.left,
-                            ),
-                          ],
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Thống kê theo tên"),
+                              Text(
+                                '$nameEmployer: "${datefirt.day}/${datefirt.month} - ${dateEnd.day}/${dateEnd.month} 0 VNĐ',
+                                textAlign: TextAlign.left,
+                              ),
+                            ],
+                          ),
                         );
                       }
                       if (snapshot.hasError) {
@@ -312,13 +321,13 @@ class _ThongKePageState extends State<ThongKePage> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(20),
+                      padding: const EdgeInsets.all(6),
                       child: Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           color: Colors.blueGrey,
                         ),
-                        height: 500,
+                        height: 400,
                         width: double.infinity,
                         child: StreamBuilder(
                           stream: FirestoreHelper.readThongkeByDate(
@@ -331,7 +340,9 @@ class _ThongKePageState extends State<ThongKePage> {
                             }
 
                             if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                              return const Text('vui lòng chọn ngày muốn xem');
+                              return Center(
+                                  child: const Text(
+                                      'vui lòng chọn ngày muốn xem'));
                             }
                             if (snapshot.hasError) {
                               return const Text("lỗi kết nối dữ liệu");
