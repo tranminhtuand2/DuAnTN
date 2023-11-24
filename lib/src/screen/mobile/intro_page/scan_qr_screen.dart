@@ -8,7 +8,7 @@ import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/controller_getx/table_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/table_model.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/check_location_page.dart';
+import 'package:managerfoodandcoffee/src/screen/mobile/intro_page/check_location_page.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 

@@ -1,19 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/message_page/widgets/button_bottom_sheet.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 
 class ChatMessage extends StatelessWidget {
   final bool isSentByMe;
-  final String content;
-  // final int idMessage;
+  final Widget content;
   final int index;
 
   const ChatMessage(
       {super.key,
       required this.isSentByMe,
       required this.content,
-      // required this.idMessage,
       required this.index});
 
   @override
@@ -61,7 +60,10 @@ class ChatMessage extends StatelessWidget {
                                 icon: const Icon(CupertinoIcons.delete),
                                 title: 'Xóa tin nhắn',
                                 function: () {
-                                  //
+                                  showCustomSnackBar(
+                                      title: 'Lỗi',
+                                      message: 'Không thể xóa!!',
+                                      type: Type.error);
                                 },
                               ),
                             ],
@@ -72,27 +74,23 @@ class ChatMessage extends StatelessWidget {
                   }
                 },
                 child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  decoration: BoxDecoration(
-                    color: isSentByMe
-                        ? const Color.fromARGB(255, 91, 200, 194)
-                        : colorScheme(context).onBackground.withOpacity(0.3),
-                    borderRadius: isSentByMe
-                        ? const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomLeft: Radius.circular(10))
-                        : const BorderRadius.only(
-                            topLeft: Radius.circular(10),
-                            topRight: Radius.circular(10),
-                            bottomRight: Radius.circular(10)),
-                  ),
-                  child: Text(
-                    content,
-                    style: TextStyle(color: colorScheme(context).tertiary),
-                  ),
-                ),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                    decoration: BoxDecoration(
+                      color: isSentByMe
+                          ? const Color.fromARGB(255, 91, 200, 194)
+                          : colorScheme(context).onBackground.withOpacity(0.3),
+                      borderRadius: isSentByMe
+                          ? const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomLeft: Radius.circular(10))
+                          : const BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              topRight: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                    ),
+                    child: content),
               ),
             ),
           ),
