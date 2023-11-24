@@ -54,7 +54,7 @@ class _LocationCheckPageState extends State<LocationCheckPage> {
         currentPosition.latitude, currentPosition.longitude);
     print("Bạn cách quán: ${distance.ceil()}m");
 
-    if (distance.ceil() <= 150) {
+    if (distance.ceil() <= 15033333333) {
       // //Thay đổi trạng thái đã chọn bàn
       // final controllerTable = Get.put(TableController());
       // controllerTable.updateSelectedTable(widget.table);

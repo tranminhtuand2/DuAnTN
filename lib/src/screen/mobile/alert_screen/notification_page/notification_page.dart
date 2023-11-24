@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
@@ -14,9 +13,11 @@ class NotificationPage extends StatefulWidget {
   State<NotificationPage> createState() => _NotificationPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
+class _NotificationPageState extends State<NotificationPage>
+    with AutomaticKeepAliveClientMixin {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Scaffold(
       body: StreamBuilder(
         stream: FirestoreHelper.getDataCoupons(),
@@ -71,6 +72,9 @@ class _NotificationPageState extends State<NotificationPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
 
 class CouponItem extends StatelessWidget {

@@ -162,7 +162,8 @@ class _HomePageState extends State<HomePage> {
         floatingActionButton: FloatingActionButton(
           backgroundColor: colorScheme(context).onSurfaceVariant,
           onPressed: () {
-            Get.to(() => const AlertScreen(isFirstSendMessage: true));
+            Get.to(() => AlertScreen(
+                isFirstSendMessage: true, tableModel: widget.table));
           },
           child: const Icon(CupertinoIcons.chat_bubble_text),
         ),
@@ -230,7 +231,7 @@ class _HomePageState extends State<HomePage> {
     return IconButton(
       onPressed: () {
         Get.to(
-          () => const AlertScreen(),
+          () => AlertScreen(tableModel: widget.table),
         );
       },
       icon: Icon(

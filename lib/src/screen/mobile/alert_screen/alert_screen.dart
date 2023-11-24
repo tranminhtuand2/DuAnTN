@@ -2,19 +2,21 @@ import 'package:buttons_tabbar/buttons_tabbar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:managerfoodandcoffee/src/model/table_model.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/message_page/message_page.dart';
 import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/notification_page/notification_page.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 class AlertScreen extends StatefulWidget {
-  const AlertScreen({
-    super.key,
-    this.isFirstSendMessage = false,
-    this.isPushNotificationPage = false,
-  });
+  const AlertScreen(
+      {super.key,
+      this.isFirstSendMessage = false,
+      this.isPushNotificationPage = false,
+      this.tableModel});
   final bool isFirstSendMessage;
   final bool isPushNotificationPage;
+  final TableModel? tableModel;
 
   @override
   State<AlertScreen> createState() => _AlertScreenState();
@@ -91,7 +93,7 @@ class _AlertScreenState extends State<AlertScreen>
                     ),
                   ),
                   Tab(
-                    text: 'Thông báo',
+                    text: 'Khuyến mãi',
                     icon: Icon(
                       CupertinoIcons.speaker_zzz,
                       size: 22,
@@ -106,8 +108,10 @@ class _AlertScreenState extends State<AlertScreen>
                   physics: const BouncingScrollPhysics(),
                   children: [
                     Center(
-                      child:
-                          MessagePage(isFirstSend: widget.isFirstSendMessage),
+                      child: MessagePage(
+                          isFirstSend: widget.isFirstSendMessage,
+                          tableModel:
+                              widget.tableModel ?? TableModel(tenban: "")),
                     ),
                     const Center(
                       child: NotificationPage(),
@@ -116,19 +120,7 @@ class _AlertScreenState extends State<AlertScreen>
             ),
           ],
         ),
-      )
-          //  Column(
-          //     mainAxisAlignment: MainAxisAlignment.center,
-          //     crossAxisAlignment: CrossAxisAlignment.center,
-          //     children: [
-          //       const Text(
-          //           'Bạn cần đăng nhập để xem tin nhắn & thông báo 🐧'),
-          //       Center(
-          //         child: Lottie.asset('assets/images/nodata.json'),
-          //       ),
-          //     ],
-          //   ),
-          ),
+      )),
     );
   }
 }
