@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:badges/badges.dart' as badges;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
@@ -41,7 +39,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return WillPopScope(
       onWillPop: () async {
         return onBackPressed(context);

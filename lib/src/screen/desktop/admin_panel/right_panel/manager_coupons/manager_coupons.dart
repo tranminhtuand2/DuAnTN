@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+import 'package:managerfoodandcoffee/src/common_widget/coupons_item.dart';
 import 'package:managerfoodandcoffee/src/common_widget/input_field.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_button.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_dialog.dart';
-import 'package:managerfoodandcoffee/src/common_widget/snack_bar_getx.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/model/coupons_model.dart';
-import 'package:managerfoodandcoffee/src/screen/mobile/alert_screen/notification_page/notification_page.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/format_date.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
-import 'package:ticket_widget/ticket_widget.dart';
 
 class ManagerCoupons extends StatefulWidget {
   const ManagerCoupons({super.key});
@@ -37,7 +34,7 @@ class _ManagerCouponsState extends State<ManagerCoupons> {
       child: Row(
         children: [
           Expanded(
-            flex: 2,
+            flex: 3,
             child: Container(
               width: double.infinity,
               height: double.infinity,
@@ -67,20 +64,15 @@ class _ManagerCouponsState extends State<ManagerCoupons> {
                             child: InkWell(
                               onLongPress: () =>
                                   _submitDeleteCoupons(coupons, context),
-                              child: TicketWidget(
-                                margin: const EdgeInsets.symmetric(vertical: 8),
-                                width: MediaQuery.sizeOf(context).width,
-                                height: 200,
-                                child: CouponItem(
-                                  discount: '${coupons.persent}%',
-                                  details: '\'${coupons.data}\'',
-                                  validDate:
-                                      'Áp dụng từ ${coupons.beginDay} - ${coupons.endDay}',
-                                  startColor: Colors.teal,
-                                  endColor: Colors.teal[100]!,
-                                  soluotdung: coupons.soluotdung,
-                                  isEnable: coupons.isEnable,
-                                ),
+                              child: CouponItem(
+                                discount: '${coupons.persent}%',
+                                details: coupons.data,
+                                validDate:
+                                    'Áp dụng từ ${coupons.beginDay} - ${coupons.endDay}',
+                                startColor: Colors.teal,
+                                endColor: Colors.teal[100]!,
+                                soluotdung: coupons.soluotdung,
+                                isEnable: coupons.isEnable,
                               ),
                             ),
                           );
@@ -97,6 +89,7 @@ class _ManagerCouponsState extends State<ManagerCoupons> {
           ),
           const SizedBox(width: 16),
           Expanded(
+            flex: 2,
             child: Container(
               width: double.infinity,
               height: double.infinity,
