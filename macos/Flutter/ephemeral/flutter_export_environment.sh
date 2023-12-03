@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=C:\src\flutter_windows_3.10.0-stable\flutter"
-export "FLUTTER_APPLICATION_PATH=D:\flucode\DATN\quanlycf\managerfoodandcoffee"
+export "FLUTTER_ROOT=/home/hathechi/snap/flutter/common/flutter"
+export "FLUTTER_APPLICATION_PATH=/media/hathechi/DATA/FPT_POLY/DUANTOTNGHIEP/DuAnTN"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
