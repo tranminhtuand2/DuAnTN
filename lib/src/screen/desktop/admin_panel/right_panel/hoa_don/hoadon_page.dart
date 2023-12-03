@@ -4,11 +4,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:managerfoodandcoffee/src/common_widget/my_dialog.dart';
+import 'package:managerfoodandcoffee/src/controller_getx/auth_controller.dart';
 import 'package:managerfoodandcoffee/src/firebase_helper/firebasestore_helper.dart';
 import 'package:managerfoodandcoffee/src/screen/desktop/admin_panel/right_panel/hoa_don/PDF/print_pdf.dart';
 import 'package:managerfoodandcoffee/src/utils/colortheme.dart';
 import 'package:managerfoodandcoffee/src/utils/format_price.dart';
-import 'package:managerfoodandcoffee/src/utils/size.dart';
 import 'package:managerfoodandcoffee/src/utils/texttheme.dart';
 
 import '../../../../../model/invoice_model.dart';
@@ -23,6 +23,7 @@ class HoaDonPage extends StatefulWidget {
 class _HoaDonPageState extends State<HoaDonPage> {
   final isShowFirst = ValueNotifier(false);
   int selectedIndex = 0;
+  final authController = Get.put(AuthController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -339,15 +340,17 @@ class _HoaDonPageState extends State<HoaDonPage> {
         ),
         Expanded(
           flex: 1,
-          child: IconButton(
-            onPressed: () {
-              _deleteInvoice(hoaDonIndex);
-            },
-            icon: const Icon(
-              CupertinoIcons.trash_fill,
-              color: Colors.red,
-            ),
-          ),
+          child: authController.role.value == "user"
+              ? const SizedBox(height: 40)
+              : IconButton(
+                  onPressed: () {
+                    _deleteInvoice(hoaDonIndex);
+                  },
+                  icon: const Icon(
+                    CupertinoIcons.trash_fill,
+                    color: Colors.red,
+                  ),
+                ),
         ),
       ],
     );
